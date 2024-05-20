@@ -1,23 +1,17 @@
+import { dataInventory } from "..";
 import { Router } from "express";
-import { inventoryList } from "..";
+import { Express, Request, Response } from "express";
 
 export const router = Router();
-
-
-router.get("/api/inventory/detail", (req, res) => {
-  res.send(inventoryList); 
+router.get("/api/inventaris/name", (req: Request, res: Response) => {
+const data = dataInventory.map((inventory) => {
+  return { id: inventory.id, slug: inventory.slug, name: inventory.name, nomor: inventory.nomor, description: inventory.description, picture: inventory.picture}
 });
-router.get("/api/inventory/:id/detail", (req, res) => {
-  console.log(req.params);
+res.json(data);
+});
+
+router.get("/api/inventaris/:id", (req, res) => {
   const parsedId = parseInt(req.params.id);
-  res.send(inventoryList.find((inventory) => inventory.id === parsedId));
-});
-
-router.get("/api/inventory", (req, res) => {
-const newInventory = inventoryList.map((inventory) => {
-  const {id,name} = inventory;
-  return {id, name};
-})
-res.send(newInventory);
+  res.json(dataInventory.find((inventory) => inventory.id === parsedId));
 });
 
