@@ -18,7 +18,7 @@ exports.contentData = [
         title: "Pendidikan dan Latihan Dasar PASAINS XVIII",
         location: "Hutan Wanagama, 2-6 November 2016",
         content: "Pendidikan dan Latihan Dasar (Diklatsar) PASAINS XVIII sudah dilaksanakan pada tanggal 2 - 6 November 2016 di Hutan Wanagama Gunung Kidul. Peserta yang ikut menjalani Diklatsar berjumlah 16 orang terdiri dari berbagai program studi di Fakultas Matematika dan Ilmu Pengetahuan Alam UGM. Peserta Diksar terdiri dari 8 perempuan dan 8 laki-laki. ",
-        picture: "https://pbs.twimg.com/media/EiSwKFkVoAAs6Wa.jpg"
+        picture: require("./image/gunung.jpg")
     },
     {
         id: 2,
