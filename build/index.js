@@ -15,48 +15,54 @@ exports.contentData = [
     {
         id: 1,
         slug: "diksar",
-        title: "Pendidikan dan Latihan Dasar PASAINS XVIII",
+        title: "Pendidikan dan Latihan Dasar XVIII",
         location: "Hutan Wanagama, 2-6 November 2016",
-        content: "Pendidikan dan Latihan Dasar (Diklatsar) PASAINS XVIII sudah dilaksanakan pada tanggal 2 - 6 November 2016 di Hutan Wanagama Gunung Kidul. Peserta yang ikut menjalani Diklatsar berjumlah 16 orang terdiri dari berbagai program studi di Fakultas Matematika dan Ilmu Pengetahuan Alam UGM. Peserta Diksar terdiri dari 8 perempuan dan 8 laki-laki. ",
-        picture: require("./image/gunung.jpg")
+        content: "Pendidikan dan Latihan Dasar (Diklatsar) PASAINS XVIII sudah dilaksanakan pada tanggal 2 - 4 November 2016 di Hutan Wanagama Gunung Kidul. ",
+        description: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+        picture: "https://pbs.twimg.com/media/EiSwKFkVoAAs6Wa.jpg"
     },
     {
         id: 2,
         slug: "dikjutgh",
-        title: "Pendidikan Lanjut Gunung dan Hutan PASAINS XVIII",
+        title: "Pendidikan Lanjut Gunung Hutan XVIII",
         location: "Gunung Merbabu & Merapi, 16-18 Desember 2016",
-        content: "Pendidikan Lanjut Gunung dan Hutan (Dikjut GH) terlaksana pada 16 -17 Desember 2016. Dikjut GH dilaksanakan di Gunung Merbabu dan Gunung Merapi. Pendakian Gunung Merbabu melalui jalur pendakian via Wekas dan dilajutkan lintas jalur melalui jalur pendakian via Selo. Selajutnya pendakian Gunung Merapi melalui jalur pendakian via Selo.",
+        content: "Pendidikan Lanjut Gunung dan Hutan (Dikjut GH) terlaksana pada 16 -17 Desember 2016. Dikjut GH dilaksanakan di Gunung Merbabu dan Gunung Merapi.",
+        description: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
         picture: "https://pbs.twimg.com/media/EiSwKFkVoAAs6Wa.jpg"
     },
     {
         id: 3,
         slug: "dikjutcv",
-        title: "Pendidikan Lanjut Caving PASAINS XVIII",
+        title: "Pendidikan Lanjut Caving XVIII",
         location: "Gua nglibeng, 19-21 maret 2017",
         content: "Pendidikan Lanjut Caving (DIkjut CV) terlaksana pada bulan Maret 2017. Dikjut CV dilaksanakan di Gua Nglibeng untuk gua veritkal dan Gua Plelen untuk gua horizontal.",
+        description: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
         picture: "https://pbs.twimg.com/media/EiSwKFkVoAAs6Wa.jpg"
     },
     {
         id: 4,
         slug: "dikjutcb",
-        title: "Pendidikan Lanjut Climbing PASAINS XVIII",
+        title: "Pendidikan Lanjut Climbing XVIII",
         location: "Tebing Siung, 24-26 Juni 2017",
         content: "Pendidikan Lanjut Climbing (Dikjut CB) terlaksana pada bulan Juni 2017. Dikjut CB dilaksanakan di Tebing Siung Gunung Kidul dan diikuti oleh 14 peserta.",
+        description: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
         picture: "https://pbs.twimg.com/media/EiSwKFkVoAAs6Wa.jpg"
     },
     {
         id: 5,
         slug: "dikjutimpk",
-        title: "Pendidikan Lanjut IMPK PASAINS XVIII",
+        title: "Pendidikan Lanjut IMPK XVIII",
         location: "Sapu Angin, 5-6 September 2017",
         content: "Pendidikan Lanjut IMPK (Dikjut IMPK) terlksana pada bulan september 2017. Dikjut IMPK dilaksanakan di lereng Gunung Merapi, Klaten, Jawa Tengah dan diikuti oleh 14 peserta.",
+        description: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
         picture: "https://pbs.twimg.com/media/EiSwKFkVoAAs6Wa.jpg"
     },
     { id: 6,
         slug: "pengembaraan",
-        title: "Pengembaraan PASAINS XVIII",
+        title: "Pengembaraan XVIII",
         location: "Gunung Lawu, 11-13 Desember 2017",
-        content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+        description: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
         picture: "https://pbs.twimg.com/media/EiSwKFkVoAAs6Wa.jpg"
     }
 ];
