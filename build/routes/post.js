@@ -6,7 +6,7 @@ const express_1 = require("express");
 exports.post_router = (0, express_1.Router)();
 exports.post_router.get("/api/post/", (req, res) => {
     const data = __1.contentData.map((item) => {
-        return { id: item.id, slug: item.slug, title: item.title, location: item.location, content: item.content, picture: item.picture };
+        return { id: item.id, slug: item.slug, title: item.title, location: item.location, content: item.content, description: item.description, picture: item.picture };
     });
     res.json(data);
 });
