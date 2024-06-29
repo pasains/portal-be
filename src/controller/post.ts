@@ -1,7 +1,6 @@
 import { Express, Request, Response } from "express";
-import { contentData } from "..";
 import { Router } from "express";
-
+/*
 export const post_router = Router();
 post_router.get("/api/post", (req: Request, res: Response) => {
   let { size, page } = req.query;
@@ -37,3 +36,4 @@ post_router.get("/api/post/:page", (req: Request, res: Response) => {
   const data = contentData.find((item) => item.slug === page);
   res.json(data);
 });
+**/

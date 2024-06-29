@@ -1,7 +1,6 @@
-import { dataInventory } from "..";
 import { Router } from "express";
 import { Express, Request, Response } from "express";
-
+/*
 export const inventory_router = Router();
 inventory_router.get("/api/inventaris", (req: Request, res: Response) => {
   let { size, page } = req.query;
@@ -35,3 +34,4 @@ inventory_router.get("/api/inventaris/:id", (req, res) => {
   const parsedId = parseInt(req.params.id);
   res.json(dataInventory.find((inventory) => inventory.id === parsedId));
 });
+**/

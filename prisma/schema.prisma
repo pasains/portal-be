@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           BigInt   @id @default(autoincrement())
+  username     String   @db.VarChar(100)
+  email        String   @db.VarChar(100)
+  phone_number String   @db.Char(14)
+  address      String   @db.VarChar(100)
+  profile      String   @db.VarChar(20)
+  position     String   @db.VarChar(100)
+  role         Role   @default(ADMIN)
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  created_by  User @relation("History_user", fields: [id], references: [id])
+  history_user Inventory[] @relation("History_user")
+  history_update_user Inventory_group[] @relation("History_update_user")
+}
+
+model Inventory {
+  id BigInt @id @default(autoincrement())
+  inventory_name String @db.VarChar(100)
+  ref_id String @db.VarChar(50)
+  description String @db.Text
+  is_borrowable Boolean @default(true)
+  inventory_type_id Inventory_type @relation("Type_id", fields: [inventory_typeId], references: [id])
+  inventory_typeId BigInt
+  created_at  DateTime  @default(now())
+  created_by     User @relation("History_user", fields: [created_byId], references: [id])
+  created_byId BigInt
+  updated_at DateTime @default(now())
+}
+
+model Inventory_type {
+  id  BigInt @id @default(autoincrement())
+  inventory_type_name String @db.VarChar(50)
+  description String  @db.Text
+  type_id Inventory[] @relation("Type_id")
+}
+ model Inventory_group {
+   id BigInt @id @default(autoincrement())
+   inventory_group_name String @db.VarChar(50)
+   description String @db.Text
+   created_at DateTime @default(now())
+   created_by User @relation("History_user", fields: [created_byId], references: [id])
+   created_byId BigInt
+  updated_at DateTime @default(now())
+  updated_by     User @relation("History_update_user", fields: [updated_byId], references: [id])
+  updated_byId BigInt
+  group_id Inventory_group_member[] @relation("Group_id")
+  type_id Inventory_group_member[] @relation("Type_id")
+ }
+
+model Inventory_group_member {
+  id  BigInt @id @default(autoincrement())
+  inventory_group_id Inventory_group @relation("Group_id", fields: [inventory_groupId], references: [id])
+  inventory_groupId BigInt
+  inventory_type_id Inventory_type @relation("Type_id", fields: [inventory_typeId], references: [id])
+  inventory_typeId BigInt
+}
+ enum Role {
+   USER
+   ADMIN
+ }
