@@ -5,72 +5,91 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id           BigInt   @id @default(autoincrement())
-  username     String   @db.VarChar(100)
-  email        String   @db.VarChar(100)
-  phone_number String   @db.Char(14)
-  address      String   @db.VarChar(100)
-  profile      String   @db.VarChar(20)
-  position     String   @db.VarChar(100)
-  role         Role   @default(ADMIN)
-  is_active    Boolean  @default(true)
-  created_at   DateTime @default(now())
-  created_by  User @relation("History_user", fields: [id], references: [id])
-  history_user Inventory[] @relation("History_user")
-  history_update_user Inventory_group[] @relation("History_update_user")
+    id                             BigInt            @id @default(autoincrement())
+    username                       String            @db.VarChar(100)
+    email                          String            @db.VarChar(100)
+    phone_number                   String            @db.Char(14)
+    address                        String            @db.VarChar(100)
+    profile                        String            @db.VarChar(20)
+    position                       String            @db.VarChar(100)
+    role                           Role              @default(ADMIN)
+    is_active                      Boolean           @default(true)
+    created_at                     DateTime          @default(now())
+    created_by                     BigInt
+    created_by_rel                 User?             @relation("self_created_by_rel", fields: [created_by], references: [id])
+    self_created_by_rel            User[]            @relation("self_created_by_rel")
+    updated_at                     DateTime          @default(now())
+    updated_by                     BigInt
+    updated_by_rel                 User?             @relation("self_updated_by_rel", fields: [updated_by], references: [id])
+    self_updated_user_rel          User[]            @relation("self_updated_by_rel")
+    history                        History[]         @relation("history_user_rel")
+    history_created_by_rel         History[]         @relation("history_created_by_rel")
+    history_updated_by_rel         History[]         @relation("history_updated_by_rel")
+    inventory_created_by           Inventory[]       @relation("inventory_created_by_rel")
+    inventory_updated_by           Inventory[]       @relation("inventory_updated_by_rel")
+    inventory_group_created_by_rel Inventory_group[] @relation("inventory_group_created_by_rel")
+    inventory_group_updated_by_rel Inventory_group[] @relation("inventory_group_updated_by_rel")
+}
+
+model History {
+    id             BigInt   @id @default(autoincrement())
+    user_id        BigInt?
+    user_history   User?    @relation("history_user_rel", fields: [user_id], references: [id])
+    created_at     DateTime @default(now())
+    created_by     BigInt
+    created_by_rel User?    @relation("history_created_by_rel", fields: [created_by], references: [id])
+    updated_at     DateTime @default(now())
+    updated_by     BigInt
+    updated_by_rel User?    @relation("history_updated_by_rel", fields: [updated_by], references: [id])
 }
 
 model Inventory {
-  id BigInt @id @default(autoincrement())
-  inventory_name String @db.VarChar(100)
-  ref_id String @db.VarChar(50)
-  description String @db.Text
-  is_borrowable Boolean @default(true)
-  inventory_type_id Inventory_type @relation("Type_id", fields: [inventory_typeId], references: [id])
-  inventory_typeId BigInt
-  created_at  DateTime  @default(now())
-  created_by     User @relation("History_user", fields: [created_byId], references: [id])
-  created_byId BigInt
-  updated_at DateTime @default(now())
+    id                    BigInt         @id @default(autoincrement())
+    inventory_name        String         @db.VarChar(100)
+    ref_id                String         @db.VarChar(50)
+    description           String         @db.Text
+    is_borrowable         Boolean        @default(true)
+    inventory_type_id     BigInt
+    inventory_type_id_rel Inventory_type @relation("inventory_type_id_rel", fields: [inventory_type_id], references: [id])
+    created_at            DateTime       @default(now())
+    created_by            BigInt
+    inventory_created_by  User?          @relation("inventory_created_by_rel", fields: [created_by], references: [id])
+    updated_at            DateTime       @default(now())
+    updated_by            BigInt
+    inventory_updated_by  User?          @relation("inventory_updated_by_rel", fields: [updated_by], references: [id])
 }
 
 model Inventory_type {
-  id  BigInt @id @default(autoincrement())
-  inventory_type_name String @db.VarChar(50)
-  description String  @db.Text
-  type_id Inventory[] @relation("Type_id")
+    id                    BigInt            @id @default(autoincrement())
+    inventory_type_name   String            @db.VarChar(50)
+    description           String            @db.Text
+    group                 Inventory_group[] @relation("inventory_group_member")
+    inventory_type_id_rel Inventory[]       @relation("inventory_type_id_rel")
 }
- model Inventory_group {
-   id BigInt @id @default(autoincrement())
-   inventory_group_name String @db.VarChar(50)
-   description String @db.Text
-   created_at DateTime @default(now())
-   created_by User @relation("History_user", fields: [created_byId], references: [id])
-   created_byId BigInt
-  updated_at DateTime @default(now())
-  updated_by     User @relation("History_update_user", fields: [updated_byId], references: [id])
-  updated_byId BigInt
-  group_id Inventory_group_member[] @relation("Group_id")
-  type_id Inventory_group_member[] @relation("Type_id")
- }
 
-model Inventory_group_member {
-  id  BigInt @id @default(autoincrement())
-  inventory_group_id Inventory_group @relation("Group_id", fields: [inventory_groupId], references: [id])
-  inventory_groupId BigInt
-  inventory_type_id Inventory_type @relation("Type_id", fields: [inventory_typeId], references: [id])
-  inventory_typeId BigInt
+model Inventory_group {
+    id                             BigInt           @id @default(autoincrement())
+    inventory_group_name           String           @db.VarChar(50)
+    description                    String           @db.Text
+    created_at                     DateTime         @default(now())
+    created_by                     BigInt
+    inventory_group_created_by_rel User?            @relation("inventory_group_created_by_rel", fields: [created_by], references: [id])
+    updated_at                     DateTime         @default(now())
+    updated_by                     BigInt
+    inventory_group_updated_by_rel User?            @relation("inventory_group_updated_by_rel", fields: [updated_by], references: [id])
+    type                           Inventory_type[] @relation("inventory_group_member")
 }
- enum Role {
-   USER
-   ADMIN
- }
+
+enum Role {
+    USER
+    ADMIN
+}
