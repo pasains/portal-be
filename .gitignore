@@ -1,4 +1,5 @@
 node_modules
-build
+.prettierignore
 **.DS_Store
-**.env
+.env.example
+prettierrc.json

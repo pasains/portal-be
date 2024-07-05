@@ -9,30 +9,43 @@ var cors = require("cors");
 const port = 8081;
 
 app.use(cors());
-
 async function main() {
-  const user = await prisma.user.create({
+  const newUser = await prisma.user.create({
     data: {
-      username: "susi",
+      firstName: "Susilawati",
+      lastName: "Budi Utami",
+      userName: "mecinsusi",
       email: "susi@probo.id",
-      phone_number: "081225363229",
+      phoneNumber: "081225363229",
       address: "sleman",
       profile: "dev",
       position: "senior",
-      created_by: 1,
     },
   });
-  console.log(user);
+  console.log("Created new user:", newUser);
+
+  const updatedUser = await prisma.user.update({
+    where: { id: newUser.id },
+    data: { userName: "Susilawati update" },
+  });
+  console.log("Updated user:", updatedUser);
+
+  const deletedUser = await prisma.user.delete({
+    where: { id: newUser.id },
+  });
+  console.log("Deleted user:", deletedUser);
+
+  const auditTrail = await prisma.userHistory.findMany();
+  console.log("History Trail:", auditTrail);
 }
 
 main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
+  .catch((e) => {
     console.error(e);
-    await prisma.$disconnect();
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });
 
 app.listen(port, () => {
