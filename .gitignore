@@ -1,5 +1,6 @@
-node_modules
-.prettierignore
-**.DS_Store
-.env.example
+node_modules 
+.prettierignore 
+**.DS_Store 
+.env 
+.env.save 
 prettierrc.json
