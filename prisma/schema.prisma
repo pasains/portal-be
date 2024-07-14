@@ -64,13 +64,13 @@ model User {
 
 model UserHistory {
   id                      BigInt   @id @default(autoincrement())
-  userId                  BigInt?
+  userId                  BigInt
   userHistoryIdRel        User?    @relation("userHistoryIdRel", fields: [userId], references: [id])
   createdAt               DateTime @default(now())
-  createdBy               BigInt
+  createdBy               BigInt?
   userHistoryCreatedByRel User?    @relation("userHistoryCreatedByRel", fields: [createdBy], references: [id])
   updatedAt               DateTime @default(now())
-  updatedBy               BigInt
+  updatedBy               BigInt?
   userHistoryUpdatedByRel User?    @relation("userHistoryUpdatedByRel", fields: [updatedBy], references: [id])
   oldData                 Json
   newData                 Json
@@ -79,16 +79,16 @@ model UserHistory {
 model Inventory {
   id                            BigInt             @id @default(autoincrement())
   inventoryName                 String             @db.VarChar(100)
-  refId                         String             @db.VarChar(50)
-  description                   String             @db.Text
+  refId                         String             @db.VarChar(100)
+  description                   String?            @db.Text
   isBorrowable                  Boolean            @default(true)
   inventoryTypeId               BigInt
   inventoryTypeIdRel            InventoryType      @relation("inventoryTypeIdRel", fields: [inventoryTypeId], references: [id])
   createdAt                     DateTime           @default(now())
-  createdBy                     BigInt
+  createdBy                     BigInt?
   inventoryCreatedByRel         User?              @relation("inventoryCreatedByRel", fields: [createdBy], references: [id])
   updatedAt                     DateTime           @default(now())
-  updatedBy                     BigInt
+  updatedBy                     BigInt?
   inventoryUpdatedByRel         User?              @relation("inventoryUpdatedByRel", fields: [updatedBy], references: [id])
   inventoryStockIdRel           InventoryStock[]   @relation("inventoryStockIdRel")
   inventoryUserHistoryIdRel     InventoryHistory[] @relation("inventoryUserHistoryIdRel")
@@ -100,7 +100,7 @@ model Inventory {
 model InventoryType {
   id                 BigInt           @id @default(autoincrement())
   inventoryTypeName  String           @db.VarChar(50)
-  description        String           @db.Text
+  description        String?          @db.Text
   group              InventoryGroup[] @relation("inventoryGroupMember")
   inventoryTypeIdRel Inventory[]      @relation("inventoryTypeIdRel")
 }
@@ -108,11 +108,11 @@ model InventoryType {
 model InventoryGroup {
   id                         BigInt          @id @default(autoincrement())
   inventoryGroupName         String          @db.VarChar(50)
-  description                String          @db.Text
-  createdBy                  BigInt
+  description                String?         @db.Text
   createdAt                  DateTime        @default(now())
+  createdBy                  BigInt?
   inventoryGroupCreatedByRel User?           @relation("inventoryGroupCreatedByRel", fields: [createdBy], references: [id])
-  updatedBy                  BigInt
+  updatedBy                  BigInt?
   inventoryGroupUpdatedByRel User?           @relation("inventoryGroupUpdatedByRel", fields: [updatedBy], references: [id])
   type                       InventoryType[] @relation("inventoryGroupMember")
   updatedAt                  DateTime        @default(now())
@@ -122,11 +122,11 @@ model InventoryStock {
   id                         BigInt    @id @default(autoincrement())
   inventoryStockIdRel        Inventory @relation("inventoryStockIdRel", fields: [inventoryId], references: [id])
   inventoryId                BigInt
-  quantity                   Int       @default(autoincrement())
-  createdBy                  BigInt
+  quantity                   Int       @default(1)
+  createdBy                  BigInt?
   inventoryStockCreatedByRel User?     @relation("inventoryStockCreatedByRel", fields: [createdBy], references: [id])
   createdAt                  DateTime  @default(now())
-  updatedBy                  BigInt
+  updatedBy                  BigInt?
   inventoryStockUpdatedByRel User?     @relation("inventoryStockUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt                  DateTime  @default(now())
 }
@@ -136,11 +136,11 @@ model InventoryHistory {
   inventoryUserHistoryIdRel    Inventory  @relation("inventoryUserHistoryIdRel", fields: [inventoryId], references: [id])
   inventoryId                  BigInt
   condition                    String     @db.VarChar(100)
-  image                        String     @db.VarChar(100)
-  createdBy                    BigInt
+  image                        String?    @db.VarChar(100)
+  createdBy                    BigInt?
   inventoryHistoryCreatedByRel User?      @relation("inventoryHistoryCreatedByRel", fields: [createdBy], references: [id])
   createdAt                    DateTime   @default(now())
-  updatedBy                    BigInt
+  updatedBy                    BigInt?
   inventoryHistoryUpdatedByRel User?      @relation("inventoryHistoryUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt                    DateTime   @default(now())
   documentIdRel                Document[] @relation("documentIdRel")
@@ -160,26 +160,29 @@ model StockLedger {
   quantityAfterTransaction Int
   voucherType              String    @db.VarChar(100)
   voucherName              BigInt
-  createdBy                BigInt
+  createdBy                BigInt?
   stockLedgerCreatedByRel  User?     @relation("stockLedgerCreatedByRel", fields: [createdBy], references: [id])
   createdAt                DateTime  @default(now())
-  updatedBy                BigInt
+  updatedBy                BigInt?
   stockLedgerUpdatedByRel  User?     @relation("stockLedgerUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt                DateTime  @default(now())
 }
 
 model Item {
   id                       BigInt            @id @default(autoincrement())
+  borrowingId              BigInt
+  itemBorrowingIdRel       Borrowing         @relation("itemBorrowingIdRel", fields: [borrowingId], references: [id])
   receivingId              BigInt
   itemReceivingIdRel       Receiving         @relation("itemReceivingIdRel", fields: [receivingId], references: [id])
   inventoryId              BigInt
   itemInventoryIdRel       Inventory         @relation("itemInventoryIdRel", fields: [inventoryId], references: [id])
   quantity                 BigInt
-  condition                String            @db.VarChar(100)
-  createdBy                BigInt
+  preCondition             String?           @db.Text
+  postCondition            String?           @db.Text
+  createdBy                BigInt?
   itemCreatedByRel         User?             @relation("itemCreatedByRel", fields: [createdBy], references: [id])
   createdAt                DateTime          @default(now())
-  updatedBy                BigInt
+  updatedBy                BigInt?
   itemUpdatedByRel         User?             @relation("itemUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt                DateTime          @default(now())
   borrowingStatusItemIdRel BorrowingStatus[] @relation("borrowingStatusItemIdRel")
@@ -189,12 +192,12 @@ model Receiving {
   id                    BigInt            @id @default(autoincrement())
   userId                BigInt
   receivingIdRel        User              @relation("receivingIdRel", fields: [userId], references: [id])
-  notes                 String            @db.Text
-  status                String            @db.Text
-  createdBy             BigInt
+  notes                 String?           @db.Text
+  status                String?           @db.Text
+  createdBy             BigInt?
   receivingCreatedByRel User?             @relation("receivingCreatedByRel", fields: [createdBy], references: [id])
   createdAt             DateTime          @default(now())
-  updatedBy             BigInt
+  updatedBy             BigInt?
   receivingUpdatedByRel User?             @relation("receivingUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt             DateTime          @default(now())
   itemReceivingIdRel    Item[]            @relation("itemReceivingIdRel")
@@ -205,8 +208,8 @@ model ReceivingStatus {
   id                          BigInt    @id @default(autoincrement())
   receivingId                 BigInt
   receivingStatusIdRel        Receiving @relation("receivingStatusIdRel", fields: [receivingId], references: [id])
-  status                      String    @db.VarChar(100)
-  createdBy                   BigInt
+  status                      String?   @db.Text
+  createdBy                   BigInt?
   receivingStatusCreatedByRel User?     @relation("receivingStatusCreatedByRel", fields: [createdBy], references: [id])
   createdAt                   DateTime  @default(now())
 }
@@ -221,12 +224,13 @@ model Borrowing {
   borrowingOrganizationIdRel Organization    @relation("borrowingOrganizationIdRel", fields: [organizationId], references: [id])
   dueDate                    DateTime        @db.Date
   specialInstruction         String          @db.Text
-  createdBy                  BigInt
+  createdBy                  BigInt?
   borrowingCreatedByRel      User?           @relation("borrowingCreatedByRel", fields: [createdBy], references: [id])
   createdAt                  DateTime        @default(now())
-  updatedBy                  BigInt
+  updatedBy                  BigInt?
   borrowingUpdatedByRel      User?           @relation("borrowingUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt                  DateTime        @default(now())
+  itemBorrowingIdRel         Item[]          @relation("itemBorrowingIdRel")
 }
 
 model BorrowingStatus {
@@ -236,10 +240,10 @@ model BorrowingStatus {
   inventoryId                   BigInt
   borrowingStatusInventoryIdRel Inventory   @relation("borrowingStatusInventoryIdRel", fields: [inventoryId], references: [id])
   status                        String      @db.VarChar(100)
-  createdBy                     BigInt
+  createdBy                     BigInt?
   borrowingStatusCreatedByRel   User?       @relation("borrowingStatusCreatedByRel", fields: [createdBy], references: [id])
   createdAt                     DateTime    @default(now())
-  updatedBy                     BigInt
+  updatedBy                     BigInt?
   borrowingStatusUpdatedByRel   User?       @relation("borrowingStatusUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt                     DateTime    @default(now())
   borrowingStatusIdRel          Borrowing[] @relation("borrowingStatusIdRel")
@@ -253,10 +257,10 @@ model Borrower {
   identityCard                String       @db.Char(10)
   identityNumber              String       @db.VarChar(50)
   phoneNumber                 String       @db.Char(14)
-  createdBy                   BigInt
+  createdBy                   BigInt?
   borrowerCreatedByRel        User?        @relation("borrowerCreatedByRel", fields: [createdBy], references: [id])
   createdAt                   DateTime     @default(now())
-  updatedBy                   BigInt
+  updatedBy                   BigInt?
   borrowerUpdatedByRel        User?        @relation("borrowerUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt                   DateTime     @default(now())
   borrowerIdRel               Borrowing[]  @relation("borrowerIdRel")
@@ -268,10 +272,10 @@ model Organization {
   address                     String      @db.VarChar(100)
   organizationStatus          String      @db.VarChar(100)
   note                        String      @db.Text
-  createdBy                   BigInt
+  createdBy                   BigInt?
   organizationCreatedByRel    User?       @relation("organizationCreatedByRel", fields: [createdBy], references: [id])
   createdAt                   DateTime    @default(now())
-  updatedBy                   BigInt
+  updatedBy                   BigInt?
   organizationUpdatedByRel    User?       @relation("organizationUpdatedByRel", fields: [updatedBy], references: [id])
   updatedAt                   DateTime    @default(now())
   borrowerOrganizationNameRel Borrower[]  @relation("borrowerOrganizationNameRel")
