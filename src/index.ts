@@ -10,33 +10,31 @@ const port = 8081;
 
 app.use(cors());
 async function main() {
-  const newUser = await prisma.user.create({
+  const newInventory = await prisma.inventory.create({
     data: {
-      firstName: "Susilawati",
-      lastName: "Budi Utami",
-      userName: "mecinsusi",
-      email: "susi@probo.id",
-      phoneNumber: "081225363229",
-      address: "sleman",
-      profile: "dev",
-      position: "senior",
+      inventoryName: "COS",
+      refId: "21/RS/186",
+      description: "seri 04 08 berwarna silver buatan Buatan Petzl",
+      inventoryTypeId: 3,
+      createdBy: 4,
+      updatedBy: 4
     },
   });
-  console.log("Created new user:", newUser);
+  console.log("Created new inventory:", newInventory);
 
-  const updatedUser = await prisma.user.update({
-    where: { id: newUser.id },
-    data: { userName: "Susilawati update" },
-  });
-  console.log("Updated user:", updatedUser);
+  //const updatedUser = await prisma.user.update({
+  //  where: { id: newUser.id },
+  //  data: { userName: "Susilawati update" },
+  //});
+  //console.log("Updated user:", updatedUser);
+  //
+  //const deletedUser = await prisma.user.delete({
+  //  where: { id: newUser.id },
+  //});
+  //console.log("Deleted user:", deletedUser);
 
-  const deletedUser = await prisma.user.delete({
-    where: { id: newUser.id },
-  });
-  console.log("Deleted user:", deletedUser);
-
-  const auditTrail = await prisma.userHistory.findMany();
-  console.log("History Trail:", auditTrail);
+  //const auditTrail = await prisma.userHistory.findMany();
+  //console.log("History Trail:", auditTrail);
 }
 
 main()
