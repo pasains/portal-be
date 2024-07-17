@@ -1,27 +1,21 @@
-import express, { Request, Response } from "express";
 import prisma from "./configuration/db";
 import dotenv from "dotenv";
+import { app } from "./router";
 
 dotenv.config();
 
-const app = express();
-var cors = require("cors");
-const port = 8081;
-
-app.use(cors());
 async function main() {
-  const newInventory = await prisma.inventory.create({
-    data: {
-      inventoryName: "COS",
-      refId: "21/RS/186",
-      description: "seri 04 08 berwarna silver buatan Buatan Petzl",
-      inventoryTypeId: 3,
-      createdBy: 4,
-      updatedBy: 4
-    },
-  });
-  console.log("Created new inventory:", newInventory);
-
+  // const newInventory = await prisma.inventory.create({
+  //   data: {
+  //     inventoryName: "COS",
+  //     refId: "21/RS/186",
+  //     description: "seri 04 08 berwarna silver buatan Buatan Petzl",
+  //     inventoryTypeId: 3,
+  //     createdBy: 4,
+  //     updatedBy: 4
+  //   },
+  // });
+  // console.log("Created new inventory:", newInventory);
   //const updatedUser = await prisma.user.update({
   //  where: { id: newUser.id },
   //  data: { userName: "Susilawati update" },
@@ -32,7 +26,6 @@ async function main() {
   //  where: { id: newUser.id },
   //});
   //console.log("Deleted user:", deletedUser);
-
   //const auditTrail = await prisma.userHistory.findMany();
   //console.log("History Trail:", auditTrail);
 }
@@ -46,6 +39,7 @@ main()
     await prisma.$disconnect();
   });
 
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
