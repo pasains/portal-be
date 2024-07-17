@@ -1,0 +1,27 @@
+version: '3'
+name: 'pasains'
+services:
+  adminer:
+    image: adminer
+    networks:
+      - server_pasains_net
+    ports:
+      - 8089:8080
+    restart: always
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: pasains_portal
+      POSTGRES_PASSWORD: zzLFXW7R8Uip8cjQrqCu
+      POSTGRES_USER: postgres
+    networks:
+      - server_pasains_net
+    ports:
+      - 5434:5432
+    restart: always
+    volumes:
+      - db_pasains_data:/var/lib/postgresql/data
+networks:
+  server_pasains_net:
+volumes:
+  db_pasains_data:
