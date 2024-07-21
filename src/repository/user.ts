@@ -1,21 +1,36 @@
 import { PrismaClient } from "@prisma/client";
-import { User } from "@prisma/client";
+import { UserCreateParams, UserUpdateParams } from "../types/User";
 
 const prisma = new PrismaClient();
 
-export const createUser = async (user: User) => {
+export const createUser = async (data: UserCreateParams) => {
   const newUser = await prisma.user.create({
-    data: user,
+    data: data,
   });
   return newUser;
 };
 
-export const updateUser = async (user: User) => {
+export const updateUser = async (userId: number, data: UserUpdateParams) => {
   const updatedUser = await prisma.user.update({
-    where: { id: user.id },
-    data: user,
+    where: { id: userId },
+    data: data,
   });
   return updatedUser;
+};
+
+export const patchUser = async (
+  userId: number,
+  op: string,
+  field: string,
+  value: string,
+) => {
+  const patchedUser = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      [field]: op === "add" || op === "replace" ? value : null,
+    },
+  });
+  return patchedUser;
 };
 
 export const deleteUser = async (userId: number) => {

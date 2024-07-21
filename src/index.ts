@@ -4,6 +4,12 @@ import { app } from "./router";
 
 dotenv.config();
 
+// Fix BigInt to JSON
+// @ts-ignore
+BigInt.prototype.toJSON = function () {
+  return Number(this);
+};
+
 async function main() {
   // const newInventory = await prisma.inventory.create({
   //   data: {
