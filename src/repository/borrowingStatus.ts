@@ -2,7 +2,9 @@ import { PrismaClient, BorrowingStatus } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const createBorrowingStatus = async (borrowingStatus: BorrowingStatus) => {
+export const createBorrowingStatus = async (
+  borrowingStatus: BorrowingStatus,
+) => {
   const newBorrowingStatus = await prisma.borrowingStatus.create({
     data: borrowingStatus,
   });

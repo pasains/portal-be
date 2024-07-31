@@ -1,6 +1,5 @@
 // handling all business logic for inventory related
 import {
-  checkInventoryTypeExists,
   createInventory,
   deleteInventory,
   getAllInventory,
@@ -12,8 +11,8 @@ import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 import {
   InventoryCreateParams,
   InventoryUpdateParams,
-} from "../types/Inventory";
-import { InventoryType } from "@prisma/client";
+} from "../types/inventory";
+import { checkInventoryTypeExists } from "../repository/inventoryType";
 
 export const createInventoryService = async (
   inventory: InventoryCreateParams,
@@ -21,9 +20,8 @@ export const createInventoryService = async (
   if (
     !inventory.inventoryTypeId ||
     typeof inventory.inventoryTypeId !== "number"
-  )
+  ) {
     throw new Error("Invalid inventory Type Id");
-  {
   }
   const exists = await checkInventoryTypeExists(inventory.inventoryTypeId);
   if (!exists) {

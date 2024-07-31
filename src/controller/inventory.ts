@@ -10,6 +10,8 @@ import {
 } from "../service/inventory";
 
 import { body, param, validationResult } from "express-validator";
+import { normalize } from "../utils/normalize";
+import { DataType } from "../types/dataType";
 
 export const inventoryRouter = Router();
 
@@ -27,9 +29,17 @@ inventoryRouter.post(
     }
     try {
       const inventory = await createInventoryService(req.body);
-      res.send(inventory);
+      res.send(
+        normalize(
+          "Inventory created successfully",
+          "OK",
+          DataType.object,
+          inventory,
+        ),
+      );
     } catch (error) {
-      res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -50,9 +60,17 @@ inventoryRouter.put(
     const id = req.params.id;
     try {
       const inventory = await updateInventoryService(+id, req.body);
-      res.send(inventory);
+      res.send(
+        normalize(
+          "Inventory updated successfully",
+          "OK",
+          DataType.object,
+          inventory,
+        ),
+      );
     } catch (error) {
-      res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -92,9 +110,19 @@ inventoryRouter.delete(
     const id = req.params.id;
     try {
       await deleteInventoryService(+id);
-      res.status(200).json({ message: "User deleted successfully" });
+      res
+        .status(200)
+        .json(
+          normalize(
+            "Inventory deleted successfully",
+            "OK",
+            DataType.null,
+            null,
+          ),
+        );
     } catch (error) {
-      return res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -111,12 +139,22 @@ inventoryRouter.get(
     try {
       const inventory = await getInventoryService(+id);
       if (inventory) {
-        res.send(inventory);
+        res.send(
+          normalize(
+            "Inventory found successfully",
+            "OK",
+            DataType.object,
+            inventory,
+          ),
+        );
       } else {
-        res.status(400).json({ message: "Inventory not found" });
+        res
+          .status(400)
+          .json(normalize("Inventory not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
-      res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -124,8 +162,16 @@ inventoryRouter.get(
 inventoryRouter.get("/", async (_req: Request, res: Response) => {
   try {
     const inventory = await getAllInventoryService();
-    res.send(inventory);
+    res.send(
+      normalize(
+        "Inventory list found successfully",
+        "OK",
+        DataType.array,
+        inventory,
+      ),
+    );
   } catch (error) {
-    res.status(400).json({ message: error });
+    const message = (error as any)?.message || "Internal server error";
+    res.status(400).json(normalize(message, "ERROR", DataType.null, null));
   }
 });

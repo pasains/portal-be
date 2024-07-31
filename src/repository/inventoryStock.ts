@@ -2,7 +2,7 @@ import { InventoryStock, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const createInventoryStock = async ( inventoryStock: InventoryStock) => {
+export const createInventoryStock = async (inventoryStock: InventoryStock) => {
   const newInventoryStock = await prisma.inventoryStock.create({
     data: inventoryStock,
   });
@@ -11,7 +11,7 @@ export const createInventoryStock = async ( inventoryStock: InventoryStock) => {
 
 export const updateInventoryStock = async (
   inventoryStockId: number,
-  inventoryStock: InventoryStock
+  inventoryStock: InventoryStock,
 ) => {
   const updatedInventoryStock = await prisma.inventoryStock.update({
     where: { id: inventoryStockId },

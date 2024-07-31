@@ -1,3 +1,4 @@
+import { getInventoryGroup } from "../repository/inventoryGroup";
 import {
   createInventoryType,
   deleteInventoryType,
@@ -5,17 +6,42 @@ import {
   getInventoryType,
   updateInventoryType,
 } from "../repository/inventoryType";
-import { InventoryTypeCreateParams, InventoryTypeUpdateParams } from "../types/inventoryType";
+import {
+  InventoryTypeCreateParams,
+  InventoryTypeUpdateParams,
+} from "../types/inventoryType";
 
-export const createInventoryTypeService = async (inventoryType: InventoryTypeCreateParams ) => {
-  const newInventoryType = await createInventoryType(inventoryType);
+export const createInventoryTypeService = async (
+  inventoryType: InventoryTypeCreateParams,
+) => {
+  // check if InventoryGroup exists
+  if (inventoryType.groupId) {
+    const groupExists = await getInventoryGroup(inventoryType.groupId);
+    if (!groupExists) {
+      throw new Error("Invalid Inventory Group");
+    }
+  }
+  const newInventoryType = await createInventoryType({
+    ...inventoryType,
+  });
   return newInventoryType;
 };
+
 export const updateInventoryTypeService = async (
   inventoryTypeId: number,
   inventoryType: InventoryTypeUpdateParams,
 ) => {
-  const updatedInventoryType = await updateInventoryType(inventoryTypeId, inventoryType);
+  // check if InventoryGroup exists
+  if (inventoryType.groupId) {
+    const groupExists = await getInventoryGroup(inventoryType.groupId);
+    if (!groupExists) {
+      throw new Error("Invalid Inventory Group");
+    }
+  }
+  const updatedInventoryType = await updateInventoryType(
+    inventoryTypeId,
+    inventoryType,
+  );
   return updatedInventoryType;
 };
 

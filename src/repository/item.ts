@@ -9,10 +9,7 @@ export const createItem = async (item: Item) => {
   return newItem;
 };
 
-export const updateItem = async (
-  itemId: number,
-  item: Item,
-) => {
+export const updateItem = async (itemId: number, item: Item) => {
   const updatedItem = await prisma.item.update({
     where: { id: itemId },
     data: item,

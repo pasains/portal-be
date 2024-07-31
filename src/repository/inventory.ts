@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   InventoryCreateParams,
   InventoryUpdateParams,
-} from "../types/Inventory";
+} from "../types/inventory";
 
 const prisma = new PrismaClient();
 
@@ -13,17 +13,6 @@ export const createInventory = async (inventory: InventoryCreateParams) => {
     data: inventory,
   });
   return newInventory;
-};
-
-export const checkInventoryTypeExists = async (
-  inventoryTypeId: number,
-): Promise<boolean> => {
-  const count = await prisma.inventoryType.count({
-    where: {
-      id: inventoryTypeId,
-    },
-  });
-  return count > 0;
 };
 
 export const updateInventory = async (

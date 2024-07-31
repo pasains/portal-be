@@ -9,7 +9,7 @@ import {
 import {
   UserCreateParams,
   UserUpdateParams,
-} from "../types/User";
+} from "../types/user";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 export const createUserService = async (data: UserCreateParams) => {

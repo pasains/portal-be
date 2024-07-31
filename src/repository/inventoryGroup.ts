@@ -2,7 +2,7 @@ import { InventoryGroup, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const createInventoryGroup = async ( inventoryGroup: InventoryGroup) => {
+export const createInventoryGroup = async (inventoryGroup: InventoryGroup) => {
   const newInventoryGroup = await prisma.inventoryGroup.create({
     data: inventoryGroup,
   });

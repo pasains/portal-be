@@ -2,7 +2,9 @@ import { InventoryHistory, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const createInventoryHistory = async ( inventoryHistory: InventoryHistory) => {
+export const createInventoryHistory = async (
+  inventoryHistory: InventoryHistory,
+) => {
   const newInventoryHistory = await prisma.inventoryHistory.create({
     data: inventoryHistory,
   });
@@ -11,7 +13,7 @@ export const createInventoryHistory = async ( inventoryHistory: InventoryHistory
 
 export const updateInventoryHistory = async (
   inventoryHistoryId: number,
-  inventoryHistory: InventoryHistory
+  inventoryHistory: InventoryHistory,
 ) => {
   const updatedInventoryHistory = await prisma.inventoryHistory.update({
     where: { id: inventoryHistoryId },

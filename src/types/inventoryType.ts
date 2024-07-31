@@ -3,6 +3,7 @@ export interface InventoryTypeCreateParams {
   inventoryTypeName: string;
   description: string;
   createdBy: number;
+  groupId: number;
 }
 
 export interface InventoryTypeUpdateParams {
@@ -11,4 +12,5 @@ export interface InventoryTypeUpdateParams {
   description: string;
   updatedAt: Date;
   updatedBy: number;
+  groupId: number;
 }
