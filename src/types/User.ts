@@ -28,3 +28,4 @@ export interface UserUpdateParams {
   updatedAt: Date;
   updatedBy: number;
 }
+

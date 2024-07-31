@@ -2,6 +2,7 @@ import express from "express";
 
 import { inventoryRouter } from "./controller/inventory";
 import { userRouter } from "./controller/user";
+import { inventoryTypeRouter } from "./controller/inventoryType";
 import bodyParser from "body-parser";
 
 export const app = express();
@@ -16,6 +17,7 @@ app.use(
 );
 
 app.use("/api/inventory", inventoryRouter);
+app.use("/api/inventorytype", inventoryTypeRouter);
 app.use("/api/user", userRouter);
 app.get("/api/healthz", (_req, res) => {
   res.send("OK");
