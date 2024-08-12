@@ -1,21 +1,39 @@
-import { PrismaClient, StockLedger } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import {
+  StockLedgerCreateParams,
+  StockLedgerUpdateParams,
+} from "../types/stockLedger";
 
 const prisma = new PrismaClient();
 
-export const createStockLedger = async (stockLedger: StockLedger) => {
+export const createStockLedger = async (
+  stockLedger: StockLedgerCreateParams,
+) => {
   const newStockLedger = await prisma.stockLedger.create({
-    data: stockLedger,
+    data: {
+      inventoryId: stockLedger?.inventoryId,
+      quantity: stockLedger?.quantity,
+      quantityAfterTransaction: stockLedger?.quantityAfterTransaction,
+      voucherType: stockLedger?.voucherType,
+      voucherName: stockLedger?.voucherName,
+    },
   });
   return newStockLedger;
 };
 
 export const updateStockLedger = async (
   stockLedgerId: number,
-  stockLedger: StockLedger,
+  stockLedger: StockLedgerUpdateParams,
 ) => {
   const updatedStockLedger = await prisma.stockLedger.update({
     where: { id: stockLedgerId },
-    data: stockLedger,
+    data: {
+      inventoryId: stockLedger?.inventoryId,
+      quantity: stockLedger?.quantity,
+      quantityAfterTransaction: stockLedger?.quantityAfterTransaction,
+      voucherType: stockLedger?.voucherType,
+      voucherName: stockLedger?.voucherName,
+    },
   });
   return updatedStockLedger;
 };

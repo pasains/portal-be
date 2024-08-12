@@ -1,8 +1,14 @@
-import { InventoryGroup, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import {
+  InventoryGroupCreateParams,
+  InventoryGroupUpdateParams,
+} from "../types/inventoryGroup";
 
 const prisma = new PrismaClient();
 
-export const createInventoryGroup = async (inventoryGroup: InventoryGroup) => {
+export const createInventoryGroup = async (
+  inventoryGroup: InventoryGroupCreateParams,
+) => {
   const newInventoryGroup = await prisma.inventoryGroup.create({
     data: inventoryGroup,
   });
@@ -11,7 +17,7 @@ export const createInventoryGroup = async (inventoryGroup: InventoryGroup) => {
 
 export const updateInventoryGroup = async (
   inventoryGroupId: number,
-  inventoryGroup: InventoryGroup,
+  inventoryGroup: InventoryGroupUpdateParams,
 ) => {
   const updatedInventoryGroup = await prisma.inventoryGroup.update({
     where: { id: inventoryGroupId },
@@ -37,4 +43,17 @@ export const getInventoryGroup = async (inventoryGroupId: number) => {
 export const getAllInventoryGroup = async () => {
   const allInventoryGroup = await prisma.inventoryGroup.findMany();
   return allInventoryGroup;
+};
+
+export const connectInventoryGroupToInventoryType = async (
+  inventoryGroupId: number,
+  inventoryTypeId: number,
+) => {
+  const updatedInventoryGroup = await prisma.inventoryGroup.update({
+    where: { id: inventoryGroupId },
+    data: {
+      type: { connect: { id: inventoryTypeId } },
+    },
+  });
+  return updatedInventoryGroup;
 };

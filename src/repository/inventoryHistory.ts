@@ -1,23 +1,35 @@
-import { InventoryHistory, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import {
+  InventoryHistoryCreateParams,
+  InventoryHistoryUpdateParams,
+} from "../types/inventoryHistory";
 
 const prisma = new PrismaClient();
 
 export const createInventoryHistory = async (
-  inventoryHistory: InventoryHistory,
+  inventoryHistory: InventoryHistoryCreateParams,
 ) => {
   const newInventoryHistory = await prisma.inventoryHistory.create({
-    data: inventoryHistory,
+    data: {
+      inventoryId: inventoryHistory?.inventoryId,
+      condition: inventoryHistory?.condition,
+      image: inventoryHistory?.image,
+    },
   });
   return newInventoryHistory;
 };
 
 export const updateInventoryHistory = async (
   inventoryHistoryId: number,
-  inventoryHistory: InventoryHistory,
+  inventoryHistory: InventoryHistoryUpdateParams,
 ) => {
   const updatedInventoryHistory = await prisma.inventoryHistory.update({
     where: { id: inventoryHistoryId },
-    data: inventoryHistory,
+    data: {
+      inventoryId: inventoryHistory?.inventoryId,
+      condition: inventoryHistory?.condition,
+      image: inventoryHistory?.image,
+    },
   });
   return updatedInventoryHistory;
 };

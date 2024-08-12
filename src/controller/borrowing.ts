@@ -1,40 +1,44 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryService,
-  deleteInventoryService,
-  getAllInventoryService,
-  getInventoryService,
-  patchInventoryService,
-  updateInventoryService,
-} from "../service/inventory";
+  createBorrowingService,
+  deleteBorrowingService,
+  getAllBorrowingService,
+  getBorrowingService,
+  patchBorrowingService,
+  updateBorrowingService,
+} from "../service/borrowing";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const inventoryRouter = Router();
+export const borrowingRouter = Router();
 
-inventoryRouter.post(
+borrowingRouter.post(
   "/",
-  body("inventoryName").isString().trim(),
-  body("refId").isString().trim(),
-  body("description").isString().trim(),
-  body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric(),
+  body("borrowerId").optional().isNumeric(),
+  body("borrowingStatusId").optional().isNumeric(),
+  body("organizationId").optional().isNumeric(),
+  body("dueDate")
+    .isISO8601()
+    .withMessage(
+      "Please provide a complete ISO-8601 date-time string with timezone (e.g., 2024-08-10T12:34:56.789Z)",
+    ),
+  body("specialInstruction").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const inventory = await createInventoryService(req.body);
+      const borrowing = await createBorrowingService(req.body);
       res.send(
         normalize(
-          "Inventory created successfully",
+          "Borrowing created successfully",
           "OK",
           DataType.object,
-          inventory,
+          borrowing,
         ),
       );
     } catch (error) {
@@ -44,14 +48,18 @@ inventoryRouter.post(
   },
 );
 
-inventoryRouter.put(
+borrowingRouter.put(
   "/:id",
   param("id").isNumeric().trim(),
-  body("inventoryName").isString().trim(),
-  body("refId").isString().trim(),
-  body("description").isString().trim(),
-  body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric().trim(),
+  body("borrowerId").optional().isNumeric(),
+  body("borrowingStatusId").optional().isNumeric(),
+  body("organizationId").optional().isNumeric(),
+  body("dueDate")
+    .isISO8601()
+    .withMessage(
+      "Please provide a complete ISO-8601 date-time string with timezone (e.g., 2024-08-10T12:34:56.789Z)",
+    ),
+  body("specialInstruction").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -59,13 +67,13 @@ inventoryRouter.put(
     }
     const id = req.params.id;
     try {
-      const inventory = await updateInventoryService(+id, req.body);
+      const borrowing = await updateBorrowingService(+id, req.body);
       res.send(
         normalize(
-          "Inventory updated successfully",
+          "Borrowing updated successfully",
           "OK",
           DataType.object,
-          inventory,
+          borrowing,
         ),
       );
     } catch (error) {
@@ -75,7 +83,7 @@ inventoryRouter.put(
   },
 );
 
-inventoryRouter.patch(
+borrowingRouter.patch(
   "/:id",
   param("id").isNumeric().trim(),
   body("op").isIn(["add", "remove", "replace"]),
@@ -88,8 +96,8 @@ inventoryRouter.patch(
     }
     const id = req.params.id;
     try {
-      const inventory = await patchInventoryService(+id, req.body);
-      res.send(inventory);
+      const borrowing = await patchBorrowingService(+id, req.body);
+      res.send(borrowing);
     } catch (error) {
       if (error instanceof Error) {
         return res.status(400).json({ message: error.message });
@@ -99,7 +107,7 @@ inventoryRouter.patch(
   },
 );
 
-inventoryRouter.delete(
+borrowingRouter.delete(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -109,25 +117,15 @@ inventoryRouter.delete(
     }
     const id = req.params.id;
     try {
-      await deleteInventoryService(+id);
-      res
-        .status(200)
-        .json(
-          normalize(
-            "Inventory deleted successfully",
-            "OK",
-            DataType.null,
-            null,
-          ),
-        );
+      await deleteBorrowingService(+id);
+      res.status(200).json({ message: "Borrowing deleted successfully" });
     } catch (error) {
-      const message = (error as any)?.message || "Internal server error";
-      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+      return res.status(400).json({ message: error });
     }
   },
 );
 
-inventoryRouter.get(
+borrowingRouter.get(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -137,20 +135,20 @@ inventoryRouter.get(
     }
     const id = req.params.id;
     try {
-      const inventory = await getInventoryService(+id);
-      if (inventory) {
+      const borrowing = await getBorrowingService(+id);
+      if (borrowing) {
         res.send(
           normalize(
-            "Inventory found successfully",
+            "Borrowing found successfully",
             "OK",
             DataType.object,
-            inventory,
+            borrowing,
           ),
         );
       } else {
         res
           .status(400)
-          .json(normalize("Inventory not found", "ERROR", DataType.null, null));
+          .json(normalize("Borrowing not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -159,19 +157,20 @@ inventoryRouter.get(
   },
 );
 
-inventoryRouter.get("/", async (_req: Request, res: Response) => {
+borrowingRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventory = await getAllInventoryService();
+    const borrowing = await getAllBorrowingService();
     res.send(
       normalize(
-        "Inventory list found successfully",
+        "Borrowing found successfully",
         "OK",
         DataType.array,
-        inventory,
+        borrowing,
       ),
     );
   } catch (error) {
-    const message = (error as any)?.message || "Internal server error";
-    res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+    res
+      .status(400)
+      .json(normalize("Internal server error", "ERROR", DataType.null, null));
   }
 });

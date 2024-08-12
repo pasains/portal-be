@@ -1,5 +1,5 @@
 export interface InventoryTypeCreateParams {
-  id: bigint;
+  id: number;
   inventoryTypeName: string;
   description: string;
   createdBy: number;
@@ -7,7 +7,7 @@ export interface InventoryTypeCreateParams {
 }
 
 export interface InventoryTypeUpdateParams {
-  id : bigint;
+  id : number;
   inventoryTypeName: string;
   description: string;
   updatedAt: Date;

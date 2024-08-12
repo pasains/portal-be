@@ -1,21 +1,34 @@
-import { PrismaClient, Borrower } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { BorrowerCreateParams, BorrowerUpdateParams } from "../types/borrower";
 
 const prisma = new PrismaClient();
 
-export const createBorrower = async (borrower: Borrower) => {
+export const createBorrower = async (borrower: BorrowerCreateParams) => {
   const newBorrower = await prisma.borrower.create({
-    data: borrower,
+    data: {
+      borrowerName: borrower?.borrowerName,
+      organizationName: borrower?.organizationName,
+      identityCard: borrower?.identityCard,
+      identityNumber: borrower?.identityNumber,
+      phoneNumber: borrower?.phoneNumber,
+    },
   });
   return newBorrower;
 };
 
 export const updateBorrower = async (
   borrowerId: number,
-  borrower: Borrower,
+  borrower: BorrowerUpdateParams,
 ) => {
   const updatedBorrower = await prisma.borrower.update({
     where: { id: borrowerId },
-    data: borrower,
+    data: {
+      borrowerName: borrower?.borrowerName,
+      organizationName: borrower?.organizationName,
+      identityCard: borrower?.identityCard,
+      identityNumber: borrower?.identityNumber,
+      phoneNumber: borrower?.phoneNumber,
+    },
   });
   return updatedBorrower;
 };

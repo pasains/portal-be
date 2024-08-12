@@ -20,6 +20,11 @@ userRouter.post(
   body("firstName").isString().trim(), // spec validation
   body("lastName").isString().trim(), // spec validation
   body("email").isEmail().trim(), // spec validation
+  body("password").isStrongPassword({
+    minLength: 12,
+    minUppercase: 1,
+    minSymbols: 1,
+  }), // spec validation
   body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }), // spec validation
   body("address").isString().trim(), // spec validation
   body("profile").isString().trim(), // spec validation
@@ -59,7 +64,7 @@ userRouter.put(
   body("firstName").isString().trim(), // spec validation
   body("lastName").isString().trim(), // spec validation
   body("email").isEmail().trim(), // spec validation
-  body("phoneNumber").isString().trim(), // spec validation
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }), // spec validation
   body("address").isString().trim(), // spec validation
   body("profile").isString().trim(), // spec validation
   body("position").isString().trim(), // spec validation

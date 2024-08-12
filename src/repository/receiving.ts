@@ -1,8 +1,12 @@
-import { PrismaClient, Receiving } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import {
+  ReceivingCreateParams,
+  ReceivingUpdateParams,
+} from "../types/receiving";
 
 const prisma = new PrismaClient();
 
-export const createReceiving = async (receiving: Receiving) => {
+export const createReceiving = async (receiving: ReceivingCreateParams) => {
   const newReceiving = await prisma.receiving.create({
     data: receiving,
   });
@@ -11,7 +15,7 @@ export const createReceiving = async (receiving: Receiving) => {
 
 export const updateReceiving = async (
   receivingId: number,
-  receiving: Receiving,
+  receiving: ReceivingUpdateParams,
 ) => {
   const updatedReceiving = await prisma.receiving.update({
     where: { id: receivingId },

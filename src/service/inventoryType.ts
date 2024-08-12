@@ -59,3 +59,4 @@ export const getAllInventoryTypeService = async () => {
   const allInventoryType = await getAllInventoryType();
   return allInventoryType;
 };
+

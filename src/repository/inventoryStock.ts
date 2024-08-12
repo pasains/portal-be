@@ -1,36 +1,35 @@
-import { InventoryStock, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import {
+  InventoryStockCreateParams,
+  InventoryStockUpdateParams,
+} from "../types/inventoryStock";
 
 const prisma = new PrismaClient();
 
-export const createInventoryStock = async (inventoryStock: InventoryStock) => {
+export const createInventoryStock = async (
+  inventoryStock: InventoryStockCreateParams,
+) => {
   const newInventoryStock = await prisma.inventoryStock.create({
-    data: inventoryStock,
+    data: {
+      inventoryId: inventoryStock?.inventoryId,
+      quantity: inventoryStock?.quantity,
+    },
   });
   return newInventoryStock;
 };
 
 export const updateInventoryStock = async (
   inventoryStockId: number,
-  inventoryStock: InventoryStock,
+  inventoryStock: InventoryStockUpdateParams,
 ) => {
   const updatedInventoryStock = await prisma.inventoryStock.update({
     where: { id: inventoryStockId },
-    data: inventoryStock,
+    data: {
+      inventoryId: inventoryStock?.inventoryId,
+      quantity: inventoryStock?.quantity,
+    },
   });
   return updatedInventoryStock;
-};
-
-export const patchInventoryStock = async (
-  inventoryStockId: number,
-  op: string,
-  field: string,
-  value: string,
-) => {
-  const patchedInventoryStock = await prisma.inventoryStock.update({
-    where: { id: inventoryStockId },
-    data: { [field]: op === "add" || op === "replace" ? value : null },
-  });
-  return patchedInventoryStock;
 };
 
 export const deleteInventoryStock = async (inventoryStockId: number) => {

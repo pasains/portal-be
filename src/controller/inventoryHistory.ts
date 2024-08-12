@@ -1,37 +1,37 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryTypeService,
-  deleteInventoryTypeService,
-  getAllInventoryTypeService,
-  getInventoryTypeService,
-  updateInventoryTypeService,
-} from "../service/inventoryType";
+  createInventoryHistoryService,
+  deleteInventoryHistoryService,
+  getAllInventoryHistoryService,
+  getInventoryHistoryService,
+  updateInventoryHistoryService,
+} from "../service/inventoryHistory";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const inventoryTypeRouter = Router();
+export const inventoryHistoryRouter = Router();
 
-inventoryTypeRouter.post(
+inventoryHistoryRouter.post(
   "/",
-  body("inventoryTypeName").isString().trim(),
-  body("description").isString().trim(),
-  body("groupId").optional().isNumeric(),
+  body("inventoryId").optional().isNumeric(),
+  body("condition").isString().trim(),
+  body("image").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const inventoryType = await createInventoryTypeService(req.body);
+      const inventoryHistory = await createInventoryHistoryService(req.body);
       res.send(
         normalize(
-          "Inventory Type created successfully",
+          "Inventory History created successfully",
           "OK",
           DataType.object,
-          inventoryType,
+          inventoryHistory,
         ),
       );
     } catch (error) {
@@ -41,12 +41,12 @@ inventoryTypeRouter.post(
   },
 );
 
-inventoryTypeRouter.put(
+inventoryHistoryRouter.put(
   "/:id",
   param("id").isNumeric().trim(),
-  body("inventoryTypeName").isString().trim(),
-  body("description").isString().trim(),
-  body("groupId").optional().isNumeric(),
+  body("inventoryId").optional().isNumeric(),
+  body("condition").isString().trim(),
+  body("image").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -54,13 +54,13 @@ inventoryTypeRouter.put(
     }
     const id = req.params.id;
     try {
-      const inventoryType = await updateInventoryTypeService(+id, req.body);
+      const inventoryHistory = await updateInventoryHistoryService(+id, req.body);
       res.send(
         normalize(
-          "Inventory Type updated successfully",
+          "Inventory History updated successfully",
           "OK",
           DataType.object,
-          inventoryType,
+          inventoryHistory,
         ),
       );
     } catch (error) {
@@ -70,7 +70,7 @@ inventoryTypeRouter.put(
   },
 );
 
-inventoryTypeRouter.delete(
+inventoryHistoryRouter.delete(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -80,15 +80,15 @@ inventoryTypeRouter.delete(
     }
     const id = req.params.id;
     try {
-      await deleteInventoryTypeService(+id);
-      res.status(200).json({ message: "Inventory Type deleted successfully" });
+      await deleteInventoryHistoryService(+id);
+      res.status(200).json({ message: "Inventory History deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
     }
   },
 );
 
-inventoryTypeRouter.get(
+inventoryHistoryRouter.get(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -98,21 +98,21 @@ inventoryTypeRouter.get(
     }
     const id = req.params.id;
     try {
-      const inventoryType = await getInventoryTypeService(+id);
-      if (inventoryType) {
+      const inventoryHistory = await getInventoryHistoryService(+id);
+      if (inventoryHistory) {
         res.send(
           normalize(
-            "Inventory Type found successfully",
+            "Inventory History found successfully",
             "OK",
             DataType.object,
-            inventoryType,
+            inventoryHistory,
           ),
         );
       } else {
         res
           .status(400)
           .json(
-            normalize("Inventory Type not found", "ERROR", DataType.null, null),
+            normalize("Inventory History not found", "ERROR", DataType.null, null),
           );
       }
     } catch (error) {
@@ -122,15 +122,15 @@ inventoryTypeRouter.get(
   },
 );
 
-inventoryTypeRouter.get("/", async (_req: Request, res: Response) => {
+inventoryHistoryRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventoryType = await getAllInventoryTypeService();
+    const inventoryHistory = await getAllInventoryHistoryService();
     res.send(
       normalize(
-        "Inventory Type found successfully",
+        "Inventory History found successfully",
         "OK",
         DataType.array,
-        inventoryType,
+        inventoryHistory,
       ),
     );
   } catch (error) {

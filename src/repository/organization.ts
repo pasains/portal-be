@@ -1,21 +1,37 @@
-import { PrismaClient, Organization } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import {
+  OrganizationCreateParams,
+  OrganizationUpdateParams,
+} from "../types/organization";
 
 const prisma = new PrismaClient();
 
-export const createOrganization = async (organization: Organization) => {
+export const createOrganization = async (
+  organization: OrganizationCreateParams,
+) => {
   const newOrganization = await prisma.organization.create({
-    data: organization,
+    data: {
+      organizationName: organization?.organizationName,
+      address: organization?.address,
+      organizationStatus: organization?.organizationStatus,
+      note: organization?.note,
+    },
   });
   return newOrganization;
 };
 
 export const updateOrganization = async (
   organizationId: number,
-  organization: Organization,
+  organization: OrganizationUpdateParams,
 ) => {
   const updatedOrganization = await prisma.organization.update({
     where: { id: organizationId },
-    data: organization,
+    data: {
+      organizationName: organization?.organizationName,
+      address: organization?.address,
+      organizationStatus: organization?.organizationStatus,
+      note: organization?.note,
+    },
   });
   return updatedOrganization;
 };

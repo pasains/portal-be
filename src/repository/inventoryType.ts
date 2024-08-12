@@ -1,4 +1,4 @@
-import { InventoryType, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import {
   InventoryTypeCreateParams,
   InventoryTypeUpdateParams,
@@ -68,4 +68,17 @@ export const checkInventoryTypeExists = async (
     },
   });
   return count > 0;
+};
+
+export const connectInventoryTypeToGroup = async (
+  inventoryTypeId: number,
+  inventoryGroupId: number,
+) => {
+  const updatedInventoryType = await prisma.inventoryType.update({
+    where: { id: inventoryTypeId },
+    data: {
+      group: { connect: { id: inventoryGroupId } },
+    },
+  });
+  return updatedInventoryType;
 };

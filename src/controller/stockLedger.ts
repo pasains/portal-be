@@ -1,37 +1,39 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryTypeService,
-  deleteInventoryTypeService,
-  getAllInventoryTypeService,
-  getInventoryTypeService,
-  updateInventoryTypeService,
-} from "../service/inventoryType";
+  createStockLedgerService,
+  deleteStockLedgerService,
+  getAllStockLedgerService,
+  getStockLedgerService,
+  updateStockLedgerService,
+} from "../service/stockLedger";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const inventoryTypeRouter = Router();
+export const stockLedgerRouter = Router();
 
-inventoryTypeRouter.post(
+stockLedgerRouter.post(
   "/",
-  body("inventoryTypeName").isString().trim(),
-  body("description").isString().trim(),
-  body("groupId").optional().isNumeric(),
+  body("stockLedgerId").optional().isNumeric(),
+  body("quantity").isNumeric(),
+  body("quantityAfterTransaction").isNumeric(),
+  body("voucherType").isString().trim(),
+  body("voucherName").isNumeric(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const inventoryType = await createInventoryTypeService(req.body);
+      const stockLedger = await createStockLedgerService(req.body);
       res.send(
         normalize(
-          "Inventory Type created successfully",
+          "Stock Ledger created successfully",
           "OK",
           DataType.object,
-          inventoryType,
+          stockLedger,
         ),
       );
     } catch (error) {
@@ -41,12 +43,14 @@ inventoryTypeRouter.post(
   },
 );
 
-inventoryTypeRouter.put(
+stockLedgerRouter.put(
   "/:id",
   param("id").isNumeric().trim(),
-  body("inventoryTypeName").isString().trim(),
-  body("description").isString().trim(),
-  body("groupId").optional().isNumeric(),
+  body("stockLedgerId").optional().isNumeric(),
+  body("quantity").isNumeric(),
+  body("quantityAfterTransaction").isNumeric(),
+  body("voucherType").isString().trim(),
+  body("voucherName").isNumeric(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -54,13 +58,13 @@ inventoryTypeRouter.put(
     }
     const id = req.params.id;
     try {
-      const inventoryType = await updateInventoryTypeService(+id, req.body);
+      const stockLedger = await updateStockLedgerService(+id, req.body);
       res.send(
         normalize(
-          "Inventory Type updated successfully",
+          "Stock Ledger updated successfully",
           "OK",
           DataType.object,
-          inventoryType,
+          stockLedger,
         ),
       );
     } catch (error) {
@@ -70,7 +74,7 @@ inventoryTypeRouter.put(
   },
 );
 
-inventoryTypeRouter.delete(
+stockLedgerRouter.delete(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -80,15 +84,15 @@ inventoryTypeRouter.delete(
     }
     const id = req.params.id;
     try {
-      await deleteInventoryTypeService(+id);
-      res.status(200).json({ message: "Inventory Type deleted successfully" });
+      await deleteStockLedgerService(+id);
+      res.status(200).json({ message: "Stock Ledger deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
     }
   },
 );
 
-inventoryTypeRouter.get(
+stockLedgerRouter.get(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -98,21 +102,21 @@ inventoryTypeRouter.get(
     }
     const id = req.params.id;
     try {
-      const inventoryType = await getInventoryTypeService(+id);
-      if (inventoryType) {
+      const stockLedger = await getStockLedgerService(+id);
+      if (stockLedger) {
         res.send(
           normalize(
-            "Inventory Type found successfully",
+            "Stock Ledger found successfully",
             "OK",
             DataType.object,
-            inventoryType,
+            stockLedger,
           ),
         );
       } else {
         res
           .status(400)
           .json(
-            normalize("Inventory Type not found", "ERROR", DataType.null, null),
+            normalize("Stock Ledger not found", "ERROR", DataType.null, null),
           );
       }
     } catch (error) {
@@ -122,15 +126,15 @@ inventoryTypeRouter.get(
   },
 );
 
-inventoryTypeRouter.get("/", async (_req: Request, res: Response) => {
+stockLedgerRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventoryType = await getAllInventoryTypeService();
+    const stockLedger = await getAllStockLedgerService();
     res.send(
       normalize(
-        "Inventory Type found successfully",
+        "Stock Ledger found successfully",
         "OK",
         DataType.array,
-        inventoryType,
+        stockLedger,
       ),
     );
   } catch (error) {

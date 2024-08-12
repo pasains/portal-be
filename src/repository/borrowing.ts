@@ -1,21 +1,37 @@
-import { PrismaClient, Borrowing } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import {
+  BorrowingCreateParams,
+  BorrowingUpdateParams,
+} from "../types/borrowing";
 
 const prisma = new PrismaClient();
 
-export const createBorrowing = async (borrowing: Borrowing) => {
+export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
   const newBorrowing = await prisma.borrowing.create({
-    data: borrowing,
+    data: {
+      borrowerId: borrowing.borrowerId,
+      borrowingStatusId: borrowing.borrowingStatusId,
+      organizationId: borrowing.organizationId,
+      dueDate: borrowing.dueDate,
+      specialInstruction: borrowing.specialInstruction,
+    },
   });
   return newBorrowing;
 };
 
 export const updateBorrowing = async (
   borrowingId: number,
-  borrowing: Borrowing,
+  borrowing: BorrowingUpdateParams,
 ) => {
   const updatedBorrowing = await prisma.borrowing.update({
     where: { id: borrowingId },
-    data: borrowing,
+    data: {
+      borrowerId: borrowing.borrowerId,
+      borrowingStatusId: borrowing.borrowingStatusId,
+      organizationId: borrowing.organizationId,
+      dueDate: borrowing.dueDate,
+      specialInstruction: borrowing.specialInstruction,
+    },
   });
   return updatedBorrowing;
 };

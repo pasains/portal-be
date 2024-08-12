@@ -5,6 +5,7 @@ export interface UserCreateParams {
   lastName: string;
   userName: string;
   email: string;
+  password: string;
   phoneNumber: string;
   address: string;
   profile: string;
@@ -19,6 +20,7 @@ export interface UserUpdateParams {
   lastName: string;
   userName: string;
   email: string;
+  password: string;
   phoneNumber: string;
   address: string;
   profile: string;

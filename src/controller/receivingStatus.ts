@@ -1,37 +1,36 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryTypeService,
-  deleteInventoryTypeService,
-  getAllInventoryTypeService,
-  getInventoryTypeService,
-  updateInventoryTypeService,
-} from "../service/inventoryType";
+  createReceivingStatusService,
+  deleteReceivingStatusService,
+  getAllReceivingStatusService,
+  getReceivingStatusService,
+  updateReceivingStatusService,
+} from "../service/receivingStatus";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const inventoryTypeRouter = Router();
+export const receivingStatusRouter = Router();
 
-inventoryTypeRouter.post(
+receivingStatusRouter.post(
   "/",
-  body("inventoryTypeName").isString().trim(),
-  body("description").isString().trim(),
-  body("groupId").optional().isNumeric(),
+  body("receivingId").optional().isNumeric(),
+  body("status").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const inventoryType = await createInventoryTypeService(req.body);
+      const receivingStatus = await createReceivingStatusService(req.body);
       res.send(
         normalize(
-          "Inventory Type created successfully",
+          "Receiving Status created successfully",
           "OK",
           DataType.object,
-          inventoryType,
+          receivingStatus,
         ),
       );
     } catch (error) {
@@ -41,12 +40,11 @@ inventoryTypeRouter.post(
   },
 );
 
-inventoryTypeRouter.put(
+receivingStatusRouter.put(
   "/:id",
   param("id").isNumeric().trim(),
-  body("inventoryTypeName").isString().trim(),
-  body("description").isString().trim(),
-  body("groupId").optional().isNumeric(),
+  body("receivingId").optional().isNumeric(),
+  body("status").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -54,13 +52,13 @@ inventoryTypeRouter.put(
     }
     const id = req.params.id;
     try {
-      const inventoryType = await updateInventoryTypeService(+id, req.body);
+      const receivingStatus = await updateReceivingStatusService(+id, req.body);
       res.send(
         normalize(
-          "Inventory Type updated successfully",
+          "Receiving Status updated successfully",
           "OK",
           DataType.object,
-          inventoryType,
+          receivingStatus,
         ),
       );
     } catch (error) {
@@ -70,7 +68,7 @@ inventoryTypeRouter.put(
   },
 );
 
-inventoryTypeRouter.delete(
+receivingStatusRouter.delete(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -80,15 +78,15 @@ inventoryTypeRouter.delete(
     }
     const id = req.params.id;
     try {
-      await deleteInventoryTypeService(+id);
-      res.status(200).json({ message: "Inventory Type deleted successfully" });
+      await deleteReceivingStatusService(+id);
+      res.status(200).json({ message: "Receiving Status deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
     }
   },
 );
 
-inventoryTypeRouter.get(
+receivingStatusRouter.get(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -98,21 +96,21 @@ inventoryTypeRouter.get(
     }
     const id = req.params.id;
     try {
-      const inventoryType = await getInventoryTypeService(+id);
-      if (inventoryType) {
+      const receivingStatus = await getReceivingStatusService(+id);
+      if (receivingStatus) {
         res.send(
           normalize(
-            "Inventory Type found successfully",
+            "Receiving Status found successfully",
             "OK",
             DataType.object,
-            inventoryType,
+            receivingStatus,
           ),
         );
       } else {
         res
           .status(400)
           .json(
-            normalize("Inventory Type not found", "ERROR", DataType.null, null),
+            normalize("Receiving Status not found", "ERROR", DataType.null, null),
           );
       }
     } catch (error) {
@@ -122,15 +120,15 @@ inventoryTypeRouter.get(
   },
 );
 
-inventoryTypeRouter.get("/", async (_req: Request, res: Response) => {
+receivingStatusRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventoryType = await getAllInventoryTypeService();
+    const receivingStatus = await getAllReceivingStatusService();
     res.send(
       normalize(
-        "Inventory Type found successfully",
+        "Receiving Status found successfully",
         "OK",
         DataType.array,
-        inventoryType,
+        receivingStatus,
       ),
     );
   } catch (error) {
