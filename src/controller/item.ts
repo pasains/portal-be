@@ -1,40 +1,41 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryService,
-  deleteInventoryService,
-  getAllInventoryService,
-  getInventoryService,
-  patchInventoryService,
-  updateInventoryService,
-} from "../service/inventory";
+  createItemService,
+  deleteItemService,
+  getAllItemService,
+  getItemService,
+  patchItemService,
+  updateItemService,
+} from "../service/item";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const inventoryRouter = Router();
+export const itemRouter = Router();
 
-inventoryRouter.post(
+itemRouter.post(
   "/",
-  body("inventoryName").isString().trim(),
-  body("refId").isString().trim(),
-  body("description").isString().trim(),
-  body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric(),
+  body("borrowingId").optional().isNumeric(),
+  body("receivingId").optional().isNumeric(),
+  body("inventoryId").optional().isNumeric(),
+  body("quantity").isNumeric(),
+  body("preCondition").isString().trim(),
+  body("postCondition").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const inventory = await createInventoryService(req.body);
+      const item = await createItemService(req.body);
       res.send(
         normalize(
-          "Inventory created successfully",
+          "Item created successfully",
           "OK",
           DataType.object,
-          inventory,
+          item,
         ),
       );
     } catch (error) {
@@ -44,14 +45,15 @@ inventoryRouter.post(
   },
 );
 
-inventoryRouter.put(
+itemRouter.put(
   "/:id",
   param("id").isNumeric().trim(),
-  body("inventoryName").isString().trim(),
-  body("refId").isString().trim(),
-  body("description").isString().trim(),
-  body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric().trim(),
+  body("borrowingId").optional().isNumeric(),
+  body("receivingId").optional().isNumeric(),
+  body("inventoryId").optional().isNumeric(),
+  body("quantity").isNumeric(),
+  body("preCondition").isString().trim(),
+  body("postCondition").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -59,13 +61,13 @@ inventoryRouter.put(
     }
     const id = req.params.id;
     try {
-      const inventory = await updateInventoryService(+id, req.body);
+      const item = await updateItemService(+id, req.body);
       res.send(
         normalize(
-          "Inventory updated successfully",
+          "Item updated successfully",
           "OK",
           DataType.object,
-          inventory,
+          item,
         ),
       );
     } catch (error) {
@@ -75,7 +77,7 @@ inventoryRouter.put(
   },
 );
 
-inventoryRouter.patch(
+itemRouter.patch(
   "/:id",
   param("id").isNumeric().trim(),
   body("op").isIn(["add", "remove", "replace"]),
@@ -88,8 +90,8 @@ inventoryRouter.patch(
     }
     const id = req.params.id;
     try {
-      const inventory = await patchInventoryService(+id, req.body);
-      res.send(inventory);
+      const item = await patchItemService(+id, req.body);
+      res.send(item);
     } catch (error) {
       if (error instanceof Error) {
         return res.status(400).json({ message: error.message });
@@ -99,7 +101,7 @@ inventoryRouter.patch(
   },
 );
 
-inventoryRouter.delete(
+itemRouter.delete(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -109,25 +111,15 @@ inventoryRouter.delete(
     }
     const id = req.params.id;
     try {
-      await deleteInventoryService(+id);
-      res
-        .status(200)
-        .json(
-          normalize(
-            "Inventory deleted successfully",
-            "OK",
-            DataType.null,
-            null,
-          ),
-        );
+      await deleteItemService(+id);
+      res.status(200).json({ message: "Item deleted successfully" });
     } catch (error) {
-      const message = (error as any)?.message || "Internal server error";
-      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+      return res.status(400).json({ message: error });
     }
   },
 );
 
-inventoryRouter.get(
+itemRouter.get(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -137,20 +129,22 @@ inventoryRouter.get(
     }
     const id = req.params.id;
     try {
-      const inventory = await getInventoryService(+id);
-      if (inventory) {
+      const item = await getItemService(+id);
+      if (item) {
         res.send(
           normalize(
-            "Inventory found successfully",
+            "Item found successfully",
             "OK",
             DataType.object,
-            inventory,
+            item,
           ),
         );
       } else {
         res
           .status(400)
-          .json(normalize("Inventory not found", "ERROR", DataType.null, null));
+          .json(
+            normalize("Item not found", "ERROR", DataType.null, null),
+          );
       }
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -159,19 +153,20 @@ inventoryRouter.get(
   },
 );
 
-inventoryRouter.get("/", async (_req: Request, res: Response) => {
+itemRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventory = await getAllInventoryService();
+    const item = await getAllItemService();
     res.send(
       normalize(
-        "Inventory list found successfully",
+        "Item found successfully",
         "OK",
         DataType.array,
-        inventory,
+        item,
       ),
     );
   } catch (error) {
-    const message = (error as any)?.message || "Internal server error";
-    res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+    res
+      .status(400)
+      .json(normalize("Internal server error", "ERROR", DataType.null, null));
   }
 });

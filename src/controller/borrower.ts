@@ -1,40 +1,40 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryService,
-  deleteInventoryService,
-  getAllInventoryService,
-  getInventoryService,
-  patchInventoryService,
-  updateInventoryService,
-} from "../service/inventory";
+  createBorrowerService,
+  deleteBorrowerService,
+  patchBorrowerService,
+  getAllBorrowerService,
+  getBorrowerService,
+  updateBorrowerService,
+} from "../service/borrower";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const inventoryRouter = Router();
+export const borrowerRouter = Router();
 
-inventoryRouter.post(
+borrowerRouter.post(
   "/",
-  body("inventoryName").isString().trim(),
-  body("refId").isString().trim(),
-  body("description").isString().trim(),
-  body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric(),
+  body("borrowerName").isString().trim(),
+  body("organizationName").isString().trim(),
+  body("identityNumber").isString().trim(),
+  body("identityCard").isString().trim(),
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const inventory = await createInventoryService(req.body);
+      const borrower = await createBorrowerService(req.body);
       res.send(
         normalize(
-          "Inventory created successfully",
+          "Borrower created successfully",
           "OK",
           DataType.object,
-          inventory,
+          borrower,
         ),
       );
     } catch (error) {
@@ -44,14 +44,14 @@ inventoryRouter.post(
   },
 );
 
-inventoryRouter.put(
+borrowerRouter.put(
   "/:id",
   param("id").isNumeric().trim(),
-  body("inventoryName").isString().trim(),
-  body("refId").isString().trim(),
-  body("description").isString().trim(),
-  body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric().trim(),
+  body("borrowerName").isString().trim(),
+  body("organizationName").isString().trim(),
+  body("identityNumber").isString().trim(),
+  body("identityCard").isString().trim(),
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -59,13 +59,13 @@ inventoryRouter.put(
     }
     const id = req.params.id;
     try {
-      const inventory = await updateInventoryService(+id, req.body);
+      const borrower = await updateBorrowerService(+id, req.body);
       res.send(
         normalize(
-          "Inventory updated successfully",
+          "Borrower updated successfully",
           "OK",
           DataType.object,
-          inventory,
+          borrower,
         ),
       );
     } catch (error) {
@@ -75,12 +75,12 @@ inventoryRouter.put(
   },
 );
 
-inventoryRouter.patch(
+borrowerRouter.patch(
   "/:id",
   param("id").isNumeric().trim(),
-  body("op").isIn(["add", "remove", "replace"]),
-  body("path").isString().trim(),
-  body("value").optional().isString().trim(),
+  body("op").isIn(["add", "remove", "replace"]), // spec validation
+  body("path").isString().trim(), // spec validation
+  body("value").optional().isString().trim(), // spec validation
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -88,46 +88,22 @@ inventoryRouter.patch(
     }
     const id = req.params.id;
     try {
-      const inventory = await patchInventoryService(+id, req.body);
-      res.send(inventory);
+      const borrower = await patchBorrowerService(+id, req.body);
+      res.send(borrower);
     } catch (error) {
       if (error instanceof Error) {
-        return res.status(400).json({ message: error.message });
+        res
+          .status(400)
+          .json(normalize(error.message, "ERROR", DataType.null, null));
       }
-      res.status(500).json({ message: "Internal service error" });
-    }
-  },
-);
-
-inventoryRouter.delete(
-  "/:id",
-  param("id").isNumeric().trim(),
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    const id = req.params.id;
-    try {
-      await deleteInventoryService(+id);
       res
-        .status(200)
-        .json(
-          normalize(
-            "Inventory deleted successfully",
-            "OK",
-            DataType.null,
-            null,
-          ),
-        );
-    } catch (error) {
-      const message = (error as any)?.message || "Internal server error";
-      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+        .status(500)
+        .json(normalize("Internal server error", "ERROR", DataType.null, null));
     }
   },
 );
 
-inventoryRouter.get(
+borrowerRouter.delete(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -137,20 +113,38 @@ inventoryRouter.get(
     }
     const id = req.params.id;
     try {
-      const inventory = await getInventoryService(+id);
-      if (inventory) {
+      await deleteBorrowerService(+id);
+      res.status(200).json({ message: "Borrower deleted successfully" });
+    } catch (error) {
+      return res.status(400).json({ message: error });
+    }
+  },
+);
+
+borrowerRouter.get(
+  "/:id",
+  param("id").isNumeric().trim(),
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const id = req.params.id;
+    try {
+      const borrower = await getBorrowerService(+id);
+      if (borrower) {
         res.send(
           normalize(
-            "Inventory found successfully",
+            "Borrower found successfully",
             "OK",
             DataType.object,
-            inventory,
+            borrower,
           ),
         );
       } else {
         res
           .status(400)
-          .json(normalize("Inventory not found", "ERROR", DataType.null, null));
+          .json(normalize("Borrower not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -159,19 +153,15 @@ inventoryRouter.get(
   },
 );
 
-inventoryRouter.get("/", async (_req: Request, res: Response) => {
+borrowerRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventory = await getAllInventoryService();
+    const borrower = await getAllBorrowerService();
     res.send(
-      normalize(
-        "Inventory list found successfully",
-        "OK",
-        DataType.array,
-        inventory,
-      ),
+      normalize("Borrower found successfully", "OK", DataType.array, borrower),
     );
   } catch (error) {
-    const message = (error as any)?.message || "Internal server error";
-    res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+    res
+      .status(400)
+      .json(normalize("Internal server error", "ERROR", DataType.null, null));
   }
 });

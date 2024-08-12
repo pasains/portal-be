@@ -9,6 +9,8 @@ import {
   updateUserService,
 } from "../service/user";
 import { body, param, validationResult } from "express-validator";
+import { normalize } from "../utils/normalize";
+import { DataType } from "../types/dataType";
 
 export const userRouter = Router();
 
@@ -18,7 +20,12 @@ userRouter.post(
   body("firstName").isString().trim(), // spec validation
   body("lastName").isString().trim(), // spec validation
   body("email").isEmail().trim(), // spec validation
-  body("phoneNumber").isString().trim(), // spec validation
+  body("password").isStrongPassword({
+    minLength: 12,
+    minUppercase: 1,
+    minSymbols: 1,
+  }), // spec validation
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }), // spec validation
   body("address").isString().trim(), // spec validation
   body("profile").isString().trim(), // spec validation
   body("position").isString().trim(), // spec validation
@@ -39,10 +46,13 @@ userRouter.post(
     try {
       const user = await createUserService(req.body);
       // if successful, then return the user
-      res.send(user);
+      res.send(
+        normalize("User created successfully", "OK", DataType.object, user),
+      );
     } catch (error) {
       // if error, then return error
-      res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -54,7 +64,7 @@ userRouter.put(
   body("firstName").isString().trim(), // spec validation
   body("lastName").isString().trim(), // spec validation
   body("email").isEmail().trim(), // spec validation
-  body("phoneNumber").isString().trim(), // spec validation
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }), // spec validation
   body("address").isString().trim(), // spec validation
   body("profile").isString().trim(), // spec validation
   body("position").isString().trim(), // spec validation
@@ -68,9 +78,12 @@ userRouter.put(
     const id = req.params.id;
     try {
       const user = await updateUserService(+id, req.body);
-      res.send(user);
+      res.send(
+        normalize("User updated successfully", "OK", DataType.object, user),
+      );
     } catch (error) {
-      res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -92,9 +105,13 @@ userRouter.patch(
       res.send(user);
     } catch (error) {
       if (error instanceof Error) {
-        return res.status(400).json({ message: error.message });
+        res
+          .status(400)
+          .json(normalize(error.message, "ERROR", DataType.null, null));
       }
-      res.status(500).json({ message: "Internal server error" });
+      res
+        .status(500)
+        .json(normalize("Internal server error", "ERROR", DataType.null, null));
     }
   },
 );
@@ -110,9 +127,14 @@ userRouter.delete(
     const id = req.params.id;
     try {
       await deleteUserService(+id);
-      res.status(200).json({ message: "User deleted successfully" });
+      res
+        .status(200)
+        .json(
+          normalize("User deleted successfully", "OK", DataType.null, null),
+        );
     } catch (error) {
-      res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -129,12 +151,17 @@ userRouter.get(
     try {
       const user = await getUserService(+id);
       if (user) {
-        res.send(user);
+        res.send(
+          normalize("User found successfully", "OK", DataType.object, user),
+        );
       } else {
-        res.status(404).json({ message: "User not found" });
+        res
+          .status(404)
+          .json(normalize("User not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
-      res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -142,8 +169,11 @@ userRouter.get(
 userRouter.get("/", async (_req: Request, res: Response) => {
   try {
     const user = await getAllUserService();
-    res.send(user);
+    res.send(
+      normalize("User list found successfully", "OK", DataType.array, user),
+    );
   } catch (error) {
-    res.status(400).json({ message: error });
+    const message = (error as any)?.message || "Internal server error";
+    res.status(400).json(normalize(message, "ERROR", DataType.null, null));
   }
 });
