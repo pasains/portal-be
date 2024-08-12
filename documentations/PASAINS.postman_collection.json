@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userName\": \"igun_test_1\",\n    \"firstName\": \"igun_1\",\n    \"lastName\": \"test_1\",\n    \"email\": \"igun+1@test.com\",\n    \"phoneNumber\": \"081329033253\",\n    \"address\": \"Grabag\",\n    \"profile\": \"path\",\n    \"position\": \"senior\",\n    \"role\": \"ADMIN\",\n    \"isActive\": true\n}",
+							"raw": "{\n    \"userName\": \"igun_test_1\",\n    \"firstName\": \"igun_1\",\n    \"lastName\": \"test_1\",\n    \"email\": \"igun+1@test.com\",\n    \"password\": \"@Testaja1234\",\n    \"phoneNumber\": \"081329033253\",\n    \"address\": \"Grabag\",\n    \"profile\": \"path\",\n    \"position\": \"senior\",\n    \"role\": \"ADMIN\",\n    \"isActive\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -65,7 +65,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/userName\",\n    \"value\": \"igun_test_1_patch_2\"\n}",
+							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/userName\",\n    \"value\": \"test_2_patch\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -94,7 +94,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userName\": \"igun_test_1\",\n    \"firstName\": \"igun_1\",\n    \"lastName\": \"test_1\",\n    \"email\": \"igun+1@test.com\",\n    \"phoneNumber\": \"081329033253\",\n    \"address\": \"Grabag\",\n    \"profile\": \"path\",\n    \"position\": \"senior\",\n    \"role\": \"ADMIN\",\n    \"isActive\": true\n}",
+							"raw": "{\n    \"userName\": \"igun_test_1\",\n    \"firstName\": \"igun_1\",\n    \"lastName\": \"test_1\",\n    \"email\": \"igun+1@test.com\",\n    \"password\": \"test_1\",\n    \"phoneNumber\": \"+6281329033253\",\n    \"address\": \"Grabag\",\n    \"profile\": \"path\",\n    \"position\": \"senior\",\n    \"role\": \"ADMIN\",\n    \"isActive\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -231,15 +231,25 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inventoryTypeName\": \"test_1_update\",\n    \"description\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8080/api/inventorytype",
+							"raw": "localhost:8080/api/inventorytype/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"inventorytype"
+								"inventorytype",
+								"1"
 							]
 						}
 					},
@@ -277,7 +287,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryName\": \"test_1\",\n    \"refId\": \"test_1\",\n    \"description\": \"test_2\",\n    \"isBorrowable\": true,\n    \"inventoryTypeId\": 1\n}",
+							"raw": "{\n    \"inventoryName\": \"test_2\",\n    \"refId\": \"test_2\",\n    \"description\": \"test_2\",\n    \"isBorrowable\": true,\n    \"inventoryTypeId\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -302,7 +312,18 @@
 					"name": "Get All Inventory",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/inventory",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"inventory"
+							]
+						}
 					},
 					"response": []
 				},
@@ -333,7 +354,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryName\": \"test_1\",\n    \"refId\": \"test_1\",\n    \"description\": \"test_2\",\n    \"isBorrowable\": true,\n    \"InventoryTypeId\": 1\n}",
+							"raw": "{\n    \"inventoryName\": \"test_1\",\n    \"refId\": \"test_1\",\n    \"description\": \"test_1_update\",\n    \"isBorrowable\": true,\n    \"inventoryTypeId\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -341,7 +362,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/inventory/5",
+							"raw": "localhost:8080/api/inventory/1",
 							"host": [
 								"localhost"
 							],
@@ -349,7 +370,7 @@
 							"path": [
 								"api",
 								"inventory",
-								"5"
+								"1"
 							]
 						}
 					},
@@ -362,7 +383,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/inventoryName\",\n    \"value\": \"igun_test_1_patch_2\"\n}",
+							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/\",\n    \"value\": \"test_1_patch\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -399,6 +420,756 @@
 								"api",
 								"inventory",
 								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Item",
+			"item": [
+				{
+					"name": "Create Item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"borrowingId\": 1,\n    \"receivingId\": 1,\n    \"inventoryId\": 1,\n    \"quantity\": \"test_1\",\n    \"preCondition\": \"test_1\",\n    \"postCondition\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/item",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Item",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/item",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Item By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/item/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"item",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Item",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"borrowingId\": 1,\n    \"receivingId\": 1,\n    \"inventoryId\": 1,\n    \"quantity\": \"test_1\",\n    \"preCondition\": \"test_1\",\n    \"postCondition\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/item/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"item",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Item",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/inventoryName\",\n    \"value\": \"igun_test_1_patch_2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/item/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"item",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/item/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"item",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Borrowing",
+			"item": [
+				{
+					"name": "Create Borrowing",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"borrowerId\": 2,\n    \"borrowingStatusId\": 2,\n    \"organizationId\": 1,\n    \"dueDate\": \"2024-08-10T12:34:56.789Z\",\n    \"specialInstruction\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrowing",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Borrowing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrowing",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Borrowing By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrowing/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowing",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Borrowing",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"borrowerId\": 1,\n    \"borrowingStatus\": \"test_1\",\n    \"organization\": \"test_1\",\n    \"dueDate\": \"test_1\",\n    \"specialInstruction\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrowing/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowing",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Borrowing",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/inventoryName\",\n    \"value\": \"igun_test_1_patch_2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrowing/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowing",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Borrowing",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrowing/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowing",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Borrower",
+			"item": [
+				{
+					"name": "Create Borrower",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"borrowerName\": \"test_1\",\n    \"organizationName\": \"test_1\",\n    \"identityCard\": \"test_1\",\n    \"identityNumber\": \"test_1\",\n    \"phoneNumber\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrower",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrower"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Borrower",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrower",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrower"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Borrower By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrower/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrower",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Borrower",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"borrowerName\": \"test_1_update\",\n    \"organizationName\": \"pasains\",\n    \"identityCard\": \"test\",\n    \"identityNumber\": \"test_1\",\n    \"phoneNumber\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrower/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrower",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Borrower",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/identityCard\",\n    \"value\": \"test_1_patch_2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrower/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrower",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Borrower",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrower/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrower",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Organization",
+			"item": [
+				{
+					"name": "Create Organization",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"organizationName\": \"test_1\",\n    \"address\": \"test_1\",\n    \"organizationStatus\": \"test_1\",\n    \"note\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/organization",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Organization",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/organization",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/organization/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"organization",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Organization",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"organizationName\": \"test_1\",\n    \"address\": \"test_1\",\n    \"organizationStatus\": \"test_1\",\n    \"note\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/organization/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"organization",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Organization",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/address\",\n    \"value\": \"test_1_patch\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/organization/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"organization",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Organization",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/organization/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"organization",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Borrowing Status",
+			"item": [
+				{
+					"name": "Create Borrowing Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item\": 1,\n    \"inventoryId\": 1,\n    \"status\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrowingstatus",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowingstatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Borrowing Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrowingstatus",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowingstatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Borrowing Status By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrowingstatus/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowingstatus",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Borrowing Status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"itemId\": 1,\n    \"inventoryId\": 1,\n    \"status\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrowingstatus/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowingstatus",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Borrowing Status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/status\",\n    \"value\": \"test_1_patch_2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/borrowingstatus/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowingstatus",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Borrowing Status",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/borrowingstatus/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"borrowingstatus",
+								"1"
 							]
 						}
 					},
@@ -463,27 +1234,28 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/stockledger",
+							"raw": "localhost:8080/api/stockledger/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"stockledger"
+								"stockledger",
+								"1"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Inventory",
+					"name": "Update Stock Ledger",
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryName\": \"test_1\",\n    \"refId\": \"test_1\",\n    \"description\": \"test_2\",\n    \"isBorrowable\": true,\n    \"InventoryTypeId\": 1\n}",
+							"raw": "{\n    \"inventoryId\": 1,\n    \"quantity\": 1,\n    \"quantityAfterTransaction\": 1,\n    \"voucherType\": \"test_1_update\",\n    \"voucherName\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -491,15 +1263,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/inventory/5",
+							"raw": "localhost:8080/api/stockledger/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"inventory",
-								"5"
+								"stockledger",
+								"1"
 							]
 						}
 					},
@@ -633,7 +1405,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryGroupName\": \"test_1\",\n    \"description\": \"test_2\"\n}",
+							"raw": "{\n    \"inventoryGroupName\": \"test_1\",\n    \"description\": \"test_2_update\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -685,6 +1457,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inventoryId\": 1,\n    \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:8080/api/inventorystock",
 							"host": [
@@ -905,34 +1686,6 @@
 			"name": "User History",
 			"item": [
 				{
-					"name": "Create User History",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"inventoryId\": 8,\n    \"condition\": \"test_1\",\n    \"image\": \"test_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/userhistory",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"userhistory"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get All User History",
 					"request": {
 						"method": "GET",
@@ -970,15 +1723,20 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Receiving",
+			"item": [
 				{
-					"name": "Update User History",
+					"name": "Create Receiving",
 					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": 8,\n    \"newDataJSON\": \"test_1\",\n    \"oldDataJSON\": \"test_1\"\n}",
+							"raw": "{\n    \"userId\": 8,\n    \"note\": \"test_1\",\n    \"status\": \"test_1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -986,14 +1744,52 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/userhistory/1",
+							"raw": "localhost:8080/api/receiving",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"userhistory",
+								"receiving"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Receiving",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/receiving",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receiving"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receiving by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/receiving/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receiving",
 								"1"
 							]
 						}
@@ -1001,7 +1797,36 @@
 					"response": []
 				},
 				{
-					"name": "Delete User History",
+					"name": "Update Receiving",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 8,\n    \"notes\": \"test_1\",\n    \"status\": \"test_1_update\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/receiving/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receiving",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Receiving",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1023,16 +1848,16 @@
 			]
 		},
 		{
-			"name": "Receiving",
+			"name": "Document",
 			"item": [
 				{
-					"name": "Create",
+					"name": "Create Document",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryId\": 8,\n    \"condition\": \"test_1\",\n    \"image\": \"test_1\"\n}",
+							"raw": "{\n\"url\": \"test_1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1040,52 +1865,52 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/userhistory",
+							"raw": "localhost:8080/api/document",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"userhistory"
+								"document"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get All User History",
+					"name": "Get All Document",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/userhistory",
+							"raw": "localhost:8080/api/document",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"userhistory"
+								"document"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Inventory History by Id",
+					"name": "Get Document by Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/userhistory/1",
+							"raw": "localhost:8080/api/document/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"userhistory",
+								"document",
 								"1"
 							]
 						}
@@ -1093,13 +1918,13 @@
 					"response": []
 				},
 				{
-					"name": "Update User History",
+					"name": "Update Document",
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": 8,\n    \"newDataJSON\": \"test_1\",\n    \"oldDataJSON\": \"test_1\"\n}",
+							"raw": "{\n    \"url\": \"test_1\",\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1107,14 +1932,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/userhistory/1",
+							"raw": "localhost:8080/api/document/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"userhistory",
+								"document",
 								"1"
 							]
 						}
@@ -1122,20 +1947,140 @@
 					"response": []
 				},
 				{
-					"name": "Delete User History",
+					"name": "Delete Document",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/userhistory/1",
+							"raw": "localhost:8080/api/document/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"userhistory",
+								"document",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Receiving Status",
+			"item": [
+				{
+					"name": "Create Receiving Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"receivingId\": 1,\n    \"status\": \"test_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/receivingstatus",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receivingstatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Receiving Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/receivingstatus",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receivingstatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receiving Status by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/receivingstatus/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receivingstatus",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Receiving Status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"receivingId\": 1,\n    \"status\": \"test_1_update\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/receivingstatus/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receivingstatus",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Receiving Status",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/receivingstatus",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receivingstatus"
 							]
 						}
 					},
