@@ -26,6 +26,7 @@ model User {
   position                     String             @db.VarChar(100)
   role                         Role               @default(ADMIN)
   isActive                     Boolean            @default(true)
+  deleted                      Boolean            @default(false)
   createdAt                    DateTime           @default(now())
   createdBy                    BigInt?
   createdByRel                 User?              @relation("selfCreatedByRel", fields: [createdBy], references: [id])
@@ -85,6 +86,7 @@ model Inventory {
   isBorrowable                  Boolean            @default(true)
   inventoryTypeId               BigInt
   inventoryTypeIdRel            InventoryType      @relation("inventoryTypeIdRel", fields: [inventoryTypeId], references: [id])
+  deleted                       Boolean            @default(false)
   createdAt                     DateTime           @default(now())
   createdBy                     BigInt?
   inventoryCreatedByRel         User?              @relation("inventoryCreatedByRel", fields: [createdBy], references: [id])
@@ -92,7 +94,7 @@ model Inventory {
   updatedBy                     BigInt?
   inventoryUpdatedByRel         User?              @relation("inventoryUpdatedByRel", fields: [updatedBy], references: [id])
   inventoryStockIdRel           InventoryStock[]   @relation("inventoryStockIdRel")
-  inventoryUserHistoryIdRel     InventoryHistory[] @relation("inventoryUserHistoryIdRel")
+  inventoryHistoryIdRel         InventoryHistory[] @relation("inventoryHistoryIdRel")
   stockLedgerIdRel              StockLedger[]      @relation("stockLedgerIdRel")
   itemInventoryIdRel            Item[]             @relation("itemInventoryIdRel")
   borrowingStatusInventoryIdRel BorrowingStatus[]  @relation("borrowingStatusInventoryIdRel")
@@ -133,24 +135,24 @@ model InventoryStock {
 }
 
 model InventoryHistory {
-  id                           BigInt     @id @default(autoincrement())
-  inventoryUserHistoryIdRel    Inventory  @relation("inventoryUserHistoryIdRel", fields: [inventoryId], references: [id])
+  id                           BigInt    @id @default(autoincrement())
+  inventoryHistoryIdRel        Inventory @relation("inventoryHistoryIdRel", fields: [inventoryId], references: [id])
   inventoryId                  BigInt
-  condition                    String     @db.VarChar(100)
-  image                        String?    @db.VarChar(100)
+  condition                    String    @db.VarChar(100)
   createdBy                    BigInt?
-  inventoryHistoryCreatedByRel User?      @relation("inventoryHistoryCreatedByRel", fields: [createdBy], references: [id])
-  createdAt                    DateTime   @default(now())
+  inventoryHistoryCreatedByRel User?     @relation("inventoryHistoryCreatedByRel", fields: [createdBy], references: [id])
+  createdAt                    DateTime  @default(now())
   updatedBy                    BigInt?
-  inventoryHistoryUpdatedByRel User?      @relation("inventoryHistoryUpdatedByRel", fields: [updatedBy], references: [id])
-  updatedAt                    DateTime   @default(now())
-  documentIdRel                Document[] @relation("documentIdRel")
+  inventoryHistoryUpdatedByRel User?     @relation("inventoryHistoryUpdatedByRel", fields: [updatedBy], references: [id])
+  updatedAt                    DateTime  @default(now())
+  image                        String?
+  imageRel                     Document? @relation(fields: [image], references: [url])
 }
 
 model Document {
-  id            BigInt           @id @default(autoincrement())
-  documentIdRel InventoryHistory @relation("documentIdRel", fields: [id], references: [id])
-  url           String           @db.VarChar(200)
+  id       BigInt             @id @default(autoincrement())
+  url      String             @unique @db.VarChar(200)
+  imageRel InventoryHistory[]
 }
 
 model StockLedger {
@@ -259,6 +261,7 @@ model Borrower {
   identityCard                String       @db.Char(10)
   identityNumber              String       @db.VarChar(50)
   phoneNumber                 String       @db.Char(14)
+  deleted                     Boolean      @default(false)
   createdBy                   BigInt?
   borrowerCreatedByRel        User?        @relation("borrowerCreatedByRel", fields: [createdBy], references: [id])
   createdAt                   DateTime     @default(now())
@@ -274,6 +277,7 @@ model Organization {
   address                     String      @db.VarChar(100)
   organizationStatus          String      @db.VarChar(100)
   note                        String      @db.Text
+  deleted                     Boolean     @default(false)
   createdBy                   BigInt?
   organizationCreatedByRel    User?       @relation("organizationCreatedByRel", fields: [createdBy], references: [id])
   createdAt                   DateTime    @default(now())

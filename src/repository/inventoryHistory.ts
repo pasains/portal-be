@@ -57,11 +57,17 @@ export const deleteInventoryHistory = async (inventoryHistoryId: number) => {
 export const getInventoryHistory = async (inventoryHistoryId: number) => {
   const inventoryHistory = await prisma.inventoryHistory.findUnique({
     where: { id: inventoryHistoryId },
+    include: { imageRel: true },
   });
   return inventoryHistory;
 };
 
 export const getAllInventoryHistory = async () => {
-  const allInventoryHistory = await prisma.inventoryHistory.findMany();
+  const allInventoryHistory = await prisma.inventoryHistory.findMany({
+    include: {
+      inventoryHistoryIdRel: { select: { id: true } },
+      imageRel: true,
+    },
+  });
   return allInventoryHistory;
 };

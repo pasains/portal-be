@@ -1,12 +1,12 @@
 import express from "express";
 
+import bodyParser from "body-parser";
 import { inventoryRouter } from "./controller/inventory";
 import { userRouter } from "./controller/user";
 import { inventoryTypeRouter } from "./controller/inventoryType";
 import { inventoryGroupRouter } from "./controller/inventoryGroup";
 import { inventoryStockRouter } from "./controller/inventoryStock";
 import { inventoryHistoryRouter } from "./controller/inventoryHistory";
-import bodyParser from "body-parser";
 import { stockLedgerRouter } from "./controller/stockLedger";
 import { userHistoryRouter } from "./controller/userHistory";
 import { receivingRouter } from "./controller/receiving";

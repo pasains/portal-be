@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Router } from "express";
 import {
   createInventoryService,
@@ -12,11 +12,15 @@ import {
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
+import {
+  toInventoryDetailResponse,
+  toInventoryResponses,
+} from "../types/inventory";
 
 export const inventoryRouter = Router();
 
 inventoryRouter.post(
-  "/",
+  "/createinventory",
   body("inventoryName").isString().trim(),
   body("refId").isString().trim(),
   body("description").isString().trim(),
@@ -34,7 +38,7 @@ inventoryRouter.post(
           "Inventory created successfully",
           "OK",
           DataType.object,
-          inventory,
+          inventory
         ),
       );
     } catch (error) {
@@ -144,17 +148,17 @@ inventoryRouter.get(
             "Inventory found successfully",
             "OK",
             DataType.object,
-            inventory,
+            toInventoryDetailResponse(inventory),
           ),
         );
       } else {
         res
-          .status(400)
+          .status(404)
           .json(normalize("Inventory not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
-      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+      res.status(500).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -167,7 +171,7 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
         "Inventory list found successfully",
         "OK",
         DataType.array,
-        inventory,
+        toInventoryResponses(inventory),
       ),
     );
   } catch (error) {

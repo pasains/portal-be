@@ -1,5 +1,4 @@
 import { DataType } from "../types/dataType";
-
 export const normalize = (
   message: string,
   status: string,

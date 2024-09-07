@@ -9,12 +9,15 @@ import {
 const prisma = new PrismaClient();
 
 export const createInventory = async (inventory: InventoryCreateParams) => {
-  const newInventory = await prisma.inventory.create({
-    data: inventory,
-  });
-  return newInventory;
+  try {
+    const newInventory = await prisma.inventory.create({
+      data: inventory,
+    });
+    return newInventory;
+  } catch (error) {
+    throw new Error("Failed to create inventory");
+  }
 };
-
 export const updateInventory = async (
   inventoryId: number,
   inventory: InventoryUpdateParams,
@@ -48,11 +51,18 @@ export const deleteInventory = async (inventoryId: number) => {
 export const getInventory = async (inventoryId: number) => {
   const inventory = await prisma.inventory.findUnique({
     where: { id: inventoryId },
+    include: {
+      inventoryHistoryIdRel: true,
+      inventoryTypeIdRel: true,
+      inventoryStockIdRel: true,
+    },
   });
   return inventory;
 };
 
 export const getAllInventory = async () => {
-  const allInventory = await prisma.inventory.findMany();
+  const allInventory = await prisma.inventory.findMany({
+    include: { inventoryTypeIdRel: true, inventoryStockIdRel: true },
+  });
   return allInventory;
 };

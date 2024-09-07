@@ -9,8 +9,8 @@ export const createUserHistory = async (
   const newUserHistory = await prisma.userHistory.create({
     data: {
       userId: userHistory?.userId,
-      newData: userHistory?.newDataJSON,
-      oldData: userHistory?.oldDataJSON,
+      newData: userHistory?.newData,
+      oldData: userHistory?.oldData,
     },
   });
   return newUserHistory;

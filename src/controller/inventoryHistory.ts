@@ -54,7 +54,10 @@ inventoryHistoryRouter.put(
     }
     const id = req.params.id;
     try {
-      const inventoryHistory = await updateInventoryHistoryService(+id, req.body);
+      const inventoryHistory = await updateInventoryHistoryService(
+        +id,
+        req.body,
+      );
       res.send(
         normalize(
           "Inventory History updated successfully",
@@ -81,7 +84,9 @@ inventoryHistoryRouter.delete(
     const id = req.params.id;
     try {
       await deleteInventoryHistoryService(+id);
-      res.status(200).json({ message: "Inventory History deleted successfully" });
+      res
+        .status(200)
+        .json({ message: "Inventory History deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
     }
@@ -112,7 +117,12 @@ inventoryHistoryRouter.get(
         res
           .status(400)
           .json(
-            normalize("Inventory History not found", "ERROR", DataType.null, null),
+            normalize(
+              "Inventory History not found",
+              "ERROR",
+              DataType.null,
+              null,
+            ),
           );
       }
     } catch (error) {
@@ -134,8 +144,7 @@ inventoryHistoryRouter.get("/", async (_req: Request, res: Response) => {
       ),
     );
   } catch (error) {
-    res
-      .status(400)
-      .json(normalize("Internal server error", "ERROR", DataType.null, null));
+    const message = (error as any)?.message || "Internal server error";
+    res.status(400).json(normalize(message, "ERROR", DataType.null, null));
   }
 });

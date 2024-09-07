@@ -3,6 +3,8 @@ import { UserCreateParams, UserUpdateParams } from "../types/user";
 
 const prisma = new PrismaClient();
 
+export default prisma;
+
 export const createUser = async (user: UserCreateParams) => {
   const newUser = await prisma.user.create({
     data: user,

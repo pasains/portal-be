@@ -1,7 +1,7 @@
 export interface UserHistoryCreateParams {
   userId: number;
-  newDataJSON: string;
-  oldDataJSON: string;
+  newData: string;
+  oldData: string;
   createdBy: number;
 }
 
