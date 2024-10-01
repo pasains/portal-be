@@ -6,15 +6,12 @@ import {
   patchUser,
   updateUser,
 } from "../repository/user";
-import {
-  UserCreateParams,
-  UserUpdateParams,
-} from "../types/user";
+import { UserCreateParams, UserUpdateParams } from "../types/user";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 export const createUserService = async (data: UserCreateParams) => {
-  const newUser = await createUser(data);
-  return newUser;
+  const createdUser = await createUser(data);
+  return createdUser;
 };
 
 export const updateUserService = async (

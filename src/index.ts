@@ -2,6 +2,7 @@ import prisma from "./configuration/db";
 import dotenv from "dotenv";
 import { app } from "./router";
 
+// Load environment variable
 dotenv.config();
 
 // Fix BigInt to JSON
@@ -10,19 +11,18 @@ BigInt.prototype.toJSON = function () {
   return Number(this);
 };
 
-async function main() {
-}
-
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
+try {
+  const port = process.env.PORT;
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
   });
-
-const port = process.env.PORT || 8081;
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+} catch (error) {
+  console.error("Error during execution:", error);
+  process.exit(1);
+} finally {
+  // Ensuring the Prisma client is properly disconnected
+  prisma
+    .$disconnect()
+    .then(() => console.log("Prisma disconnected"))
+    .catch((e) => console.error("Error during disconnection:", e));
+}

@@ -10,8 +10,8 @@ export interface BorrowerCreateParams {
 
 export interface BorrowerUpdateParams {
   id: number;
-  borrowerName: string;
   organizationName: string;
+  borrowerName: string;
   identityCard: string;
   identityNumber: string;
   phoneNumber: string;

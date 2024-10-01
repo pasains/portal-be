@@ -21,7 +21,7 @@ userRouter.post(
   body("lastName").isString().trim(), // spec validation
   body("email").isEmail().trim(), // spec validation
   body("password").isStrongPassword({
-    minLength: 12,
+    minLength: 10,
     minUppercase: 1,
     minSymbols: 1,
   }), // spec validation
@@ -140,7 +140,7 @@ userRouter.delete(
 );
 
 userRouter.get(
-  "/:id",
+  "/profile/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);

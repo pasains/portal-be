@@ -15,7 +15,7 @@ import { DataType } from "../types/dataType";
 export const inventoryTypeRouter = Router();
 
 inventoryTypeRouter.post(
-  "/",
+  "/create",
   body("inventoryTypeName").isString().trim(),
   body("description").isString().trim(),
   body("groupId").optional().isNumeric(),
@@ -42,7 +42,7 @@ inventoryTypeRouter.post(
 );
 
 inventoryTypeRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("inventoryTypeName").isString().trim(),
   body("description").isString().trim(),
@@ -71,7 +71,7 @@ inventoryTypeRouter.put(
 );
 
 inventoryTypeRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);

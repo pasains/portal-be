@@ -31,6 +31,7 @@ export const createInventoryService = async (
     const newInventory = await createInventory(inventory);
     return newInventory;
   } catch (error) {
+    console.log(error)
     if (error instanceof PrismaClientValidationError) {
       const message = error.message.split("\n");
       throw new Error(message[message.length - 1]);

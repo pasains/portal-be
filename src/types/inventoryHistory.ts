@@ -1,9 +1,7 @@
 export interface InventoryHistoryCreateParams {
-  id: number;
   inventoryId: number;
   condition: string;
-  image: string;
-  createdBy: number;
+  image?: any;
 }
 
 export interface InventoryHistoryUpdateParams {
@@ -24,4 +22,3 @@ export interface InventoryHistoryResponse {
   updatedAt: Date;
   updatedBy: number;
 }
-

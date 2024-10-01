@@ -12,7 +12,6 @@ export interface UserCreateParams {
   position: string;
   role: Role;
   isActive: boolean;
-  createdBy: number;
 }
 
 export interface UserUpdateParams {
@@ -30,4 +29,3 @@ export interface UserUpdateParams {
   updatedAt: Date;
   updatedBy: number;
 }
-

@@ -1,8 +1,15 @@
 export interface BorrowingCreateParams {
   id: number;
-  borrowerId: number;
-  borrowingStatusId: number;
-  organizationId: number;
+  borrowerId?: bigint;
+  organizationId?: bigint;
+  borrowerName: string;
+  identityCard: string;
+  identityNumber: string;
+  phoneNumber: string;
+  organizationName: string;
+  address: string;
+  organizationStatus: string;
+  note: string;
   dueDate: Date;
   specialInstruction: string;
   createdBy: number;
@@ -11,7 +18,6 @@ export interface BorrowingCreateParams {
 export interface BorrowingUpdateParams {
   id: number;
   borrowerId: number;
-  borrowingStatusId: number;
   organizationId: number;
   dueDate: Date;
   specialInstruction: string;

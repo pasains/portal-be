@@ -63,11 +63,6 @@ export const getInventoryHistory = async (inventoryHistoryId: number) => {
 };
 
 export const getAllInventoryHistory = async () => {
-  const allInventoryHistory = await prisma.inventoryHistory.findMany({
-    include: {
-      inventoryHistoryIdRel: { select: { id: true } },
-      imageRel: true,
-    },
-  });
+  const allInventoryHistory = await prisma.inventoryHistory.findMany({});
   return allInventoryHistory;
 };

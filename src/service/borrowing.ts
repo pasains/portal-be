@@ -11,9 +11,39 @@ import {
   BorrowingUpdateParams,
 } from "../types/borrowing";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
+import { createBorrower } from "../repository/borrower";
+import { createOrganization } from "../repository/organization";
 
-export const createBorrowingService = async (borrowing: BorrowingCreateParams) => {
+export const createBorrowingService = async (
+  borrowing: BorrowingCreateParams,
+) => {
+  //const organization = await createOrganization({
+  //  ...borrowing,
+  //  organizationName: borrowing.organizationName,
+  //  address: borrowing.address,
+  //  organizationStatus: borrowing.organizationStatus,
+  //  note: borrowing.note,
+  //});
+  //const borrower = await createBorrower({
+  //  ...borrowing,
+  //  organizationId: organization.id,
+  //  borrowerName: borrowing.borrowerName,
+  //  identityCard: borrowing.identityCard,
+  //  identityNumber: borrowing.identityNumber,
+  //  phoneNumber: borrowing.phoneNumber,
+  //});
   const newBorrowing = await createBorrowing(borrowing);
+  //...borrowing,
+  //organizationName: organization.organizationName,
+  //address: organization.address,
+  //organizationStatus: organization.organizationStatus,
+  //note: organization.note,
+  //borrowerName: borrower.borrowerName,
+  //identityCard: borrower.identityCard,
+  //identityNumber: borrower.identityNumber,
+  //phoneNumber: borrower.phoneNumber,
+  //dueDate: borrowing.dueDate,
+  //specialInstruction: borrowing.specialInstruction,
   return newBorrowing;
 };
 
@@ -39,7 +69,12 @@ export const patchBorrowingService = async (
     throw new Error("Invalid field");
   }
   try {
-    const patchedBorrowing = await patchBorrowing(borrowingId, op, field, value);
+    const patchedBorrowing = await patchBorrowing(
+      borrowingId,
+      op,
+      field,
+      value,
+    );
     return patchedBorrowing;
   } catch (error) {
     if (error instanceof PrismaClientValidationError) {

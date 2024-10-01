@@ -16,15 +16,16 @@ import { DataType } from "../types/dataType";
 export const borrowingRouter = Router();
 
 borrowingRouter.post(
-  "/",
-  body("borrowerId").optional().isNumeric(),
-  body("borrowingStatusId").optional().isNumeric(),
-  body("organizationId").optional().isNumeric(),
-  body("dueDate")
-    .isISO8601()
-    .withMessage(
-      "Please provide a complete ISO-8601 date-time string with timezone (e.g., 2024-08-10T12:34:56.789Z)",
-    ),
+  "/create",
+  body("organizationName").isString().trim(),
+  body("address").isString().trim(),
+  body("organizationStatus").isString().trim(),
+  body("note").isString().trim(),
+  body("borrowerName").isString().trim(),
+  body("identityCard").isString().trim(),
+  body("identityNumber").isString().trim(),
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
+  body("dueDate").isDate().withMessage("valid date YYYY-MM-DD").toDate(),
   body("specialInstruction").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -49,16 +50,11 @@ borrowingRouter.post(
 );
 
 borrowingRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("borrowerId").optional().isNumeric(),
-  body("borrowingStatusId").optional().isNumeric(),
   body("organizationId").optional().isNumeric(),
-  body("dueDate")
-    .isISO8601()
-    .withMessage(
-      "Please provide a complete ISO-8601 date-time string with timezone (e.g., 2024-08-10T12:34:56.789Z)",
-    ),
+  body("dueDate").isDate().withMessage("valid date YYYY-MM-DD").toDate(),
   body("specialInstruction").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -108,7 +104,7 @@ borrowingRouter.patch(
 );
 
 borrowingRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);

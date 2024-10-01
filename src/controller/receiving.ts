@@ -15,7 +15,7 @@ import { DataType } from "../types/dataType";
 export const receivingRouter = Router();
 
 receivingRouter.post(
-  "/",
+  "/create",
   body("userId").optional().isNumeric(),
   body("notes").isString().trim(),
   body("status").isString().trim(),
@@ -42,7 +42,7 @@ receivingRouter.post(
 );
 
 receivingRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("userId").optional().isNumeric(),
   body("notes").isString(),
@@ -71,7 +71,7 @@ receivingRouter.put(
 );
 
 receivingRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);

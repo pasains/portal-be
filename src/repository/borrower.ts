@@ -6,11 +6,11 @@ const prisma = new PrismaClient();
 export const createBorrower = async (borrower: BorrowerCreateParams) => {
   const newBorrower = await prisma.borrower.create({
     data: {
-      borrowerName: borrower?.borrowerName,
-      organizationName: borrower?.organizationName,
-      identityCard: borrower?.identityCard,
-      identityNumber: borrower?.identityNumber,
-      phoneNumber: borrower?.phoneNumber,
+      borrowerName: borrower.borrowerName,
+      identityCard: borrower.identityCard,
+      identityNumber: borrower.identityNumber,
+      phoneNumber: borrower.phoneNumber,
+      organizationName: borrower.organizationName
     },
   });
   return newBorrower;
@@ -24,7 +24,6 @@ export const updateBorrower = async (
     where: { id: borrowerId },
     data: {
       borrowerName: borrower?.borrowerName,
-      organizationName: borrower?.organizationName,
       identityCard: borrower?.identityCard,
       identityNumber: borrower?.identityNumber,
       phoneNumber: borrower?.phoneNumber,

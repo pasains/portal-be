@@ -11,8 +11,8 @@ export const createOrganization = async (
 ) => {
   const newOrganization = await prisma.organization.create({
     data: {
-      organizationName: organization?.organizationName,
-      address: organization?.address,
+      organizationName: organization.organizationName,
+      address: organization.address,
       organizationStatus: organization?.organizationStatus,
       note: organization?.note,
     },

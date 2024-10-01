@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.18.0",
+    "@prisma/client": "^5.19.1",
     "@types/body-parser": "^1.19.5",
     "@types/cookie-session": "^2.0.49",
     "@types/node": "^20.14.9",

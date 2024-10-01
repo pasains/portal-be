@@ -19,6 +19,7 @@ CREATE TABLE "User" (
     "createdBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -49,6 +50,7 @@ CREATE TABLE "Inventory" (
     "createdBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Inventory_pkey" PRIMARY KEY ("id")
 );
@@ -93,11 +95,11 @@ CREATE TABLE "InventoryHistory" (
     "id" BIGSERIAL NOT NULL,
     "inventoryId" BIGINT NOT NULL,
     "condition" VARCHAR(100) NOT NULL,
-    "image" VARCHAR(100),
     "createdBy" BIGINT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "image" TEXT,
 
     CONSTRAINT "InventoryHistory_pkey" PRIMARY KEY ("id")
 );
@@ -172,7 +174,6 @@ CREATE TABLE "ReceivingStatus" (
 CREATE TABLE "Borrowing" (
     "id" BIGSERIAL NOT NULL,
     "borrowerId" BIGINT,
-    "borrowingStatusId" BIGINT,
     "organizationId" BIGINT,
     "dueDate" DATE NOT NULL,
     "specialInstruction" TEXT NOT NULL,
@@ -189,6 +190,7 @@ CREATE TABLE "BorrowingStatus" (
     "id" BIGSERIAL NOT NULL,
     "itemId" BIGINT,
     "inventoryId" BIGINT NOT NULL,
+    "borrowingStatusId" BIGINT,
     "status" VARCHAR(100) NOT NULL,
     "createdBy" BIGINT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -203,7 +205,7 @@ CREATE TABLE "BorrowingStatus" (
 CREATE TABLE "Borrower" (
     "id" BIGSERIAL NOT NULL,
     "borrowerName" VARCHAR(100) NOT NULL,
-    "organizationName" TEXT NOT NULL,
+    "organizationName" VARCHAR(100) NOT NULL,
     "identityCard" CHAR(10) NOT NULL,
     "identityNumber" VARCHAR(50) NOT NULL,
     "phoneNumber" CHAR(14) NOT NULL,
@@ -211,6 +213,7 @@ CREATE TABLE "Borrower" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Borrower_pkey" PRIMARY KEY ("id")
 );
@@ -226,6 +229,7 @@ CREATE TABLE "Organization" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
 );
@@ -238,6 +242,21 @@ CREATE TABLE "_inventoryGroupMember" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Document_url_key" ON "Document"("url");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Item_inventoryId_key" ON "Item"("inventoryId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Borrowing_borrowerId_organizationId_key" ON "Borrowing"("borrowerId", "organizationId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "BorrowingStatus_itemId_key" ON "BorrowingStatus"("itemId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Borrower_organizationName_key" ON "Borrower"("organizationName");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Organization_organizationName_key" ON "Organization"("organizationName");
@@ -255,19 +274,19 @@ ALTER TABLE "User" ADD CONSTRAINT "User_createdBy_fkey" FOREIGN KEY ("createdBy"
 ALTER TABLE "User" ADD CONSTRAINT "User_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserHistory" ADD CONSTRAINT "UserHistory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "UserHistory" ADD CONSTRAINT "UserHistory_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserHistory" ADD CONSTRAINT "UserHistory_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_inventoryTypeId_fkey" FOREIGN KEY ("inventoryTypeId") REFERENCES "InventoryType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserHistory" ADD CONSTRAINT "UserHistory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_inventoryTypeId_fkey" FOREIGN KEY ("inventoryTypeId") REFERENCES "InventoryType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -279,31 +298,31 @@ ALTER TABLE "InventoryGroup" ADD CONSTRAINT "InventoryGroup_createdBy_fkey" FORE
 ALTER TABLE "InventoryGroup" ADD CONSTRAINT "InventoryGroup_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InventoryStock" ADD CONSTRAINT "InventoryStock_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InventoryStock" ADD CONSTRAINT "InventoryStock_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InventoryStock" ADD CONSTRAINT "InventoryStock_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "InventoryStock" ADD CONSTRAINT "InventoryStock_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "InventoryStock" ADD CONSTRAINT "InventoryStock_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InventoryHistory" ADD CONSTRAINT "InventoryHistory_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "InventoryHistory" ADD CONSTRAINT "InventoryHistory_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "InventoryHistory" ADD CONSTRAINT "InventoryHistory_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "InventoryHistory" ADD CONSTRAINT "InventoryHistory_image_fkey" FOREIGN KEY ("image") REFERENCES "Document"("url") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "InventoryHistory" ADD CONSTRAINT "InventoryHistory_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "InventoryHistory" ADD CONSTRAINT "InventoryHistory_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Document" ADD CONSTRAINT "Document_id_fkey" FOREIGN KEY ("id") REFERENCES "InventoryHistory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "StockLedger" ADD CONSTRAINT "StockLedger_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StockLedger" ADD CONSTRAINT "StockLedger_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "StockLedger" ADD CONSTRAINT "StockLedger_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StockLedger" ADD CONSTRAINT "StockLedger_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -312,19 +331,16 @@ ALTER TABLE "StockLedger" ADD CONSTRAINT "StockLedger_updatedBy_fkey" FOREIGN KE
 ALTER TABLE "Item" ADD CONSTRAINT "Item_borrowingId_fkey" FOREIGN KEY ("borrowingId") REFERENCES "Borrowing"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Item" ADD CONSTRAINT "Item_receivingId_fkey" FOREIGN KEY ("receivingId") REFERENCES "Receiving"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Item" ADD CONSTRAINT "Item_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Item" ADD CONSTRAINT "Item_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Item" ADD CONSTRAINT "Item_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Item" ADD CONSTRAINT "Item_receivingId_fkey" FOREIGN KEY ("receivingId") REFERENCES "Receiving"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Item" ADD CONSTRAINT "Item_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Receiving" ADD CONSTRAINT "Receiving_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Receiving" ADD CONSTRAINT "Receiving_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -333,40 +349,40 @@ ALTER TABLE "Receiving" ADD CONSTRAINT "Receiving_createdBy_fkey" FOREIGN KEY ("
 ALTER TABLE "Receiving" ADD CONSTRAINT "Receiving_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ReceivingStatus" ADD CONSTRAINT "ReceivingStatus_receivingId_fkey" FOREIGN KEY ("receivingId") REFERENCES "Receiving"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Receiving" ADD CONSTRAINT "Receiving_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ReceivingStatus" ADD CONSTRAINT "ReceivingStatus_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ReceivingStatus" ADD CONSTRAINT "ReceivingStatus_receivingId_fkey" FOREIGN KEY ("receivingId") REFERENCES "Receiving"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Borrowing" ADD CONSTRAINT "Borrowing_borrowerId_fkey" FOREIGN KEY ("borrowerId") REFERENCES "Borrower"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Borrowing" ADD CONSTRAINT "Borrowing_borrowingStatusId_fkey" FOREIGN KEY ("borrowingStatusId") REFERENCES "BorrowingStatus"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Borrowing" ADD CONSTRAINT "Borrowing_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Borrowing" ADD CONSTRAINT "Borrowing_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Borrowing" ADD CONSTRAINT "Borrowing_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Borrowing" ADD CONSTRAINT "Borrowing_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "BorrowingStatus" ADD CONSTRAINT "BorrowingStatus_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "Item"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "BorrowingStatus" ADD CONSTRAINT "BorrowingStatus_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "BorrowingStatus" ADD CONSTRAINT "BorrowingStatus_borrowingStatusId_fkey" FOREIGN KEY ("borrowingStatusId") REFERENCES "Borrowing"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "BorrowingStatus" ADD CONSTRAINT "BorrowingStatus_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "BorrowingStatus" ADD CONSTRAINT "BorrowingStatus_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "BorrowingStatus" ADD CONSTRAINT "BorrowingStatus_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Borrower" ADD CONSTRAINT "Borrower_organizationName_fkey" FOREIGN KEY ("organizationName") REFERENCES "Organization"("organizationName") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "BorrowingStatus" ADD CONSTRAINT "BorrowingStatus_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "Item"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BorrowingStatus" ADD CONSTRAINT "BorrowingStatus_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Borrower" ADD CONSTRAINT "Borrower_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

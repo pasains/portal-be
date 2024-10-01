@@ -10,11 +10,55 @@ const prisma = new PrismaClient();
 
 export const createInventory = async (inventory: InventoryCreateParams) => {
   try {
+    let inventoryType;
+    if (inventory.inventoryTypeName) {
+      inventoryType = await prisma.inventoryType.findUnique({
+        where: { id: inventory.inventoryTypeId },
+        select: {
+          inventoryTypeName: true,
+        },
+      });
+    } else {
+      inventoryType = await prisma.inventoryType.create({
+        data: {
+          inventoryTypeName: inventory.inventoryTypeName,
+          description: inventory.descriptionInventoryType,
+        },
+      });
+    }
     const newInventory = await prisma.inventory.create({
-      data: inventory,
+      data: {
+        inventoryName: inventory.inventoryName,
+        refId: inventory.refId,
+        description: inventory.description,
+        isBorrowable: inventory.isBorrowable,
+        inventoryTypeId: inventory!.inventoryTypeId,
+        inventoryHistoryIdRel: {
+          create: {
+            condition: inventory.description,
+            imageRel: {
+              create: inventory.image
+                ? {
+                    url: inventory.image,
+                  }
+                : undefined,
+            },
+          },
+        },
+        inventoryStockIdRel: {
+          create: {
+            quantity: inventory.quantity,
+          },
+        },
+      },
+      include: {
+        inventoryHistoryIdRel: true,
+        inventoryStockIdRel: true,
+      },
     });
     return newInventory;
   } catch (error) {
+    console.log(error);
     throw new Error("Failed to create inventory");
   }
 };
@@ -62,7 +106,11 @@ export const getInventory = async (inventoryId: number) => {
 
 export const getAllInventory = async () => {
   const allInventory = await prisma.inventory.findMany({
-    include: { inventoryTypeIdRel: true, inventoryStockIdRel: true },
+    include: {
+      inventoryTypeIdRel: { select: { id: true, inventoryTypeName: true } },
+      inventoryStockIdRel: { select: { quantity: true } },
+      inventoryHistoryIdRel: { select: { image: true } },
+    },
   });
   return allInventory;
 };

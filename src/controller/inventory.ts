@@ -20,12 +20,16 @@ import {
 export const inventoryRouter = Router();
 
 inventoryRouter.post(
-  "/createinventory",
+  "/create",
   body("inventoryName").isString().trim(),
   body("refId").isString().trim(),
   body("description").isString().trim(),
   body("isBorrowable").isBoolean(),
   body("inventoryTypeId").isNumeric(),
+  body("image").isString().trim(),
+  body("quantity").isNumeric(),
+  body("inventoryTypeName").isString().trim(),
+  body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -38,18 +42,19 @@ inventoryRouter.post(
           "Inventory created successfully",
           "OK",
           DataType.object,
-          inventory
+          inventory,
         ),
       );
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
+      console.log(error);
       res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
 
 inventoryRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("inventoryName").isString().trim(),
   body("refId").isString().trim(),
@@ -104,7 +109,7 @@ inventoryRouter.patch(
 );
 
 inventoryRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);

@@ -5,11 +5,23 @@ const prisma = new PrismaClient();
 
 export default prisma;
 
-export const createUser = async (user: UserCreateParams) => {
-  const newUser = await prisma.user.create({
-    data: user,
+export const createUser = async (data: UserCreateParams) => {
+  const createdUser = await prisma.user.create({
+    data: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      userName: data.userName,
+      email: data.email,
+      password: data.password,
+      phoneNumber: data.phoneNumber,
+      address: data.address,
+      profile: data.profile,
+      position: data.position,
+      role: data.role,
+      isActive: data.isActive ?? true,
+    },
   });
-  return newUser;
+  return createdUser;
 };
 
 export const updateUser = async (userId: number, user: UserUpdateParams) => {

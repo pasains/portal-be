@@ -4,6 +4,10 @@ export interface InventoryCreateParams {
   description: string;
   isBorrowable: boolean;
   inventoryTypeId: number;
+  image?: string | null;
+  quantity: number;
+  inventoryTypeName: string;
+  descriptionInventoryType: string;
 }
 
 export interface InventoryUpdateParams {
@@ -22,6 +26,7 @@ export interface InventoryResponse {
   refId: string;
   description: string;
   isBorrowable: boolean;
+  inventoryTypeId: bigint;
   inventoryTypeName: string;
 }
 
@@ -31,6 +36,7 @@ export interface InventoryDetailResponse {
   refId: string;
   description: string;
   isBorrowable: boolean;
+  inventoryTypeId: bigint;
   inventoryTypeName: string;
   image: string;
   quantity: number;
@@ -48,6 +54,7 @@ export function toInventoryResponse(data: any): InventoryResponse {
     refId: data.refId,
     description: data.description,
     isBorrowable: data.isBorrowable,
+    inventoryTypeId: data.inventoryTypeIdRel.id,
     inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
   };
 }
@@ -65,6 +72,7 @@ export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
     refId: data.refId,
     description: data.description,
     isBorrowable: data.isBorrowable,
+    inventoryTypeId: data.inventoryTypeIdRel.id,
     inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
     image: data.inventoryHistoryIdRel.map((images: any) => images.image),
     condition: data.inventoryHistoryIdRel.map(
