@@ -51,9 +51,9 @@ inventoryStockRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventoryStock = await updateInventoryStockService(+id, req.body);
+      const inventoryStock = await updateInventoryStockService(id, req.body);
       res.send(
         normalize(
           "Inventory Stock updated successfully",
@@ -77,9 +77,9 @@ inventoryStockRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteInventoryStockService(+id);
+      await deleteInventoryStockService(id);
       res.status(200).json({ message: "Inventory Stock deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -95,9 +95,9 @@ inventoryStockRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventoryStock = await getInventoryStockService(+id);
+      const inventoryStock = await getInventoryStockService(id);
       if (inventoryStock) {
         res.send(
           normalize(

@@ -15,7 +15,7 @@ import { DataType } from "../types/dataType";
 export const inventoryTypeRouter = Router();
 
 inventoryTypeRouter.post(
-  "/",
+  "/create",
   body("inventoryTypeName").isString().trim(),
   body("description").isString().trim(),
   body("groupId").optional().isNumeric(),
@@ -42,7 +42,7 @@ inventoryTypeRouter.post(
 );
 
 inventoryTypeRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("inventoryTypeName").isString().trim(),
   body("description").isString().trim(),
@@ -52,9 +52,9 @@ inventoryTypeRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventoryType = await updateInventoryTypeService(+id, req.body);
+      const inventoryType = await updateInventoryTypeService(id, req.body);
       res.send(
         normalize(
           "Inventory Type updated successfully",
@@ -71,16 +71,16 @@ inventoryTypeRouter.put(
 );
 
 inventoryTypeRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteInventoryTypeService(+id);
+      await deleteInventoryTypeService(id);
       res.status(200).json({ message: "Inventory Type deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -96,9 +96,9 @@ inventoryTypeRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventoryType = await getInventoryTypeService(+id);
+      const inventoryType = await getInventoryTypeService(id);
       if (inventoryType) {
         res.send(
           normalize(

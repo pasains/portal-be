@@ -9,14 +9,14 @@ export const createUserHistory = async (
   const newUserHistory = await prisma.userHistory.create({
     data: {
       userId: userHistory?.userId,
-      newData: userHistory?.newDataJSON,
-      oldData: userHistory?.oldDataJSON,
+      newData: userHistory?.newData,
+      oldData: userHistory?.oldData,
     },
   });
   return newUserHistory;
 };
 
-export const getUserHistory = async (userHistoryId: number) => {
+export const getUserHistory = async (userHistoryId: bigint) => {
   const userHistory = await prisma.userHistory.findUnique({
     where: { id: userHistoryId },
   });

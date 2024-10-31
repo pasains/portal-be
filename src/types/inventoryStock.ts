@@ -1,13 +1,15 @@
 export interface InventoryStockCreateParams {
-  id: number;
-  inventoryId: number;
-  quantity: number;
-  createdBy: number;
+  id: bigint;
+  inventoryId: bigint;
+  currentQuantity: number;
+  totalQuantity: number;
+  createdBy: bigint;
 }
 
 export interface InventoryStockUpdateParams {
-  id: number;
-  inventoryId: number;
-  quantity: number;
-  updatedBy: number;
+  id: bigint;
+  inventoryId: bigint;
+  currentQuantity: number;
+  totalQuantity: number;
+  updatedBy: bigint;
 }

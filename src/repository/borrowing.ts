@@ -7,36 +7,63 @@ import {
 const prisma = new PrismaClient();
 
 export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
-  const newBorrowing = await prisma.borrowing.create({
-    data: {
-      borrowerId: borrowing.borrowerId,
-      borrowingStatusId: borrowing.borrowingStatusId,
-      organizationId: borrowing.organizationId,
-      dueDate: borrowing.dueDate,
-      specialInstruction: borrowing.specialInstruction,
-    },
+  const newBorrowing = await prisma.$transaction(async (prisma) => {
+    const createdBorrowing = await prisma.borrowing.create({
+      data: {
+        borrowerIdRel: {
+          connectOrCreate: {
+            where: {
+              id: borrowing.borrowerId,
+            },
+            create: {
+              borrowerName: borrowing.borrowerName,
+              identityCard: borrowing.identityCard,
+              identityNumber: borrowing.identityNumber,
+              phoneNumber: borrowing.phoneNumber,
+              borrowerOrganizationRel: {
+                connectOrCreate: {
+                  where: {
+                    id: borrowing.organizationId,
+                  },
+                  create: {
+                    organizationName: borrowing.organizationName,
+                    address: borrowing.address,
+                    organizationStatus: borrowing.organizationStatus,
+                    note: borrowing.note,
+                  },
+                },
+              },
+            },
+          },
+        },
+        status: borrowing.status,
+        dueDate: borrowing.dueDate,
+        specialInstruction: borrowing.specialInstruction,
+      },
+    });
+
+    return createdBorrowing;
   });
   return newBorrowing;
 };
 
 export const updateBorrowing = async (
-  borrowingId: number,
+  borrowingId: bigint,
   borrowing: BorrowingUpdateParams,
 ) => {
   const updatedBorrowing = await prisma.borrowing.update({
     where: { id: borrowingId },
     data: {
       borrowerId: borrowing.borrowerId,
-      borrowingStatusId: borrowing.borrowingStatusId,
-      organizationId: borrowing.organizationId,
       dueDate: borrowing.dueDate,
+      status: borrowing.status,
       specialInstruction: borrowing.specialInstruction,
     },
   });
   return updatedBorrowing;
 };
 export const patchBorrowing = async (
-  borrowingId: number,
+  borrowingId: bigint,
   op: string,
   field: string,
   value: string,
@@ -48,14 +75,14 @@ export const patchBorrowing = async (
   return patchedBorrowing;
 };
 
-export const deleteBorrowing = async (borrowingId: number) => {
+export const deleteBorrowing = async (borrowingId: bigint) => {
   const deletedBorrowing = await prisma.borrowing.delete({
     where: { id: borrowingId },
   });
   return deletedBorrowing;
 };
 
-export const getBorrowing = async (borrowingId: number) => {
+export const getBorrowing = async (borrowingId: bigint) => {
   const borrowing = await prisma.borrowing.findUnique({
     where: { id: borrowingId },
   });

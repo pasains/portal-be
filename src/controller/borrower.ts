@@ -19,6 +19,9 @@ borrowerRouter.post(
   "/",
   body("borrowerName").isString().trim(),
   body("organizationName").isString().trim(),
+  body("address").isString().trim(),
+  body("organizationStatus").isString().trim(),
+  body("note").isString().trim(),
   body("identityNumber").isString().trim(),
   body("identityCard").isString().trim(),
   body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
@@ -49,6 +52,9 @@ borrowerRouter.put(
   param("id").isNumeric().trim(),
   body("borrowerName").isString().trim(),
   body("organizationName").isString().trim(),
+  body("address").isString().trim(),
+  body("organizationStatus").isString().trim(),
+  body("note").isString().trim(),
   body("identityNumber").isString().trim(),
   body("identityCard").isString().trim(),
   body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
@@ -57,9 +63,9 @@ borrowerRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const borrower = await updateBorrowerService(+id, req.body);
+      const borrower = await updateBorrowerService(id, req.body);
       res.send(
         normalize(
           "Borrower updated successfully",
@@ -86,9 +92,9 @@ borrowerRouter.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const borrower = await patchBorrowerService(+id, req.body);
+      const borrower = await patchBorrowerService(id, req.body);
       res.send(borrower);
     } catch (error) {
       if (error instanceof Error) {
@@ -111,9 +117,9 @@ borrowerRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteBorrowerService(+id);
+      await deleteBorrowerService(id);
       res.status(200).json({ message: "Borrower deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -129,9 +135,9 @@ borrowerRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const borrower = await getBorrowerService(+id);
+      const borrower = await getBorrowerService(id);
       if (borrower) {
         res.send(
           normalize(

@@ -21,7 +21,7 @@ userRouter.post(
   body("lastName").isString().trim(), // spec validation
   body("email").isEmail().trim(), // spec validation
   body("password").isStrongPassword({
-    minLength: 12,
+    minLength: 10,
     minUppercase: 1,
     minSymbols: 1,
   }), // spec validation
@@ -32,7 +32,7 @@ userRouter.post(
   body("role").optional().isIn(["ADMIN", "USER"]), // spec validation
   body("isActive").isBoolean(), // spec validation
   async (req: Request, res: Response) => {
-    // aja lali async
+    // use  async
     // process validation
     const errors = validationResult(req);
 
@@ -75,9 +75,9 @@ userRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const user = await updateUserService(+id, req.body);
+      const user = await updateUserService(id, req.body);
       res.send(
         normalize("User updated successfully", "OK", DataType.object, user),
       );
@@ -99,9 +99,9 @@ userRouter.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const user = await patchUserService(+id, req.body);
+      const user = await patchUserService(id, req.body);
       res.send(user);
     } catch (error) {
       if (error instanceof Error) {
@@ -124,9 +124,9 @@ userRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteUserService(+id);
+      await deleteUserService(id);
       res
         .status(200)
         .json(
@@ -140,16 +140,16 @@ userRouter.delete(
 );
 
 userRouter.get(
-  "/:id",
+  "/profile/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const user = await getUserService(+id);
+      const user = await getUserService(id);
       if (user) {
         res.send(
           normalize("User found successfully", "OK", DataType.object, user),

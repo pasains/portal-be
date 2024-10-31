@@ -12,25 +12,39 @@ import {
   InventoryCreateParams,
   InventoryUpdateParams,
 } from "../types/inventory";
-import { checkInventoryTypeExists } from "../repository/inventoryType";
+import {
+  checkInventoryTypeName,
+  createInventoryType,
+  getInventoryType,
+} from "../repository/inventoryType";
 
 export const createInventoryService = async (
   inventory: InventoryCreateParams,
 ) => {
-  if (
-    !inventory.inventoryTypeId ||
-    typeof inventory.inventoryTypeId !== "number"
-  ) {
-    throw new Error("Invalid inventory Type Id");
+  let inventoryType;
+  const exists = await checkInventoryTypeName({
+    inventoryTypeName: inventory.inventoryTypeName,
+  });
+  if (exists) {
+    inventoryType = await getInventoryType(inventory.inventoryTypeId);
+  } else {
+    inventoryType = await createInventoryType({
+      id: inventory.inventoryTypeId,
+      inventoryTypeName: inventory.inventoryTypeName,
+      description: inventory.descriptionInventoryType,
+    });
   }
-  const exists = await checkInventoryTypeExists(inventory.inventoryTypeId);
-  if (!exists) {
-    throw new Error("Invalid inventoryTypeId: Does not exists");
+  if (!inventoryType || !inventoryType.id) {
+    throw new Error("Failed to retrieve or create a valid inventory type");
   }
   try {
-    const newInventory = await createInventory(inventory);
+    const newInventory = await createInventory({
+      ...inventory,
+      inventoryTypeId: inventoryType.id,
+    });
     return newInventory;
   } catch (error) {
+    console.log(error);
     if (error instanceof PrismaClientValidationError) {
       const message = error.message.split("\n");
       throw new Error(message[message.length - 1]);
@@ -40,7 +54,7 @@ export const createInventoryService = async (
 };
 
 export const updateInventoryService = async (
-  inventoryId: number,
+  inventoryId: bigint,
   inventory: InventoryUpdateParams,
 ) => {
   const updatedInventory = await updateInventory(inventoryId, inventory);
@@ -48,7 +62,7 @@ export const updateInventoryService = async (
 };
 
 export const patchInventoryService = async (
-  inventoryId: number,
+  inventoryId: bigint,
   operation: {
     op: string;
     path: string;
@@ -77,13 +91,15 @@ export const patchInventoryService = async (
   }
 };
 
-export const deleteInventoryService = async (inventoryId: number) => {
+export const deleteInventoryService = async (inventoryId: bigint) => {
   const deletedInventory = await deleteInventory(inventoryId);
   return deletedInventory;
 };
 
-export const getInventoryService = async (inventoryId: number) => {
+export const getInventoryService = async (inventoryId: bigint) => {
+  console.log(`PORTAL_BE_INVENTORY_ID`, inventoryId);
   const inventory = await getInventory(inventoryId);
+  console.log(`PORTAL_BE_INVENTORY`, inventory);
   return inventory;
 };
 

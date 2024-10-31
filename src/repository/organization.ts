@@ -11,8 +11,8 @@ export const createOrganization = async (
 ) => {
   const newOrganization = await prisma.organization.create({
     data: {
-      organizationName: organization?.organizationName,
-      address: organization?.address,
+      organizationName: organization.organizationName,
+      address: organization.address,
       organizationStatus: organization?.organizationStatus,
       note: organization?.note,
     },
@@ -20,8 +20,19 @@ export const createOrganization = async (
   return newOrganization;
 };
 
+export const checkOrganizationName = async (organization: {
+  organizationName: string;
+}) => {
+  const newOrganization = await prisma.organization.findFirst({
+    where: {
+      organizationName: organization.organizationName,
+    },
+  });
+  return newOrganization;
+};
+
 export const updateOrganization = async (
-  organizationId: number,
+  organizationId: bigint,
   organization: OrganizationUpdateParams,
 ) => {
   const updatedOrganization = await prisma.organization.update({
@@ -36,7 +47,7 @@ export const updateOrganization = async (
   return updatedOrganization;
 };
 export const patchOrganization = async (
-  organizationId: number,
+  organizationId: bigint,
   op: string,
   field: string,
   value: string,
@@ -48,14 +59,14 @@ export const patchOrganization = async (
   return patchedOrganization;
 };
 
-export const deleteOrganization = async (organizationId: number) => {
+export const deleteOrganization = async (organizationId: bigint) => {
   const deletedOrganization = await prisma.organization.delete({
     where: { id: organizationId },
   });
   return deletedOrganization;
 };
 
-export const getOrganization = async (organizationId: number) => {
+export const getOrganization = async (organizationId: bigint) => {
   const organization = await prisma.organization.findUnique({
     where: { id: organizationId },
   });

@@ -12,16 +12,25 @@ import {
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
+import {
+  toInventoryDetailResponse,
+  toInventoryResponses,
+} from "../types/inventory";
 
 export const inventoryRouter = Router();
 
 inventoryRouter.post(
-  "/",
+  "/create",
   body("inventoryName").isString().trim(),
   body("refId").isString().trim(),
   body("description").isString().trim(),
+  body("condition").isString().trim(),
+  body("note").isString().trim(),
   body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric(),
+  body("url").isURL(),
+  body("currentQuantity").isNumeric(),
+  body("inventoryTypeName").isString().trim(),
+  body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -39,27 +48,34 @@ inventoryRouter.post(
       );
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
+      console.log(error);
       res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
 
 inventoryRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("inventoryName").isString().trim(),
   body("refId").isString().trim(),
   body("description").isString().trim(),
+  body("condition").isString().trim(),
+  body("note").isString().trim(),
   body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric().trim(),
+  body("url").isURL().isArray(),
+  body("currentQuantity").isNumeric(),
+  body("totalQuantity").isNumeric(),
+  body("inventoryTypeName").isString().trim(),
+  body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventory = await updateInventoryService(+id, req.body);
+      const inventory = await updateInventoryService(id, req.body);
       res.send(
         normalize(
           "Inventory updated successfully",
@@ -86,9 +102,9 @@ inventoryRouter.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventory = await patchInventoryService(+id, req.body);
+      const inventory = await patchInventoryService(id, req.body);
       res.send(inventory);
     } catch (error) {
       if (error instanceof Error) {
@@ -100,16 +116,16 @@ inventoryRouter.patch(
 );
 
 inventoryRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteInventoryService(+id);
+      await deleteInventoryService(id);
       res
         .status(200)
         .json(
@@ -135,26 +151,27 @@ inventoryRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventory = await getInventoryService(+id);
+      const inventory = await getInventoryService(id);
       if (inventory) {
         res.send(
           normalize(
             "Inventory found successfully",
             "OK",
             DataType.object,
-            inventory,
+            toInventoryDetailResponse(inventory),
           ),
         );
       } else {
         res
-          .status(400)
+          .status(404)
           .json(normalize("Inventory not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
+      console.log(`ERROR_`, error);
       const message = (error as any)?.message || "Internal server error";
-      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+      res.status(500).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -167,7 +184,7 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
         "Inventory list found successfully",
         "OK",
         DataType.array,
-        inventory,
+        toInventoryResponses(inventory),
       ),
     );
   } catch (error) {

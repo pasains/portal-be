@@ -1,50 +1,31 @@
-import { getInventory } from "../repository/inventory";
 import {
   createInventoryHistory,
-  deleteInventoryHistory,
   getAllInventoryHistory,
   getInventoryHistory,
-  updateInventoryHistory,
 } from "../repository/inventoryHistory";
-import {
-  InventoryHistoryCreateParams,
-  InventoryHistoryUpdateParams,
-} from "../types/inventoryHistory";
+import { InventoryHistoryCreateParams } from "../types/inventoryHistory";
+import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 export const createInventoryHistoryService = async (
   inventoryHistory: InventoryHistoryCreateParams,
 ) => {
-  if (inventoryHistory.inventoryId) {
-    const inventoryExists = await getInventory(inventoryHistory.inventoryId)
-    if (!inventoryExists) {
-      throw new Error("Invalid Inventory Id")
-    }
+  if (!inventoryHistory.id || typeof inventoryHistory.id !== "bigint") {
+    throw new Error("Invalid inventory Id");
   }
-  const newInventoryHistory = await createInventoryHistory({...inventoryHistory,});
-  return newInventoryHistory;
-};
-
-export const updateInventoryHistoryService = async (
-  inventoryHistoryId: number,
-  inventoryHistory: InventoryHistoryUpdateParams,
-) => {
-  if (inventoryHistory.inventoryId) {
-    const inventoryExists = await getInventory(inventoryHistory.inventoryId)
-    if (!inventoryExists) {
-      throw new Error("Invalid Inventory Id")
+  try {
+    const newInventoryHistory = await createInventoryHistory(inventoryHistory);
+    return newInventoryHistory;
+  } catch (error) {
+    if (error instanceof PrismaClientValidationError) {
+      const message = error.message.split("\n");
+      throw new Error(message[message.length - 1]);
     }
+    throw new Error("Internal server error");
   }
-  const updatedInventoryHistory = await updateInventoryHistory(inventoryHistoryId, inventoryHistory);
-  return updatedInventoryHistory;
 };
 
-export const deleteInventoryHistoryService = async (inventoryHistoryId: number) => {
-  const deletedInventoryHistory = await deleteInventoryHistory(inventoryHistoryId);
-  return deletedInventoryHistory;
-};
-
-export const getInventoryHistoryService = async (inventoryHistoryId: number) => {
-  const inventoryHistory = await getInventoryHistory(inventoryHistoryId);
+export const getInventoryHistoryService = async (revId: bigint) => {
+  const inventoryHistory = await getInventoryHistory(revId);
   return inventoryHistory;
 };
 

@@ -31,12 +31,7 @@ itemRouter.post(
     try {
       const item = await createItemService(req.body);
       res.send(
-        normalize(
-          "Item created successfully",
-          "OK",
-          DataType.object,
-          item,
-        ),
+        normalize("Item created successfully", "OK", DataType.object, item),
       );
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -59,16 +54,11 @@ itemRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const item = await updateItemService(+id, req.body);
+      const item = await updateItemService(id, req.body);
       res.send(
-        normalize(
-          "Item updated successfully",
-          "OK",
-          DataType.object,
-          item,
-        ),
+        normalize("Item updated successfully", "OK", DataType.object, item),
       );
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -88,9 +78,9 @@ itemRouter.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const item = await patchItemService(+id, req.body);
+      const item = await patchItemService(id, req.body);
       res.send(item);
     } catch (error) {
       if (error instanceof Error) {
@@ -109,9 +99,9 @@ itemRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteItemService(+id);
+      await deleteItemService(id);
       res.status(200).json({ message: "Item deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -127,24 +117,17 @@ itemRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const item = await getItemService(+id);
+      const item = await getItemService(id);
       if (item) {
         res.send(
-          normalize(
-            "Item found successfully",
-            "OK",
-            DataType.object,
-            item,
-          ),
+          normalize("Item found successfully", "OK", DataType.object, item),
         );
       } else {
         res
           .status(400)
-          .json(
-            normalize("Item not found", "ERROR", DataType.null, null),
-          );
+          .json(normalize("Item not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -156,14 +139,7 @@ itemRouter.get(
 itemRouter.get("/", async (_req: Request, res: Response) => {
   try {
     const item = await getAllItemService();
-    res.send(
-      normalize(
-        "Item found successfully",
-        "OK",
-        DataType.array,
-        item,
-      ),
-    );
+    res.send(normalize("Item found successfully", "OK", DataType.array, item));
   } catch (error) {
     res
       .status(400)

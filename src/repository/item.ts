@@ -7,9 +7,9 @@ export const createItem = async (item: ItemCreateParams) => {
   const newItem = await prisma.item.create({
     data: {
       borrowingId: item?.borrowingId,
-      receivingId: item?.receivingId,
       inventoryId: item?.inventoryId,
       quantity: item?.quantity,
+      status: item?.status,
       preCondition: item?.preCondition,
       postCondition: item?.postCondition,
     },
@@ -17,14 +17,14 @@ export const createItem = async (item: ItemCreateParams) => {
   return newItem;
 };
 
-export const updateItem = async (itemId: number, item: ItemUpdateParams) => {
+export const updateItem = async (itemId: bigint, item: ItemUpdateParams) => {
   const updatedItem = await prisma.item.update({
     where: { id: itemId },
     data: {
       borrowingId: item?.borrowingId,
-      receivingId: item?.receivingId,
       inventoryId: item?.inventoryId,
       quantity: item?.quantity,
+      status: item?.status,
       preCondition: item?.preCondition,
       postCondition: item?.postCondition,
     },
@@ -33,7 +33,7 @@ export const updateItem = async (itemId: number, item: ItemUpdateParams) => {
 };
 
 export const patchItem = async (
-  itemId: number,
+  itemId: bigint,
   op: string,
   field: string,
   value: string,
@@ -45,14 +45,14 @@ export const patchItem = async (
   return patchedItem;
 };
 
-export const deleteItem = async (itemId: number) => {
+export const deleteItem = async (itemId: bigint) => {
   const deletedItem = await prisma.item.delete({
     where: { id: itemId },
   });
   return deletedItem;
 };
 
-export const getItem = async (itemId: number) => {
+export const getItem = async (itemId: bigint) => {
   const item = await prisma.item.findUnique({
     where: { id: itemId },
   });

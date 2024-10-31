@@ -16,15 +16,16 @@ import { DataType } from "../types/dataType";
 export const borrowingRouter = Router();
 
 borrowingRouter.post(
-  "/",
-  body("borrowerId").optional().isNumeric(),
-  body("borrowingStatusId").optional().isNumeric(),
-  body("organizationId").optional().isNumeric(),
-  body("dueDate")
-    .isISO8601()
-    .withMessage(
-      "Please provide a complete ISO-8601 date-time string with timezone (e.g., 2024-08-10T12:34:56.789Z)",
-    ),
+  "/create",
+  body("organizationName").isString().trim(),
+  body("address").isString().trim(),
+  body("organizationStatus").isString().trim(),
+  body("note").isString().trim(),
+  body("borrowerName").isString().trim(),
+  body("identityCard").isString().trim(),
+  body("identityNumber").isString().trim(),
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
+  body("dueDate").isDate().withMessage("valid date YYYY-MM-DD").toDate(),
   body("specialInstruction").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -49,25 +50,26 @@ borrowingRouter.post(
 );
 
 borrowingRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
-  body("borrowerId").optional().isNumeric(),
-  body("borrowingStatusId").optional().isNumeric(),
-  body("organizationId").optional().isNumeric(),
-  body("dueDate")
-    .isISO8601()
-    .withMessage(
-      "Please provide a complete ISO-8601 date-time string with timezone (e.g., 2024-08-10T12:34:56.789Z)",
-    ),
+  body("organizationName").isString().trim(),
+  body("address").isString().trim(),
+  body("organizationStatus").isString().trim(),
+  body("note").isString().trim(),
+  body("borrowerName").isString().trim(),
+  body("identityCard").isString().trim(),
+  body("identityNumber").isString().trim(),
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
+  body("dueDate").isDate().withMessage("valid date YYYY-MM-DD").toDate(),
   body("specialInstruction").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const borrowing = await updateBorrowingService(+id, req.body);
+      const borrowing = await updateBorrowingService(id, req.body);
       res.send(
         normalize(
           "Borrowing updated successfully",
@@ -94,9 +96,9 @@ borrowingRouter.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const borrowing = await patchBorrowingService(+id, req.body);
+      const borrowing = await patchBorrowingService(id, req.body);
       res.send(borrowing);
     } catch (error) {
       if (error instanceof Error) {
@@ -108,16 +110,16 @@ borrowingRouter.patch(
 );
 
 borrowingRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteBorrowingService(+id);
+      await deleteBorrowingService(id);
       res.status(200).json({ message: "Borrowing deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -133,9 +135,9 @@ borrowingRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const borrowing = await getBorrowingService(+id);
+      const borrowing = await getBorrowingService(id);
       if (borrowing) {
         res.send(
           normalize(

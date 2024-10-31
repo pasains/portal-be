@@ -18,7 +18,7 @@ export const createDocumentService = async (
 };
 
 export const updateDocumentService = async (
-  documentId: number,
+  documentId: bigint,
   document: DocumentParams,
 ) => {
   const updatedDocument = await updateDocument(
@@ -28,12 +28,12 @@ export const updateDocumentService = async (
   return updatedDocument;
 };
 
-export const deleteDocumentService = async (documentId: number) => {
+export const deleteDocumentService = async (documentId: bigint) => {
   const deletedDocument = await deleteDocument(documentId);
   return deletedDocument;
 };
 
-export const getDocumentService = async (documentId: number) => {
+export const getDocumentService = async (documentId: bigint) => {
   const document = await getDocument(documentId);
   return document;
 };

@@ -1,39 +1,38 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createStockLedgerService,
-  deleteStockLedgerService,
-  getAllStockLedgerService,
-  getStockLedgerService,
-  updateStockLedgerService,
-} from "../service/stockLedger";
+  createMessageService,
+  deleteMessageService,
+  getAllMessageService,
+  getMessageService,
+  updateMessageService,
+} from "../service/message";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const stockLedgerRouter = Router();
+export const messageRouter = Router();
 
-stockLedgerRouter.post(
-  "/",
-  body("stockLedgerId").optional().isNumeric(),
-  body("quantity").isNumeric(),
-  body("quantityAfterTransaction").isNumeric(),
-  body("voucherType").isString().trim(),
-  body("voucherName").isNumeric(),
+messageRouter.post(
+  "/create",
+  body("name").isString().trim(),
+  body("organization").isString().trim(),
+  body("email").isEmail().trim(),
+  body("comment").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const stockLedger = await createStockLedgerService(req.body);
+      const message = await createMessageService(req.body);
       res.send(
         normalize(
-          "Stock Ledger created successfully",
+          "Message created successfully",
           "OK",
           DataType.object,
-          stockLedger,
+          message,
         ),
       );
     } catch (error) {
@@ -43,28 +42,26 @@ stockLedgerRouter.post(
   },
 );
 
-stockLedgerRouter.put(
+messageRouter.put(
   "/:id",
-  param("id").isNumeric().trim(),
-  body("stockLedgerId").optional().isNumeric(),
-  body("quantity").isNumeric(),
-  body("quantityAfterTransaction").isNumeric(),
-  body("voucherType").isString().trim(),
-  body("voucherName").isNumeric(),
+  body("name").isString().trim(),
+  body("organization").isString().trim(),
+  body("email").isEmail().trim(),
+  body("comment").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const stockLedger = await updateStockLedgerService(+id, req.body);
+      const message = await updateMessageService(id, req.body);
       res.send(
         normalize(
-          "Stock Ledger updated successfully",
+          "Message updated successfully",
           "OK",
           DataType.object,
-          stockLedger,
+          message,
         ),
       );
     } catch (error) {
@@ -74,7 +71,7 @@ stockLedgerRouter.put(
   },
 );
 
-stockLedgerRouter.delete(
+messageRouter.delete(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -82,17 +79,17 @@ stockLedgerRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteStockLedgerService(+id);
-      res.status(200).json({ message: "Stock Ledger deleted successfully" });
+      await deleteMessageService(id);
+      res.status(200).json({ message: "Message deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
     }
   },
 );
 
-stockLedgerRouter.get(
+messageRouter.get(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -100,24 +97,22 @@ stockLedgerRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const stockLedger = await getStockLedgerService(+id);
-      if (stockLedger) {
+      const message = await getMessageService(id);
+      if (message) {
         res.send(
           normalize(
-            "Stock Ledger found successfully",
+            "Message found successfully",
             "OK",
             DataType.object,
-            stockLedger,
+            message,
           ),
         );
       } else {
         res
           .status(400)
-          .json(
-            normalize("Stock Ledger not found", "ERROR", DataType.null, null),
-          );
+          .json(normalize("Message not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -126,16 +121,11 @@ stockLedgerRouter.get(
   },
 );
 
-stockLedgerRouter.get("/", async (_req: Request, res: Response) => {
+messageRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const stockLedger = await getAllStockLedgerService();
+    const message = await getAllMessageService();
     res.send(
-      normalize(
-        "Stock Ledger found successfully",
-        "OK",
-        DataType.array,
-        stockLedger,
-      ),
+      normalize("Message found successfully", "OK", DataType.array, message),
     );
   } catch (error) {
     res

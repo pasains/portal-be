@@ -1,44 +1,43 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryHistoryService,
-  getAllInventoryHistoryService,
-  getInventoryHistoryService,
-} from "../service/inventoryHistory";
+  createBorrowingHistoryService,
+  getBorrowingHistoryService,
+  getAllBorrowingHistoryService,
+} from "../service/borrowingHistory";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const inventoryHistoryRouter = Router();
+export const borrowingHistoryRouter = Router();
 
-inventoryHistoryRouter.post(
+borrowingHistoryRouter.post(
   "/",
   body("id").isNumeric(),
-  body("inventoryName").isString().trim(),
-  body("refId").isString().trim(),
-  body("description").isString().trim(),
-  body("condition").isString().trim(),
+  body("organizationName").isString().trim(),
+  body("address").isString().trim(),
+  body("organizationStatus").isString().trim(),
   body("note").isString().trim(),
-  body("isBorrowable").isBoolean(),
-  body("url").isURL().isArray(),
-  body("currentQuantity").isNumeric(),
-  body("totalQuantity").isNumeric(),
-  body("inventoryTypeName").isString().trim(),
-  body("descriptionInventoryType").isString().trim(),
+  body("borrowerName").isString().trim(),
+  body("identityCard").isString().trim(),
+  body("identityNumber").isString().trim(),
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
+  body("dueDate").isDate().withMessage("valid date YYYY-MM-DD").toDate(),
+  body("specialInstruction").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const inventoryHistory = await createInventoryHistoryService(req.body);
+      const borrowingHistory = await createBorrowingHistoryService(req.body);
       res.send(
         normalize(
-          "Inventory History created successfully",
+          "Borrowing Status created successfully",
           "OK",
           DataType.object,
-          inventoryHistory,
+          borrowingHistory,
         ),
       );
     } catch (error) {
@@ -48,7 +47,7 @@ inventoryHistoryRouter.post(
   },
 );
 
-inventoryHistoryRouter.get(
+borrowingHistoryRouter.get(
   "/:revId",
   param("revId").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -58,14 +57,14 @@ inventoryHistoryRouter.get(
     }
     const id = BigInt(req.params.id);
     try {
-      const inventoryHistory = await getInventoryHistoryService(id);
-      if (inventoryHistory) {
+      const borrowingHistory = await getBorrowingHistoryService(id);
+      if (borrowingHistory) {
         res.send(
           normalize(
-            "Inventory History found successfully",
+            "Borrowing Status found successfully",
             "OK",
             DataType.object,
-            inventoryHistory,
+            borrowingHistory,
           ),
         );
       } else {
@@ -73,7 +72,7 @@ inventoryHistoryRouter.get(
           .status(400)
           .json(
             normalize(
-              "Inventory History not found",
+              "Borrowing Status not found",
               "ERROR",
               DataType.null,
               null,
@@ -87,19 +86,20 @@ inventoryHistoryRouter.get(
   },
 );
 
-inventoryHistoryRouter.get("/", async (_req: Request, res: Response) => {
+borrowingHistoryRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventoryHistory = await getAllInventoryHistoryService();
+    const borrowingHistory = await getAllBorrowingHistoryService();
     res.send(
       normalize(
-        "Inventory History found successfully",
+        "Borrowing Status found successfully",
         "OK",
         DataType.array,
-        inventoryHistory,
+        borrowingHistory,
       ),
     );
   } catch (error) {
-    const message = (error as any)?.message || "Internal server error";
-    res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+    res
+      .status(400)
+      .json(normalize("Internal server error", "ERROR", DataType.null, null));
   }
 });

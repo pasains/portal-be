@@ -55,9 +55,9 @@ organizationRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const organization = await updateOrganizationService(+id, req.body);
+      const organization = await updateOrganizationService(id, req.body);
       res.send(
         normalize(
           "Organization updated successfully",
@@ -84,9 +84,9 @@ organizationRouter.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const organization = await patchOrganizationService(+id, req.body);
+      const organization = await patchOrganizationService(id, req.body);
       res.send(organization);
     } catch (error) {
       if (error instanceof Error) {
@@ -109,9 +109,9 @@ organizationRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteOrganizationService(+id);
+      await deleteOrganizationService(id);
       res.status(200).json({ message: "Organization deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -127,9 +127,9 @@ organizationRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const organization = await getOrganizationService(+id);
+      const organization = await getOrganizationService(id);
       if (organization) {
         res.send(
           normalize(

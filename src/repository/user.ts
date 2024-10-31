@@ -3,14 +3,28 @@ import { UserCreateParams, UserUpdateParams } from "../types/user";
 
 const prisma = new PrismaClient();
 
-export const createUser = async (user: UserCreateParams) => {
-  const newUser = await prisma.user.create({
-    data: user,
+export default prisma;
+
+export const createUser = async (data: UserCreateParams) => {
+  const createdUser = await prisma.user.create({
+    data: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      userName: data.userName,
+      email: data.email,
+      password: data.password,
+      phoneNumber: data.phoneNumber,
+      address: data.address,
+      profile: data.profile,
+      position: data.position,
+      role: data.role,
+      isActive: data.isActive ?? true,
+    },
   });
-  return newUser;
+  return createdUser;
 };
 
-export const updateUser = async (userId: number, user: UserUpdateParams) => {
+export const updateUser = async (userId: bigint, user: UserUpdateParams) => {
   const updatedUser = await prisma.user.update({
     where: { id: userId },
     data: user,
@@ -19,7 +33,7 @@ export const updateUser = async (userId: number, user: UserUpdateParams) => {
 };
 
 export const patchUser = async (
-  userId: number,
+  userId: bigint,
   op: string,
   field: string,
   value: string,
@@ -33,14 +47,14 @@ export const patchUser = async (
   return patchedUser;
 };
 
-export const deleteUser = async (userId: number) => {
+export const deleteUser = async (userId: bigint) => {
   const deletedUser = await prisma.user.delete({
     where: { id: userId },
   });
   return deletedUser;
 };
 
-export const getUser = async (userId: number) => {
+export const getUser = async (userId: bigint) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
   });

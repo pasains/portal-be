@@ -16,7 +16,7 @@ export const createInventoryGroup = async (
 };
 
 export const updateInventoryGroup = async (
-  inventoryGroupId: number,
+  inventoryGroupId: bigint,
   inventoryGroup: InventoryGroupUpdateParams,
 ) => {
   const updatedInventoryGroup = await prisma.inventoryGroup.update({
@@ -26,14 +26,14 @@ export const updateInventoryGroup = async (
   return updatedInventoryGroup;
 };
 
-export const deleteInventoryGroup = async (inventoryGroupId: number) => {
+export const deleteInventoryGroup = async (inventoryGroupId: bigint) => {
   const deletedInventoryGroup = await prisma.inventoryGroup.delete({
     where: { id: inventoryGroupId },
   });
   return deletedInventoryGroup;
 };
 
-export const getInventoryGroup = async (inventoryGroupId: number) => {
+export const getInventoryGroup = async (inventoryGroupId: bigint | bigint) => {
   const inventoryGroup = await prisma.inventoryGroup.findUnique({
     where: { id: inventoryGroupId },
   });
@@ -46,8 +46,8 @@ export const getAllInventoryGroup = async () => {
 };
 
 export const connectInventoryGroupToInventoryType = async (
-  inventoryGroupId: number,
-  inventoryTypeId: number,
+  inventoryGroupId: bigint,
+  inventoryTypeId: bigint,
 ) => {
   const updatedInventoryGroup = await prisma.inventoryGroup.update({
     where: { id: inventoryGroupId },

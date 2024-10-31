@@ -1,17 +1,16 @@
 export interface OrganizationCreateParams {
-  id: number;
+  id: bigint;
   organizationName: string;
   address: string;
   organizationStatus: string;
   note: string;
-  createdBy: number;
 }
 
 export interface OrganizationUpdateParams {
-  id: number;
+  id: bigint;
   organizationName: string;
   address: string;
   organizationStatus: string;
   note: string;
-  updatedBy: number;
+  updatedBy: bigint;
 }
