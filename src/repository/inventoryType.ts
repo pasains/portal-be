@@ -22,8 +22,19 @@ export const createInventoryType = async (
   return newInventoryType;
 };
 
+export const checkInventoryTypeName = async (inventoryType: {
+  inventoryTypeName: string;
+}) => {
+  const newInventoryType = await prisma.inventoryType.findFirst({
+    where: {
+      inventoryTypeName: inventoryType.inventoryTypeName,
+    },
+  });
+  return newInventoryType;
+};
+
 export const updateInventoryType = async (
-  inventoryTypeId: number,
+  inventoryTypeId: bigint,
   inventoryType: InventoryTypeUpdateParams,
 ) => {
   const group = inventoryType?.groupId
@@ -40,14 +51,14 @@ export const updateInventoryType = async (
   return updatedInventoryType;
 };
 
-export const deleteInventoryType = async (inventoryTypeId: number) => {
+export const deleteInventoryType = async (inventoryTypeId: bigint) => {
   const deletedInventoryType = await prisma.inventoryType.delete({
     where: { id: inventoryTypeId },
   });
   return deletedInventoryType;
 };
 
-export const getInventoryType = async (inventoryTypeId: number) => {
+export const getInventoryType = async (inventoryTypeId: bigint | bigint) => {
   const inventoryType = await prisma.inventoryType.findUnique({
     where: { id: inventoryTypeId },
   });
@@ -60,7 +71,7 @@ export const getAllInventoryType = async () => {
 };
 
 export const checkInventoryTypeExists = async (
-  inventoryTypeId: number,
+  inventoryTypeId: bigint,
 ): Promise<boolean> => {
   const count = await prisma.inventoryType.count({
     where: {
@@ -71,8 +82,8 @@ export const checkInventoryTypeExists = async (
 };
 
 export const connectInventoryTypeToGroup = async (
-  inventoryTypeId: number,
-  inventoryGroupId: number,
+  inventoryTypeId: bigint,
+  inventoryGroupId: bigint,
 ) => {
   const updatedInventoryType = await prisma.inventoryType.update({
     where: { id: inventoryTypeId },

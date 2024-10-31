@@ -15,7 +15,7 @@ export const createUserService = async (data: UserCreateParams) => {
 };
 
 export const updateUserService = async (
-  userId: number,
+  userId: bigint,
   data: UserUpdateParams,
 ) => {
   const updatedUser = await updateUser(userId, data);
@@ -23,7 +23,7 @@ export const updateUserService = async (
 };
 
 export const patchUserService = async (
-  userId: number,
+  userId: bigint,
   operation: {
     op: string;
     path: string;
@@ -47,12 +47,12 @@ export const patchUserService = async (
   }
 };
 
-export const deleteUserService = async (userId: number) => {
+export const deleteUserService = async (userId: bigint) => {
   const deletedUser = await deleteUser(userId);
   return deletedUser;
 };
 
-export const getUserService = async (userId: number) => {
+export const getUserService = async (userId: bigint) => {
   const user = await getUser(userId);
   return user;
 };

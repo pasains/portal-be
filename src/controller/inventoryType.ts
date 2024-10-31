@@ -52,9 +52,9 @@ inventoryTypeRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventoryType = await updateInventoryTypeService(+id, req.body);
+      const inventoryType = await updateInventoryTypeService(id, req.body);
       res.send(
         normalize(
           "Inventory Type updated successfully",
@@ -78,9 +78,9 @@ inventoryTypeRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteInventoryTypeService(+id);
+      await deleteInventoryTypeService(id);
       res.status(200).json({ message: "Inventory Type deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -96,9 +96,9 @@ inventoryTypeRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventoryType = await getInventoryTypeService(+id);
+      const inventoryType = await getInventoryTypeService(id);
       if (inventoryType) {
         res.send(
           normalize(

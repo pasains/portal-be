@@ -28,7 +28,7 @@ export const createInventoryTypeService = async (
 };
 
 export const updateInventoryTypeService = async (
-  inventoryTypeId: number,
+  inventoryTypeId: bigint,
   inventoryType: InventoryTypeUpdateParams,
 ) => {
   // check if InventoryGroup exists
@@ -45,12 +45,12 @@ export const updateInventoryTypeService = async (
   return updatedInventoryType;
 };
 
-export const deleteInventoryTypeService = async (inventoryTypeId: number) => {
+export const deleteInventoryTypeService = async (inventoryTypeId: bigint) => {
   const deletedInventoryType = await deleteInventoryType(inventoryTypeId);
   return deletedInventoryType;
 };
 
-export const getInventoryTypeService = async (inventoryTypeId: number) => {
+export const getInventoryTypeService = async (inventoryTypeId: bigint) => {
   const inventoryType = await getInventoryType(inventoryTypeId);
   return inventoryType;
 };
@@ -59,4 +59,3 @@ export const getAllInventoryTypeService = async () => {
   const allInventoryType = await getAllInventoryType();
   return allInventoryType;
 };
-

@@ -10,7 +10,7 @@ export const createDocument = async (document: Document) => {
 };
 
 export const updateDocument = async (
-  documentId: number,
+  documentId: bigint,
   document: Document,
 ) => {
   const updatedDocument = await prisma.document.update({
@@ -20,14 +20,14 @@ export const updateDocument = async (
   return updatedDocument;
 };
 
-export const deleteDocument = async (documentId: number) => {
+export const deleteDocument = async (documentId: bigint) => {
   const deletedDocument = await prisma.document.delete({
     where: { id: documentId },
   });
   return deletedDocument;
 };
 
-export const getDocument = async (documentId: number) => {
+export const getDocument = async (documentId: bigint) => {
   const document = await prisma.document.findUnique({
     where: { id: documentId },
   });

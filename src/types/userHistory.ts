@@ -1,8 +1,8 @@
 export interface UserHistoryCreateParams {
-  userId: number;
+  userId: bigint;
   newData: string;
   oldData: string;
-  createdBy: number;
+  createdBy: bigint;
 }
 
 

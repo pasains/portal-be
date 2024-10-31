@@ -21,7 +21,7 @@ export const createUserHistoryService = async (
   return newUserHistory;
 };
 
-export const getUserHistoryService = async (userHistoryId: number) => {
+export const getUserHistoryService = async (userHistoryId: bigint) => {
   const userHistory = await getUserHistory(userHistoryId);
   return userHistory;
 };

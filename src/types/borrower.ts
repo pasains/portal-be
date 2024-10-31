@@ -1,19 +1,26 @@
 export interface BorrowerCreateParams {
-  id: number;
+  id: bigint;
   borrowerName: string;
+  organizationId: bigint;
   organizationName: string;
+  address: string;
+  organizationStatus: string;
+  note: string;
   identityCard: string;
   identityNumber: string;
   phoneNumber: string;
-  createdBy: number;
 }
 
 export interface BorrowerUpdateParams {
-  id: number;
-  organizationName: string;
+  id: bigint;
   borrowerName: string;
+  organizationId: bigint;
+  organizationName: string;
+  address: string;
+  organizationStatus: string;
+  note: string;
   identityCard: string;
   identityNumber: string;
   phoneNumber: string;
-  updatedBy: number;
+  updatedBy: bigint;
 }

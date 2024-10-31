@@ -50,9 +50,9 @@ inventoryGroupRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventoryGroup = await updateInventoryGroupService(+id, req.body);
+      const inventoryGroup = await updateInventoryGroupService(id, req.body);
       res.send(
         normalize(
           "Inventory Group updated successfully",
@@ -76,9 +76,9 @@ inventoryGroupRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteInventoryGroupService(+id);
+      await deleteInventoryGroupService(id);
       res.status(200).json({ message: "Inventory Group deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -94,9 +94,9 @@ inventoryGroupRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventoryGroup = await getInventoryGroupService(+id);
+      const inventoryGroup = await getInventoryGroupService(id);
       if (inventoryGroup) {
         res.send(
           normalize(
@@ -110,7 +110,12 @@ inventoryGroupRouter.get(
         res
           .status(400)
           .json(
-            normalize("Inventory Group not found", "ERROR", DataType.null, null),
+            normalize(
+              "Inventory Group not found",
+              "ERROR",
+              DataType.null,
+              null,
+            ),
           );
       }
     } catch (error) {

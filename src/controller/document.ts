@@ -48,9 +48,9 @@ documentRouter.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const document = await updateDocumentService(+id, req.body);
+      const document = await updateDocumentService(id, req.body);
       res.send(
         normalize(
           "Document updated successfully",
@@ -74,9 +74,9 @@ documentRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteDocumentService(+id);
+      await deleteDocumentService(id);
       res.status(200).json({ message: "Document deleted successfully" });
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -92,9 +92,9 @@ documentRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const document = await getDocumentService(+id);
+      const document = await getDocumentService(id);
       if (document) {
         res.send(
           normalize(
@@ -107,9 +107,7 @@ documentRouter.get(
       } else {
         res
           .status(400)
-          .json(
-            normalize("Document not found", "ERROR", DataType.null, null),
-          );
+          .json(normalize("Document not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -122,12 +120,7 @@ documentRouter.get("/", async (_req: Request, res: Response) => {
   try {
     const document = await getAllDocumentService();
     res.send(
-      normalize(
-        "Document found successfully",
-        "OK",
-        DataType.array,
-        document,
-      ),
+      normalize("Document found successfully", "OK", DataType.array, document),
     );
   } catch (error) {
     res

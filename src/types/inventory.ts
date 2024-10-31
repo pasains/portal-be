@@ -1,23 +1,34 @@
 export interface InventoryCreateParams {
+  id: bigint;
   inventoryName: string;
   refId: string;
   description: string;
+  condition: string;
+  note: string;
+  url: string;
   isBorrowable: boolean;
-  inventoryTypeId: number;
-  image?: string | null;
-  quantity: number;
+  inventoryTypeId: bigint;
   inventoryTypeName: string;
   descriptionInventoryType: string;
+  currentQuantity: number;
+  totalQuantity: number;
 }
 
 export interface InventoryUpdateParams {
+  id: bigint;
   inventoryName: string;
   refId: string;
   description: string;
+  condition: string;
+  note: string;
   isBorrowable: boolean;
-  inventoryTypeId: number;
+  inventoryTypeId: bigint;
+  inventoryTypeName: string;
+  descriptionInventoryType: string;
+  currentQuantity: number;
+  totalQuantity: number;
   updatedAt: Date;
-  updatedBy: number;
+  updatedBy: bigint;
 }
 
 export interface InventoryResponse {
@@ -43,8 +54,8 @@ export interface InventoryDetailResponse {
   condition: string;
   createdAt: Date;
   updatedAt: Date;
-  createdBy: number;
-  updatedBy: number;
+  createdBy: bigint;
+  updatedBy: bigint;
 }
 
 export function toInventoryResponse(data: any): InventoryResponse {
@@ -74,13 +85,16 @@ export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
     isBorrowable: data.isBorrowable,
     inventoryTypeId: data.inventoryTypeIdRel.id,
     inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
-    image: data.inventoryHistoryIdRel.map((images: any) => images.image),
-    condition: data.inventoryHistoryIdRel.map(
-      (conditions: any) => conditions.condition,
-    ),
-    quantity: data.inventoryStockIdRel.map(
-      (quantities: any) => quantities.quantity,
-    ),
+    //image: data.inventoryHistoryIdRel.map((images: any) => images.image),
+    //condition: data.inventoryHistoryIdRel.map(
+    //  (conditions: any) => conditions.condition,
+    //),
+    //quantity: data.inventoryStockIdRel.map(
+    //  (quantities: any) => quantities.quantity,
+    //),
+    image: data.image,
+    condition: data.condition,
+    quantity: data.quantity,
     createdAt: data.createdAt,
     updatedAt: data.updatedAt,
     createdBy: data.createdBy,

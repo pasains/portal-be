@@ -1,13 +1,13 @@
 export interface InventoryGroupCreateParams {
-  id: number,
+  id: bigint;
   inventoryGroupName: string;
   description: string;
-  createdBy: number;
+  createdBy: bigint;
 }
 
 export interface InventoryGroupUpdateParams {
-  id: number,
+  id: bigint;
   inventoryGroupName: string;
   description: string;
-  updatedBy: number;
+  updatedBy: bigint;
 }

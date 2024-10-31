@@ -23,6 +23,5 @@ try {
   // Ensuring the Prisma client is properly disconnected
   prisma
     .$disconnect()
-    .then(() => console.log("Prisma disconnected"))
     .catch((e) => console.error("Error during disconnection:", e));
 }

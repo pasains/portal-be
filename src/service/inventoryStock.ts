@@ -25,7 +25,7 @@ export const createInventoryStockService = async (
 };
 
 export const updateInventoryStockService = async (
-  inventoryStockId: number,
+  inventoryStockId: bigint,
   inventoryStock: InventoryStockUpdateParams,
 ) => {
   if (inventoryStock.inventoryId) {
@@ -38,12 +38,12 @@ export const updateInventoryStockService = async (
   return updatedInventoryStock;
 };
 
-export const deleteInventoryStockService = async (inventoryStockId: number) => {
+export const deleteInventoryStockService = async (inventoryStockId: bigint) => {
   const deletedInventoryStock = await deleteInventoryStock(inventoryStockId);
   return deletedInventoryStock;
 };
 
-export const getInventoryStockService = async (inventoryStockId: number) => {
+export const getInventoryStockService = async (inventoryStockId: bigint) => {
   const inventoryStock = await getInventoryStock(inventoryStockId);
   return inventoryStock;
 };

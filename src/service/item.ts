@@ -18,7 +18,7 @@ export const createItemService = async (item: ItemCreateParams) => {
 };
 
 export const updateItemService = async (
-  itemId: number,
+  itemId: bigint,
   item: ItemUpdateParams,
 ) => {
   const updatedItem = await updateItem(itemId, item);
@@ -26,7 +26,7 @@ export const updateItemService = async (
 };
 
 export const patchItemService = async (
-  itemId: number,
+  itemId: bigint,
   operation: {
     op: string;
     path: string;
@@ -50,12 +50,12 @@ export const patchItemService = async (
   }
 };
 
-export const deleteItemService = async (itemId: number) => {
+export const deleteItemService = async (itemId: bigint) => {
   const deletedItem = await deleteItem(itemId);
   return deletedItem;
 };
 
-export const getItemService = async (itemId: number) => {
+export const getItemService = async (itemId: bigint) => {
   const item = await getItem(itemId);
   return item;
 };

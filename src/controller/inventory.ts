@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { Router } from "express";
 import {
   createInventoryService,
@@ -24,10 +24,11 @@ inventoryRouter.post(
   body("inventoryName").isString().trim(),
   body("refId").isString().trim(),
   body("description").isString().trim(),
+  body("condition").isString().trim(),
+  body("note").isString().trim(),
   body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric(),
-  body("image").isString().trim(),
-  body("quantity").isNumeric(),
+  body("url").isURL(),
+  body("currentQuantity").isNumeric(),
   body("inventoryTypeName").isString().trim(),
   body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
@@ -59,16 +60,22 @@ inventoryRouter.put(
   body("inventoryName").isString().trim(),
   body("refId").isString().trim(),
   body("description").isString().trim(),
+  body("condition").isString().trim(),
+  body("note").isString().trim(),
   body("isBorrowable").isBoolean(),
-  body("inventoryTypeId").isNumeric().trim(),
+  body("url").isURL().isArray(),
+  body("currentQuantity").isNumeric(),
+  body("totalQuantity").isNumeric(),
+  body("inventoryTypeName").isString().trim(),
+  body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventory = await updateInventoryService(+id, req.body);
+      const inventory = await updateInventoryService(id, req.body);
       res.send(
         normalize(
           "Inventory updated successfully",
@@ -95,9 +102,9 @@ inventoryRouter.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventory = await patchInventoryService(+id, req.body);
+      const inventory = await patchInventoryService(id, req.body);
       res.send(inventory);
     } catch (error) {
       if (error instanceof Error) {
@@ -116,9 +123,9 @@ inventoryRouter.delete(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      await deleteInventoryService(+id);
+      await deleteInventoryService(id);
       res
         .status(200)
         .json(
@@ -144,9 +151,9 @@ inventoryRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const inventory = await getInventoryService(+id);
+      const inventory = await getInventoryService(id);
       if (inventory) {
         res.send(
           normalize(
@@ -162,6 +169,7 @@ inventoryRouter.get(
           .json(normalize("Inventory not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
+      console.log(`ERROR_`, error);
       const message = (error as any)?.message || "Internal server error";
       res.status(500).json(normalize(message, "ERROR", DataType.null, null));
     }

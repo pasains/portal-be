@@ -1,7 +1,9 @@
+import { Status } from "@prisma/client";
+
 export interface BorrowingCreateParams {
-  id: number;
-  borrowerId?: bigint;
-  organizationId?: bigint;
+  id: bigint;
+  borrowerId: bigint;
+  organizationId: bigint;
   borrowerName: string;
   identityCard: string;
   identityNumber: string;
@@ -11,15 +13,24 @@ export interface BorrowingCreateParams {
   organizationStatus: string;
   note: string;
   dueDate: Date;
+  status: Status;
   specialInstruction: string;
-  createdBy: number;
 }
 
 export interface BorrowingUpdateParams {
-  id: number;
-  borrowerId: number;
-  organizationId: number;
+  id: bigint;
+  borrowerId: bigint;
+  organizationId: bigint;
+  borrowerName: string;
+  identityCard: string;
+  identityNumber: string;
+  phoneNumber: string;
+  organizationName: string;
+  address: string;
+  organizationStatus: string;
+  note: string;
   dueDate: Date;
+  status: Status;
   specialInstruction: string;
-  updatedBy: number;
+  updatedBy: bigint;
 }

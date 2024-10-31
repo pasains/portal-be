@@ -18,19 +18,19 @@ export const createInventoryGroupService = async (
 };
 
 export const updateInventoryGroupService = async (
-  inventoryGroupId: number,
+  inventoryGroupId: bigint,
   inventoryGroup: InventoryGroupUpdateParams,
 ) => {
   const updatedInventoryGroup = await updateInventoryGroup(inventoryGroupId, inventoryGroup);
   return updatedInventoryGroup;
 };
 
-export const deleteInventoryGroupService = async (inventoryGroupId: number) => {
+export const deleteInventoryGroupService = async (inventoryGroupId: bigint) => {
   const deletedInventoryGroup = await deleteInventoryGroup(inventoryGroupId);
   return deletedInventoryGroup;
 };
 
-export const getInventoryGroupService = async (inventoryGroupId: number) => {
+export const getInventoryGroupService = async (inventoryGroupId: bigint | bigint) => {
   const user = await getInventoryGroup(inventoryGroupId);
   return user;
 };

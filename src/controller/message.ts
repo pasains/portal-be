@@ -1,37 +1,38 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createReceivingService,
-  deleteReceivingService,
-  getAllReceivingService,
-  getReceivingService,
-  updateReceivingService,
-} from "../service/receiving";
+  createMessageService,
+  deleteMessageService,
+  getAllMessageService,
+  getMessageService,
+  updateMessageService,
+} from "../service/message";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const receivingRouter = Router();
+export const messageRouter = Router();
 
-receivingRouter.post(
+messageRouter.post(
   "/create",
-  body("userId").optional().isNumeric(),
-  body("notes").isString().trim(),
-  body("status").isString().trim(),
+  body("name").isString().trim(),
+  body("organization").isString().trim(),
+  body("email").isEmail().trim(),
+  body("comment").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const receiving = await createReceivingService(req.body);
+      const message = await createMessageService(req.body);
       res.send(
         normalize(
-          "Receiving created successfully",
+          "Message created successfully",
           "OK",
           DataType.object,
-          receiving,
+          message,
         ),
       );
     } catch (error) {
@@ -41,26 +42,26 @@ receivingRouter.post(
   },
 );
 
-receivingRouter.put(
-  "/update/:id",
-  param("id").isNumeric().trim(),
-  body("userId").optional().isNumeric(),
-  body("notes").isString(),
-  body("status").isString(),
+messageRouter.put(
+  "/:id",
+  body("name").isString().trim(),
+  body("organization").isString().trim(),
+  body("email").isEmail().trim(),
+  body("comment").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const receiving = await updateReceivingService(+id, req.body);
+      const message = await updateMessageService(id, req.body);
       res.send(
         normalize(
-          "Receiving updated successfully",
+          "Message updated successfully",
           "OK",
           DataType.object,
-          receiving,
+          message,
         ),
       );
     } catch (error) {
@@ -70,25 +71,7 @@ receivingRouter.put(
   },
 );
 
-receivingRouter.delete(
-  "/delete/:id",
-  param("id").isNumeric().trim(),
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    const id = req.params.id;
-    try {
-      await deleteReceivingService(+id);
-      res.status(200).json({ message: "Receiving deleted successfully" });
-    } catch (error) {
-      return res.status(400).json({ message: error });
-    }
-  },
-);
-
-receivingRouter.get(
+messageRouter.delete(
   "/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -96,24 +79,40 @@ receivingRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const receiving = await getReceivingService(+id);
-      if (receiving) {
+      await deleteMessageService(id);
+      res.status(200).json({ message: "Message deleted successfully" });
+    } catch (error) {
+      return res.status(400).json({ message: error });
+    }
+  },
+);
+
+messageRouter.get(
+  "/:id",
+  param("id").isNumeric().trim(),
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const id = BigInt(req.params.id);
+    try {
+      const message = await getMessageService(id);
+      if (message) {
         res.send(
           normalize(
-            "Receiving found successfully",
+            "Message found successfully",
             "OK",
             DataType.object,
-            receiving,
+            message,
           ),
         );
       } else {
         res
           .status(400)
-          .json(
-            normalize("Receiving not found", "ERROR", DataType.null, null),
-          );
+          .json(normalize("Message not found", "ERROR", DataType.null, null));
       }
     } catch (error) {
       const message = (error as any)?.message || "Internal server error";
@@ -122,16 +121,11 @@ receivingRouter.get(
   },
 );
 
-receivingRouter.get("/", async (_req: Request, res: Response) => {
+messageRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const receiving = await getAllReceivingService();
+    const message = await getAllMessageService();
     res.send(
-      normalize(
-        "Receiving found successfully",
-        "OK",
-        DataType.array,
-        receiving,
-      ),
+      normalize("Message found successfully", "OK", DataType.array, message),
     );
   } catch (error) {
     res

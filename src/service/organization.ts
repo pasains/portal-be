@@ -18,7 +18,7 @@ export const createOrganizationService = async (organization: OrganizationCreate
 };
 
 export const updateOrganizationService = async (
-  organizationId: number,
+  organizationId: bigint,
   organization: OrganizationUpdateParams,
 ) => {
   const updatedOrganization = await updateOrganization(organizationId, organization);
@@ -26,7 +26,7 @@ export const updateOrganizationService = async (
 };
 
 export const patchOrganizationService = async (
-  organizationId: number,
+  organizationId: bigint,
   operation: {
     op: string;
     path: string;
@@ -50,12 +50,12 @@ export const patchOrganizationService = async (
   }
 };
 
-export const deleteOrganizationService = async (organizationId: number) => {
+export const deleteOrganizationService = async (organizationId: bigint) => {
   const deletedOrganization = await deleteOrganization(organizationId);
   return deletedOrganization;
 };
 
-export const getOrganizationService = async (organizationId: number) => {
+export const getOrganizationService = async (organizationId: bigint) => {
   const organization = await getOrganization(organizationId)
   return organization;
 };

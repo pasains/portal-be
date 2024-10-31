@@ -1,21 +1,21 @@
+import { StatusItem } from "@prisma/client";
+
 export interface ItemCreateParams {
-  itemId: number;
-  borrowingId: number;
-  receivingId: number;
-  inventoryId: number;
-  quantity: number;
+  id: bigint;
+  borrowingId: bigint;
+  inventoryId: bigint;
+  quantity: bigint;
+  status: StatusItem;
   preCondition: string;
   postCondition: string;
-  createdBy: number;
 }
 
 export interface ItemUpdateParams {
-  itemId: number;
-  borrowingId: number;
-  receivingId: number;
-  inventoryId: number;
-  quantity: number;
+  borrowingId: bigint;
+  inventoryId: bigint;
+  status: StatusItem;
+  quantity: bigint;
   preCondition: string;
   postCondition: string;
-  updatedBy: number;
+  updatedBy: bigint;
 }

@@ -1,24 +1,27 @@
 export interface InventoryHistoryCreateParams {
-  inventoryId: number;
+  revId: bigint;
+  id: bigint;
+  inventoryName: string;
+  refId: string;
+  description: string;
   condition: string;
-  image?: any;
-}
-
-export interface InventoryHistoryUpdateParams {
-  id: number;
-  inventoryId: number;
-  condition: string;
-  image: string;
-  updatedBy: number;
+  note: string;
+  url: string;
+  isBorrowable: boolean;
+  inventoryTypeId: bigint;
+  inventoryTypeName: string;
+  descriptionInventoryType: string;
+  currentQuantity: number;
+  totalQuantity: number;
 }
 
 export interface InventoryHistoryResponse {
   id: bigint;
-  inventoryId: number;
+  inventoryId: bigint;
   condition: string;
   image: string;
   createdAt: Date;
-  createdBy: number;
+  createdBy: bigint;
   updatedAt: Date;
-  updatedBy: number;
+  updatedBy: bigint;
 }

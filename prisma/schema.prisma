@@ -8,54 +8,52 @@ datasource db {
 }
 
 model User {
-  id                           BigInt             @id @default(autoincrement())
-  firstName                    String             @db.VarChar(100)
-  lastName                     String             @db.VarChar(100)
-  userName                     String             @db.VarChar(100)
-  email                        String             @unique @db.VarChar(100)
-  password                     String             @db.VarChar(100)
-  phoneNumber                  String             @db.Char(14)
-  address                      String             @db.VarChar(100)
-  profile                      String             @db.VarChar(100)
-  position                     String             @db.VarChar(100)
-  role                         Role               @default(ADMIN)
-  isActive                     Boolean            @default(true)
-  createdAt                    DateTime           @default(now())
-  createdBy                    BigInt?
-  updatedAt                    DateTime           @default(now())
-  updatedBy                    BigInt?
-  deleted                      Boolean            @default(false)
-  borrowerCreatedByRel         Borrower[]         @relation("borrowerCreatedByRel")
-  borrowerUpdatedByRel         Borrower[]         @relation("borrowerUpdatedByRel")
-  borrowingCreatedByRel        Borrowing[]        @relation("borrowingCreatedByRel")
-  borrowingUpdatedByRel        Borrowing[]        @relation("borrowingUpdatedByRel")
-  borrowingStatusCreatedByRel  BorrowingStatus[]  @relation("borrowingStatusCreatedByRel")
-  borrowingStatusUpdatedByRel  BorrowingStatus[]  @relation("borrowingStatusUpdatedByRel")
-  inventoryCreatedByRel        Inventory[]        @relation("inventoryCreatedByRel")
-  inventoryUpdatedByRel        Inventory[]        @relation("inventoryUpdatedByRel")
-  inventoryGroupCreatedByRel   InventoryGroup[]   @relation("inventoryGroupCreatedByRel")
-  inventoryGroupUpdatedByRel   InventoryGroup[]   @relation("inventoryGroupUpdatedByRel")
-  inventoryHistoryCreatedByRel InventoryHistory[] @relation("inventoryHistoryCreatedByRel")
-  inventoryHistoryUpdatedByRel InventoryHistory[] @relation("inventoryHistoryUpdatedByRel")
-  inventoryStockCreatedByRel   InventoryStock[]   @relation("inventoryStockCreatedByRel")
-  inventoryStockUpdatedByRel   InventoryStock[]   @relation("inventoryStockUpdatedByRel")
-  itemCreatedByRel             Item[]             @relation("itemCreatedByRel")
-  itemUpdatedByRel             Item[]             @relation("itemUpdatedByRel")
-  organizationCreatedByRel     Organization[]     @relation("organizationCreatedByRel")
-  organizationUpdatedByRel     Organization[]     @relation("organizationUpdatedByRel")
-  receivingCreatedByRel        Receiving[]        @relation("receivingCreatedByRel")
-  receivingUpdatedByRel        Receiving[]        @relation("receivingUpdatedByRel")
-  receivingIdRel               Receiving[]        @relation("receivingIdRel")
-  receivingStatusCreatedByRel  ReceivingStatus[]  @relation("receivingStatusCreatedByRel")
-  stockLedgerCreatedByRel      StockLedger[]      @relation("stockLedgerCreatedByRel")
-  stockLedgerUpdatedByRel      StockLedger[]      @relation("stockLedgerUpdatedByRel")
-  createdByRel                 User?              @relation("selfCreatedByRel", fields: [createdBy], references: [id])
-  selfCreatedByRel             User[]             @relation("selfCreatedByRel")
-  updatedByRel                 User?              @relation("selfUpdatedByRel", fields: [updatedBy], references: [id])
-  selfUpdatedByRel             User[]             @relation("selfUpdatedByRel")
-  userHistoryCreatedByRel      UserHistory[]      @relation("userHistoryCreatedByRel")
-  userHistoryUpdatedByRel      UserHistory[]      @relation("userHistoryUpdatedByRel")
-  userHistoryIdRel             UserHistory[]      @relation("userHistoryIdRel")
+  id                                BigInt                  @id @default(autoincrement())
+  firstName                         String                  @db.VarChar(100)
+  lastName                          String                  @db.VarChar(100)
+  userName                          String                  @db.VarChar(100)
+  email                             String                  @unique @db.VarChar(100)
+  password                          String                  @db.VarChar(100)
+  phoneNumber                       String                  @db.Char(14)
+  address                           String                  @db.VarChar(100)
+  profile                           String                  @db.VarChar(100)
+  position                          String                  @db.VarChar(100)
+  role                              Role                    @default(ADMIN)
+  isActive                          Boolean                 @default(true)
+  createdAt                         DateTime                @default(now())
+  createdBy                         BigInt?
+  updatedAt                         DateTime                @default(now())
+  updatedBy                         BigInt?
+  deleted                           Boolean                 @default(false)
+  borrowerCreatedByRel              Borrower[]              @relation("borrowerCreatedByRel")
+  borrowerUpdatedByRel              Borrower[]              @relation("borrowerUpdatedByRel")
+  borrowingCreatedByRel             Borrowing[]             @relation("borrowingCreatedByRel")
+  borrowingUpdatedByRel             Borrowing[]             @relation("borrowingUpdatedByRel")
+  inventoryCreatedByRel             Inventory[]             @relation("inventoryCreatedByRel")
+  inventoryUpdatedByRel             Inventory[]             @relation("inventoryUpdatedByRel")
+  inventoryGroupCreatedByRel        InventoryGroup[]        @relation("inventoryGroupCreatedByRel")
+  inventoryGroupUpdatedByRel        InventoryGroup[]        @relation("inventoryGroupUpdatedByRel")
+  inventoryHistoryCreatedByRel      InventoryHistory[]      @relation("inventoryHistoryCreatedByRel")
+  inventoryHistoryUpdatedByRel      InventoryHistory[]      @relation("inventoryHistoryUpdatedByRel")
+  inventoryStockCreatedByRel        InventoryStock[]        @relation("inventoryStockCreatedByRel")
+  inventoryStockUpdatedByRel        InventoryStock[]        @relation("inventoryStockUpdatedByRel")
+  itemCreatedByRel                  Item[]                  @relation("itemCreatedByRel")
+  itemUpdatedByRel                  Item[]                  @relation("itemUpdatedByRel")
+  organizationCreatedByRel          Organization[]          @relation("organizationCreatedByRel")
+  organizationUpdatedByRel          Organization[]          @relation("organizationUpdatedByRel")
+  inventoryStockHistoryCreatedId    InventoryStockHistory[] @relation("inventoryStockHistoryCreatedId")
+  inventoryStockHistoryUpdatedByRel InventoryStockHistory[] @relation("inventoryStockHistoryUpdatedByRel")
+  createdByRel                      User?                   @relation("selfCreatedByRel", fields: [createdBy], references: [id])
+  selfCreatedByRel                  User[]                  @relation("selfCreatedByRel")
+  updatedByRel                      User?                   @relation("selfUpdatedByRel", fields: [updatedBy], references: [id])
+  selfUpdatedByRel                  User[]                  @relation("selfUpdatedByRel")
+  userHistoryCreatedByRel           UserHistory[]           @relation("userHistoryCreatedByRel")
+  userHistoryUpdatedByRel           UserHistory[]           @relation("userHistoryUpdatedByRel")
+  userHistoryIdRel                  UserHistory[]           @relation("userHistoryIdRel")
+  documentCreatedByRel              Document[]              @relation("documentCreatedByRel")
+  documentUpdatedByRel              Document[]              @relation("documentUpdatedByRel")
+  borrowingHistoryCreatedByRel      BorrowingHistory[]      @relation("borrowingHistoryCreatedByRel")
+  borrowingHistoryUpdatedByRel      BorrowingHistory[]      @relation("borrowingHistoryUpdatedByRel")
 }
 
 model UserHistory {
@@ -73,25 +71,40 @@ model UserHistory {
 }
 
 model Inventory {
-  id                            BigInt             @id @default(autoincrement())
-  inventoryName                 String             @db.VarChar(100)
-  refId                         String             @db.VarChar(100)
-  description                   String?
-  isBorrowable                  Boolean            @default(true)
-  inventoryTypeId               BigInt
-  createdAt                     DateTime           @default(now())
-  createdBy                     BigInt?
-  updatedAt                     DateTime           @default(now())
-  updatedBy                     BigInt?
-  deleted                       Boolean            @default(false)
-  borrowingStatusInventoryIdRel BorrowingStatus[]  @relation("borrowingStatusInventoryIdRel")
-  inventoryCreatedByRel         User?              @relation("inventoryCreatedByRel", fields: [createdBy], references: [id])
-  inventoryTypeIdRel            InventoryType      @relation("inventoryTypeIdRel", fields: [inventoryTypeId], references: [id])
-  inventoryUpdatedByRel         User?              @relation("inventoryUpdatedByRel", fields: [updatedBy], references: [id])
-  inventoryHistoryIdRel         InventoryHistory[] @relation("inventoryHistoryIdRel")
-  inventoryStockIdRel           InventoryStock[]   @relation("inventoryStockIdRel")
-  itemInventoryIdRel            Item?              @relation("itemInventoryIdRel")
-  stockLedgerIdRel              StockLedger[]      @relation("stockLedgerIdRel")
+  id                    BigInt                  @id @default(autoincrement())
+  inventoryName         String                  @db.VarChar(100)
+  refId                 String                  @db.VarChar(100)
+  description           String                  @db.Text
+  condition             String                  @db.Text
+  note                  String                  @db.Text
+  isBorrowable          Boolean                 @default(true)
+  inventoryTypeId       BigInt
+  createdAt             DateTime                @default(now())
+  createdBy             BigInt?
+  updatedAt             DateTime                @default(now())
+  updatedBy             BigInt?
+  deleted               Boolean                 @default(false)
+  inventoryCreatedByRel User?                   @relation("inventoryCreatedByRel", fields: [createdBy], references: [id])
+  inventoryTypeIdRel    InventoryType           @relation("inventoryTypeIdRel", fields: [inventoryTypeId], references: [id])
+  inventoryUpdatedByRel User?                   @relation("inventoryUpdatedByRel", fields: [updatedBy], references: [id])
+  inventoryHistoryIdRel InventoryHistory[]      @relation("inventoryHistoryIdRel")
+  inventoryStockIdRel   InventoryStock[]        @relation("inventoryStockIdRel")
+  itemInventoryIdRel    Item?                   @relation("itemInventoryIdRel")
+  inventoryIdRel        InventoryStockHistory[] @relation("inventoryIdRel")
+  documentIdRel         Document[]              @relation("documentIdRel")
+}
+
+model Document {
+  id                   BigInt    @id @default(autoincrement())
+  inventoryId          BigInt
+  url                  String    @db.VarChar(200)
+  createdBy            BigInt?
+  createdAt            DateTime  @default(now())
+  updatedBy            BigInt?
+  updatedAt            DateTime  @default(now())
+  documentIdRel        Inventory @relation("documentIdRel", fields: [inventoryId], references: [id])
+  documentCreatedByRel User?     @relation("documentCreatedByRel", fields: [createdBy], references: [id])
+  documentUpdatedByRel User?     @relation("documentUpdatedByRel", fields: [updatedBy], references: [id])
 }
 
 model InventoryType {
@@ -116,173 +129,162 @@ model InventoryGroup {
 }
 
 model InventoryStock {
-  id                         BigInt    @id @default(autoincrement())
+  id                         BigInt                  @id @default(autoincrement())
   inventoryId                BigInt
-  quantity                   Int       @default(1)
+  currentQuantity            Int
+  totalQuantity              Int
   createdBy                  BigInt?
-  createdAt                  DateTime  @default(now())
+  createdAt                  DateTime                @default(now())
   updatedBy                  BigInt?
-  updatedAt                  DateTime  @default(now())
-  inventoryStockCreatedByRel User?     @relation("inventoryStockCreatedByRel", fields: [createdBy], references: [id])
-  inventoryStockIdRel        Inventory @relation("inventoryStockIdRel", fields: [inventoryId], references: [id])
-  inventoryStockUpdatedByRel User?     @relation("inventoryStockUpdatedByRel", fields: [updatedBy], references: [id])
+  updatedAt                  DateTime                @default(now())
+  inventoryStockCreatedByRel User?                   @relation("inventoryStockCreatedByRel", fields: [createdBy], references: [id])
+  inventoryStockIdRel        Inventory               @relation("inventoryStockIdRel", fields: [inventoryId], references: [id])
+  inventoryStockUpdatedByRel User?                   @relation("inventoryStockUpdatedByRel", fields: [updatedBy], references: [id])
+  inventoryStockHistoryIdRel InventoryStockHistory[] @relation("inventoryStockHistoryIdRel")
+}
+
+model InventoryStockHistory {
+  revId                             BigInt          @id @default(autoincrement())
+  id                                BigInt
+  inventoryId                       BigInt
+  currentQuantity                   Int
+  totalQuantity                     Int
+  createdBy                         BigInt?
+  createdAt                         DateTime        @default(now())
+  updatedBy                         BigInt?
+  updatedAt                         DateTime        @default(now())
+  inventoryIdRel                    Inventory       @relation("inventoryIdRel", fields: [inventoryId], references: [id])
+  inventoryStockHistoryCreatedId    User?           @relation("inventoryStockHistoryCreatedId", fields: [createdBy], references: [id])
+  inventoryStockHistoryUpdatedByRel User?           @relation("inventoryStockHistoryUpdatedByRel", fields: [updatedBy], references: [id])
+  inventoryStockHistoryIdRel        InventoryStock? @relation("inventoryStockHistoryIdRel", fields: [id], references: [id])
 }
 
 model InventoryHistory {
-  id                           BigInt    @id @default(autoincrement())
-  inventoryId                  BigInt
-  condition                    String    @db.VarChar(100)
+  revId                        BigInt    @id @default(autoincrement())
+  id                           BigInt
+  inventoryName                String    @db.VarChar(100)
+  refId                        String    @db.VarChar(100)
+  description                  String    @db.Text
+  condition                    String    @db.Text
+  note                         String    @db.Text
+  isBorrowable                 Boolean   @default(true)
+  inventoryTypeId              BigInt
   createdBy                    BigInt?
   createdAt                    DateTime  @default(now())
   updatedBy                    BigInt?
   updatedAt                    DateTime  @default(now())
-  image                        String?
+  inventoryHistoryIdRel        Inventory @relation("inventoryHistoryIdRel", fields: [id], references: [id])
   inventoryHistoryCreatedByRel User?     @relation("inventoryHistoryCreatedByRel", fields: [createdBy], references: [id])
-  imageRel                     Document? @relation(fields: [image], references: [url])
-  inventoryHistoryIdRel        Inventory @relation("inventoryHistoryIdRel", fields: [inventoryId], references: [id])
   inventoryHistoryUpdatedByRel User?     @relation("inventoryHistoryUpdatedByRel", fields: [updatedBy], references: [id])
 }
 
-model Document {
-  id       BigInt             @id @default(autoincrement())
-  url      String             @unique @db.VarChar(200)
-  imageRel InventoryHistory[]
-}
-
-model StockLedger {
-  id                       BigInt    @id @default(autoincrement())
-  inventoryId              BigInt
-  quantity                 Int       @default(1)
-  quantityAfterTransaction Int
-  voucherType              String    @db.VarChar(100)
-  voucherName              BigInt
-  createdBy                BigInt?
-  createdAt                DateTime  @default(now())
-  updatedBy                BigInt?
-  updatedAt                DateTime  @default(now())
-  stockLedgerCreatedByRel  User?     @relation("stockLedgerCreatedByRel", fields: [createdBy], references: [id])
-  stockLedgerIdRel         Inventory @relation("stockLedgerIdRel", fields: [inventoryId], references: [id])
-  stockLedgerUpdatedByRel  User?     @relation("stockLedgerUpdatedByRel", fields: [updatedBy], references: [id])
-}
-
 model Item {
-  id                       BigInt           @id @default(autoincrement())
-  borrowingId              BigInt?
-  receivingId              BigInt?
-  inventoryId              BigInt           @unique
-  quantity                 BigInt
-  preCondition             String?
-  postCondition            String?
-  createdBy                BigInt?
-  createdAt                DateTime         @default(now())
-  updatedBy                BigInt?
-  updatedAt                DateTime         @default(now())
-  borrowingStatusItemIdRel BorrowingStatus? @relation("borrowingStatusItemIdRel")
-  itemBorrowingIdRel       Borrowing?       @relation("itemBorrowingIdRel", fields: [borrowingId], references: [id])
-  itemCreatedByRel         User?            @relation("itemCreatedByRel", fields: [createdBy], references: [id])
-  itemInventoryIdRel       Inventory        @relation("itemInventoryIdRel", fields: [inventoryId], references: [id])
-  itemReceivingIdRel       Receiving?       @relation("itemReceivingIdRel", fields: [receivingId], references: [id])
-  itemUpdatedByRel         User?            @relation("itemUpdatedByRel", fields: [updatedBy], references: [id])
-}
-
-model Receiving {
-  id                    BigInt            @id @default(autoincrement())
-  userId                BigInt?
-  notes                 String?
-  status                String?
-  createdBy             BigInt?
-  createdAt             DateTime          @default(now())
-  updatedBy             BigInt?
-  updatedAt             DateTime          @default(now())
-  itemReceivingIdRel    Item[]            @relation("itemReceivingIdRel")
-  receivingCreatedByRel User?             @relation("receivingCreatedByRel", fields: [createdBy], references: [id])
-  receivingUpdatedByRel User?             @relation("receivingUpdatedByRel", fields: [updatedBy], references: [id])
-  receivingIdRel        User?             @relation("receivingIdRel", fields: [userId], references: [id])
-  receivingStatusIdRel  ReceivingStatus[] @relation("receivingStatusIdRel")
-}
-
-model ReceivingStatus {
-  id                          BigInt     @id @default(autoincrement())
-  receivingId                 BigInt?
-  status                      String?
-  createdBy                   BigInt?
-  createdAt                   DateTime   @default(now())
-  receivingStatusCreatedByRel User?      @relation("receivingStatusCreatedByRel", fields: [createdBy], references: [id])
-  receivingStatusIdRel        Receiving? @relation("receivingStatusIdRel", fields: [receivingId], references: [id])
+  id                 BigInt     @id @default(autoincrement())
+  borrowingId        BigInt?
+  inventoryId        BigInt     @unique
+  quantity           BigInt
+  status             StatusItem
+  preCondition       String?
+  postCondition      String?
+  createdBy          BigInt?
+  createdAt          DateTime   @default(now())
+  updatedBy          BigInt?
+  updatedAt          DateTime   @default(now())
+  itemBorrowingIdRel Borrowing? @relation("itemBorrowingIdRel", fields: [borrowingId], references: [id])
+  itemCreatedByRel   User?      @relation("itemCreatedByRel", fields: [createdBy], references: [id])
+  itemInventoryIdRel Inventory  @relation("itemInventoryIdRel", fields: [inventoryId], references: [id])
+  itemUpdatedByRel   User?      @relation("itemUpdatedByRel", fields: [updatedBy], references: [id])
 }
 
 model Borrowing {
-  id                         BigInt            @id @default(autoincrement())
-  borrowerId                 BigInt?
-  organizationId             BigInt?
-  dueDate                    DateTime          @db.Date
-  specialInstruction         String
-  createdBy                  BigInt?
-  createdAt                  DateTime          @default(now())
-  updatedBy                  BigInt?
-  updatedAt                  DateTime          @default(now())
-  borrowerIdRel              Borrower?         @relation("borrowerIdRel", fields: [borrowerId], references: [id])
-  borrowingStatusIdRel       BorrowingStatus[] @relation("borrowingStatusIdRel")
-  borrowingCreatedByRel      User?             @relation("borrowingCreatedByRel", fields: [createdBy], references: [id])
-  borrowingOrganizationIdRel Organization?     @relation("borrowingOrganizationIdRel", fields: [organizationId], references: [id])
-  borrowingUpdatedByRel      User?             @relation("borrowingUpdatedByRel", fields: [updatedBy], references: [id])
-  itemBorrowingIdRel         Item[]            @relation("itemBorrowingIdRel")
-
-  @@unique([borrowerId, organizationId])
+  id                    BigInt             @id @default(autoincrement())
+  borrowerId            BigInt
+  dueDate               DateTime           @db.Date
+  status                Status
+  specialInstruction    String
+  createdBy             BigInt?
+  createdAt             DateTime           @default(now())
+  updatedBy             BigInt?
+  updatedAt             DateTime           @default(now())
+  borrowerIdRel         Borrower?          @relation("borrowerIdRel", fields: [borrowerId], references: [id])
+  borrowingCreatedByRel User?              @relation("borrowingCreatedByRel", fields: [createdBy], references: [id])
+  borrowingUpdatedByRel User?              @relation("borrowingUpdatedByRel", fields: [updatedBy], references: [id])
+  borrowingHistoryIdRel BorrowingHistory[] @relation("borrowingHistoryIdRel")
+  itemBorrowingIdRel    Item[]             @relation("itemBorrowingIdRel")
 }
 
-model BorrowingStatus {
-  id                            BigInt     @id @default(autoincrement())
-  itemId                        BigInt?    @unique
-  inventoryId                   BigInt
-  borrowingStatusId             BigInt?
-  status                        String     @db.VarChar(100)
-  createdBy                     BigInt?
-  createdAt                     DateTime   @default(now())
-  updatedBy                     BigInt?
-  updatedAt                     DateTime   @default(now())
-  borrowerId                    BigInt?
-  borrowingStatusIdRel          Borrowing? @relation("borrowingStatusIdRel", fields: [borrowingStatusId], references: [id])
-  borrowingStatusCreatedByRel   User?      @relation("borrowingStatusCreatedByRel", fields: [createdBy], references: [id])
-  borrowingStatusInventoryIdRel Inventory  @relation("borrowingStatusInventoryIdRel", fields: [inventoryId], references: [id])
-  borrowingStatusItemIdRel      Item?      @relation("borrowingStatusItemIdRel", fields: [itemId], references: [id])
-  borrowingStatusUpdatedByRel   User?      @relation("borrowingStatusUpdatedByRel", fields: [updatedBy], references: [id])
+model BorrowingHistory {
+  revId                        BigInt    @id @default(autoincrement())
+  id                           BigInt
+  borrowerId                   BigInt
+  dueDate                      DateTime  @db.Date
+  status                       Status
+  specialInstruction           String
+  createdBy                    BigInt?
+  createdAt                    DateTime  @default(now())
+  updatedBy                    BigInt?
+  updatedAt                    DateTime  @default(now())
+  borrowerHistoryIdRel         Borrower? @relation("borrowerHistoryIdRel", fields: [borrowerId], references: [id])
+  borrowingHistoryIdRel        Borrowing @relation("borrowingHistoryIdRel", fields: [id], references: [id])
+  borrowingHistoryCreatedByRel User?     @relation("borrowingHistoryCreatedByRel", fields: [createdBy], references: [id])
+  borrowingHistoryUpdatedByRel User?     @relation("borrowingHistoryUpdatedByRel", fields: [updatedBy], references: [id])
 }
 
 model Borrower {
-  id                   BigInt      @id @default(autoincrement())
-  borrowerName         String      @db.VarChar(100)
-  organizationName     String      @db.VarChar(100)
-  identityCard         String      @db.Char(10)
-  identityNumber       String      @db.VarChar(50)
-  phoneNumber          String      @db.Char(14)
-  createdBy            BigInt?
-  createdAt            DateTime    @default(now())
-  updatedBy            BigInt?
-  updatedAt            DateTime    @default(now())
-  deleted              Boolean     @default(false)
-  borrowerCreatedByRel User?       @relation("borrowerCreatedByRel", fields: [createdBy], references: [id])
-  borrowerUpdatedByRel User?       @relation("borrowerUpdatedByRel", fields: [updatedBy], references: [id])
-  borrowerIdRel        Borrowing[] @relation("borrowerIdRel")
+  id                      BigInt             @id @default(autoincrement())
+  borrowerName            String             @db.VarChar(100)
+  organizationId          BigInt
+  identityCard            String             @db.Char(10)
+  identityNumber          String             @db.VarChar(50)
+  phoneNumber             String             @db.Char(14)
+  createdBy               BigInt?
+  createdAt               DateTime           @default(now())
+  updatedBy               BigInt?
+  updatedAt               DateTime           @default(now())
+  deleted                 Boolean            @default(false)
+  borrowerCreatedByRel    User?              @relation("borrowerCreatedByRel", fields: [createdBy], references: [id])
+  borrowerUpdatedByRel    User?              @relation("borrowerUpdatedByRel", fields: [updatedBy], references: [id])
+  borrowerOrganizationRel Organization?      @relation("borrowerOrganizationRel", fields: [organizationId], references: [id])
+  borrowerHistoryIdRel    BorrowingHistory[] @relation("borrowerHistoryIdRel")
+  borrowerIdRel           Borrowing[]        @relation("borrowerIdRel")
 }
 
 model Organization {
-  id                         BigInt      @id @default(autoincrement())
-  organizationName           String      @db.VarChar(100)
-  address                    String      @db.VarChar(100)
-  organizationStatus         String      @db.VarChar(100)
-  note                       String
-  createdBy                  BigInt?
-  createdAt                  DateTime    @default(now())
-  updatedBy                  BigInt?
-  updatedAt                  DateTime    @default(now())
-  deleted                    Boolean     @default(false)
-  borrowingOrganizationIdRel Borrowing[] @relation("borrowingOrganizationIdRel")
-  organizationCreatedByRel   User?       @relation("organizationCreatedByRel", fields: [createdBy], references: [id])
-  organizationUpdatedByRel   User?       @relation("organizationUpdatedByRel", fields: [updatedBy], references: [id])
+  id                       BigInt     @id @default(autoincrement())
+  organizationName         String     @db.VarChar(100)
+  address                  String     @db.VarChar(100)
+  organizationStatus       String     @db.VarChar(100)
+  note                     String
+  createdBy                BigInt?
+  createdAt                DateTime   @default(now())
+  updatedBy                BigInt?
+  updatedAt                DateTime   @default(now())
+  deleted                  Boolean    @default(false)
+  borrowerOrganizationRel  Borrower[] @relation("borrowerOrganizationRel")
+  organizationCreatedByRel User?      @relation("organizationCreatedByRel", fields: [createdBy], references: [id])
+  organizationUpdatedByRel User?      @relation("organizationUpdatedByRel", fields: [updatedBy], references: [id])
+}
+
+model Message {
+  id           BigInt   @id @default(autoincrement())
+  name         String   @db.VarChar(100)
+  organization String   @db.VarChar(100)
+  email        String   @db.VarChar(100)
+  comment      String   @db.Text
+  createdAt    DateTime @default(now())
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum Status {
+  PENDING
+  DONE
+}
+
+enum StatusItem {
+  IN
+  OUT
 }

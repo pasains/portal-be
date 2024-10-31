@@ -1,44 +1,38 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryHistoryService,
-  getAllInventoryHistoryService,
-  getInventoryHistoryService,
-} from "../service/inventoryHistory";
+  createInventoryStockHistoryService,
+  getInventoryStockHistoryService,
+  getAllInventoryStockHistoryService,
+} from "../service/inventoryStockHistory";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
-export const inventoryHistoryRouter = Router();
+export const inventoryStockHistoryRouter = Router();
 
-inventoryHistoryRouter.post(
+inventoryStockHistoryRouter.post(
   "/",
   body("id").isNumeric(),
-  body("inventoryName").isString().trim(),
-  body("refId").isString().trim(),
-  body("description").isString().trim(),
-  body("condition").isString().trim(),
-  body("note").isString().trim(),
-  body("isBorrowable").isBoolean(),
-  body("url").isURL().isArray(),
+  body("inventoryId").isNumeric(),
   body("currentQuantity").isNumeric(),
   body("totalQuantity").isNumeric(),
-  body("inventoryTypeName").isString().trim(),
-  body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const inventoryHistory = await createInventoryHistoryService(req.body);
+      const inventoryStockHistory = await createInventoryStockHistoryService(
+        req.body,
+      );
       res.send(
         normalize(
-          "Inventory History created successfully",
+          "Stock Ledger created successfully",
           "OK",
           DataType.object,
-          inventoryHistory,
+          inventoryStockHistory,
         ),
       );
     } catch (error) {
@@ -48,7 +42,7 @@ inventoryHistoryRouter.post(
   },
 );
 
-inventoryHistoryRouter.get(
+inventoryStockHistoryRouter.get(
   "/:revId",
   param("revId").isNumeric().trim(),
   async (req: Request, res: Response) => {
@@ -58,26 +52,21 @@ inventoryHistoryRouter.get(
     }
     const id = BigInt(req.params.id);
     try {
-      const inventoryHistory = await getInventoryHistoryService(id);
-      if (inventoryHistory) {
+      const inventoryStockHistory = await getInventoryStockHistoryService(id);
+      if (inventoryStockHistory) {
         res.send(
           normalize(
-            "Inventory History found successfully",
+            "Stock Ledger found successfully",
             "OK",
             DataType.object,
-            inventoryHistory,
+            inventoryStockHistory,
           ),
         );
       } else {
         res
           .status(400)
           .json(
-            normalize(
-              "Inventory History not found",
-              "ERROR",
-              DataType.null,
-              null,
-            ),
+            normalize("Stock Ledger not found", "ERROR", DataType.null, null),
           );
       }
     } catch (error) {
@@ -87,19 +76,20 @@ inventoryHistoryRouter.get(
   },
 );
 
-inventoryHistoryRouter.get("/", async (_req: Request, res: Response) => {
+inventoryStockHistoryRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventoryHistory = await getAllInventoryHistoryService();
+    const inventoryStockHistory = await getAllInventoryStockHistoryService();
     res.send(
       normalize(
-        "Inventory History found successfully",
+        "Stock Ledger found successfully",
         "OK",
         DataType.array,
-        inventoryHistory,
+        inventoryStockHistory,
       ),
     );
   } catch (error) {
-    const message = (error as any)?.message || "Internal server error";
-    res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+    res
+      .status(400)
+      .json(normalize("Internal server error", "ERROR", DataType.null, null));
   }
 });

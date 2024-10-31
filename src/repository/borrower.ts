@@ -10,14 +10,35 @@ export const createBorrower = async (borrower: BorrowerCreateParams) => {
       identityCard: borrower.identityCard,
       identityNumber: borrower.identityNumber,
       phoneNumber: borrower.phoneNumber,
-      organizationName: borrower.organizationName
+      borrowerOrganizationRel: {
+        connectOrCreate: {
+          where: {
+            id: borrower.organizationId,
+          },
+          create: {
+            organizationName: borrower.organizationName,
+            address: borrower.address,
+            organizationStatus: borrower.organizationStatus,
+            note: borrower.note,
+          },
+        },
+      },
+    },
+  });
+  return newBorrower;
+};
+
+export const checkBorrowerName = async (borrower: { borrowerName: string }) => {
+  const newBorrower = await prisma.borrower.findFirst({
+    where: {
+      borrowerName: borrower?.borrowerName,
     },
   });
   return newBorrower;
 };
 
 export const updateBorrower = async (
-  borrowerId: number,
+  borrowerId: bigint,
   borrower: BorrowerUpdateParams,
 ) => {
   const updatedBorrower = await prisma.borrower.update({
@@ -32,7 +53,7 @@ export const updateBorrower = async (
   return updatedBorrower;
 };
 export const patchBorrower = async (
-  borrowerId: number,
+  borrowerId: bigint,
   op: string,
   field: string,
   value: string,
@@ -44,14 +65,14 @@ export const patchBorrower = async (
   return patchedBorrower;
 };
 
-export const deleteBorrower = async (borrowerId: number) => {
+export const deleteBorrower = async (borrowerId: bigint) => {
   const deletedBorrower = await prisma.borrower.delete({
     where: { id: borrowerId },
   });
   return deletedBorrower;
 };
 
-export const getBorrower = async (borrowerId: number) => {
+export const getBorrower = async (borrowerId: bigint) => {
   const borrower = await prisma.borrower.findUnique({
     where: { id: borrowerId },
   });

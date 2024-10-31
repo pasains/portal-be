@@ -18,7 +18,7 @@ export const createBorrowerService = async (borrower: BorrowerCreateParams) => {
 };
 
 export const updateBorrowerService = async (
-  borrowerId: number,
+  borrowerId: bigint,
   borrower: BorrowerUpdateParams,
 ) => {
   const updatedBorrower = await updateBorrower(borrowerId, borrower);
@@ -26,7 +26,7 @@ export const updateBorrowerService = async (
 };
 
 export const patchBorrowerService = async (
-  borrowerId: number,
+  borrowerId: bigint,
   operation: {
     op: string;
     path: string;
@@ -50,12 +50,12 @@ export const patchBorrowerService = async (
   }
 };
 
-export const deleteBorrowerService = async (borrowerId: number) => {
+export const deleteBorrowerService = async (borrowerId: bigint) => {
   const deletedBorrower = await deleteBorrower(borrowerId);
   return deletedBorrower;
 };
 
-export const getBorrowerService = async (borrowerId: number) => {
+export const getBorrowerService = async (borrowerId: bigint) => {
   const borrower = await getBorrower(borrowerId);
   return borrower;
 };

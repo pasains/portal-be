@@ -19,9 +19,9 @@ userHistoryRouter.get(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const id = req.params.id;
+    const id = BigInt(req.params.id);
     try {
-      const userHistory = await getUserHistoryService(+id);
+      const userHistory = await getUserHistoryService(id);
       if (userHistory) {
         res.send(
           normalize(

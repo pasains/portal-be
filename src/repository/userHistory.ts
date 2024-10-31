@@ -16,7 +16,7 @@ export const createUserHistory = async (
   return newUserHistory;
 };
 
-export const getUserHistory = async (userHistoryId: number) => {
+export const getUserHistory = async (userHistoryId: bigint) => {
   const userHistory = await prisma.userHistory.findUnique({
     where: { id: userHistoryId },
   });
