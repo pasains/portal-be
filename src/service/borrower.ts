@@ -6,10 +6,7 @@ import {
   patchBorrower,
   updateBorrower,
 } from "../repository/borrower";
-import {
-  BorrowerCreateParams,
-  BorrowerUpdateParams,
-} from "../types/borrower";
+import { BorrowerCreateParams, BorrowerUpdateParams } from "../types/borrower";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 export const createBorrowerService = async (borrower: BorrowerCreateParams) => {
@@ -60,7 +57,13 @@ export const getBorrowerService = async (borrowerId: bigint) => {
   return borrower;
 };
 
-export const getAllBorrowerService = async () => {
-  const allBorrower = await getAllBorrower();
+export const getAllBorrowerService = async (props: {
+  orgId: bigint | null;
+  //identityCard: string | null;
+}) => {
+  const allBorrower = await getAllBorrower({
+    orgId: props.orgId,
+    //identityCard: props.identityCard,
+  });
   return allBorrower;
 };

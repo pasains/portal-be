@@ -3,6 +3,7 @@ import { BorrowerCreateParams, BorrowerUpdateParams } from "../types/borrower";
 
 const prisma = new PrismaClient();
 
+//Query prisma create Borrower
 export const createBorrower = async (borrower: BorrowerCreateParams) => {
   const newBorrower = await prisma.borrower.create({
     data: {
@@ -28,6 +29,7 @@ export const createBorrower = async (borrower: BorrowerCreateParams) => {
   return newBorrower;
 };
 
+//Query for checking borrower name
 export const checkBorrowerName = async (borrower: { borrowerName: string }) => {
   const newBorrower = await prisma.borrower.findFirst({
     where: {
@@ -37,6 +39,7 @@ export const checkBorrowerName = async (borrower: { borrowerName: string }) => {
   return newBorrower;
 };
 
+//Query for update borrower
 export const updateBorrower = async (
   borrowerId: bigint,
   borrower: BorrowerUpdateParams,
@@ -52,6 +55,8 @@ export const updateBorrower = async (
   });
   return updatedBorrower;
 };
+
+//Query for patch borrower
 export const patchBorrower = async (
   borrowerId: bigint,
   op: string,
@@ -65,6 +70,7 @@ export const patchBorrower = async (
   return patchedBorrower;
 };
 
+//Query for delete borrower
 export const deleteBorrower = async (borrowerId: bigint) => {
   const deletedBorrower = await prisma.borrower.delete({
     where: { id: borrowerId },
@@ -72,6 +78,7 @@ export const deleteBorrower = async (borrowerId: bigint) => {
   return deletedBorrower;
 };
 
+//Query for get borrower by Id
 export const getBorrower = async (borrowerId: bigint) => {
   const borrower = await prisma.borrower.findUnique({
     where: { id: borrowerId },
@@ -79,7 +86,22 @@ export const getBorrower = async (borrowerId: bigint) => {
   return borrower;
 };
 
-export const getAllBorrower = async () => {
-  const allBorrower = await prisma.borrower.findMany();
+//Query for get borrowers
+export const getAllBorrower = async (props: {
+  //Query paramaters for get organization by Id
+  orgId: bigint | null;
+  //identityCard: string | null;
+}) => {
+  const filter = {} as any;
+  if (props.orgId != null) {
+    filter.organizationId = props.orgId;
+  }
+  //if (props.identityCard != null) {
+  //  filter.identityCard = props.identityCard;
+  //}
+
+  const allBorrower = await prisma.borrower.findMany({
+    where: filter,
+  });
   return allBorrower;
 };

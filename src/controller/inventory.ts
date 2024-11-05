@@ -178,10 +178,23 @@ inventoryRouter.get(
 
 inventoryRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventory = await getAllInventoryService();
+    let inventoryTypeId = null;
+    // If the value of query is string and except number show all without filter
+    if (
+      // Query paramater = _req.query.inventoryTypeId (string)
+      _req.query.inventoryTypeId &&
+      // Function to checks if the given value is NaN (Not-a-Number)
+      !Number.isNaN(+_req.query.inventoryTypeId)
+    ) {
+      // Change query string to Bigint
+      inventoryTypeId = BigInt(_req.query.inventoryTypeId as string);
+    }
+    const inventory = await getAllInventoryService({
+      inventoryTypeId,
+    });
     res.send(
       normalize(
-        "Inventory list found successfully",
+        "Inventory found successfully.",
         "OK",
         DataType.array,
         toInventoryResponses(inventory),

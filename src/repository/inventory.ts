@@ -94,10 +94,19 @@ export const getInventory = async (inventoryId: bigint) => {
   return inventory;
 };
 
-export const getAllInventory = async () => {
+export const getAllInventory = async (props: {
+  inventoryTypeId: bigint | null;
+}) => {
+  const filter = {} as any;
+  if (props.inventoryTypeId != null) {
+    filter.inventoryTypeId = props.inventoryTypeId;
+  }
   const allInventory = await prisma.inventory.findMany({
+    where: filter,
     include: {
-      inventoryTypeIdRel: { select: { id: true, inventoryTypeName: true } },
+      inventoryTypeIdRel: {
+        select: { id: true, inventoryTypeName: true },
+      },
       inventoryStockIdRel: { select: { currentQuantity: true } },
       documentIdRel: { select: { url: true } },
     },

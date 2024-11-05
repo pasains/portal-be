@@ -161,11 +161,34 @@ borrowerRouter.get(
 
 borrowerRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const borrower = await getAllBorrowerService();
+    let orgId = null;
+    //let identityCard = null;
+    if (_req.query.orgId && Number.isNaN(+_req.query.orgId)) {
+      res
+        .status(400)
+        .json(
+          normalize(
+            "Organization Id is not valid",
+            "ERROR",
+            DataType.null,
+            null,
+          ),
+        );
+      return;
+    }
+    if (_req.query.orgId && !Number.isNaN(+_req.query.orgId)) {
+      orgId = BigInt(_req.query.orgId as string);
+    }
+    //if (_req.query.identityCard) {
+    //  identityCard = _req.query.identityCard as string;
+    //}
+    console.log(`Organization`, orgId);
+    const borrower = await getAllBorrowerService({ orgId });
     res.send(
       normalize("Borrower found successfully", "OK", DataType.array, borrower),
     );
   } catch (error) {
+    console.log(`Error`, error);
     res
       .status(400)
       .json(normalize("Internal server error", "ERROR", DataType.null, null));

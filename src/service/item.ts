@@ -6,10 +6,7 @@ import {
   patchItem,
   updateItem,
 } from "../repository/item";
-import {
-  ItemCreateParams,
-  ItemUpdateParams,
-} from "../types/item";
+import { ItemCreateParams, ItemUpdateParams } from "../types/item";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 export const createItemService = async (item: ItemCreateParams) => {
@@ -60,7 +57,9 @@ export const getItemService = async (itemId: bigint) => {
   return item;
 };
 
-export const getAllItemService = async () => {
-  const allItem = await getAllItem();
+export const getAllItemService = async (props: {
+  borrowingId: bigint | null;
+}) => {
+  const allItem = await getAllItem({ borrowingId: props.borrowingId });
   return allItem;
 };

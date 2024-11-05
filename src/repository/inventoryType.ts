@@ -3,6 +3,7 @@ import {
   InventoryTypeCreateParams,
   InventoryTypeUpdateParams,
 } from "../types/inventoryType";
+import { group } from "console";
 
 const prisma = new PrismaClient();
 

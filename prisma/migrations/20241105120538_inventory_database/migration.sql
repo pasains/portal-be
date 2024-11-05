@@ -228,6 +228,18 @@ CREATE TABLE "Organization" (
 );
 
 -- CreateTable
+CREATE TABLE "Message" (
+    "id" BIGSERIAL NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "organization" VARCHAR(100) NOT NULL,
+    "email" VARCHAR(100) NOT NULL,
+    "comment" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_inventoryGroupMember" (
     "A" BIGINT NOT NULL,
     "B" BIGINT NOT NULL

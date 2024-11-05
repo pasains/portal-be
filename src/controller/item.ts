@@ -138,7 +138,13 @@ itemRouter.get(
 
 itemRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const item = await getAllItemService();
+    let borrowingId = null;
+    if (_req.query.borrowingId && !Number.isNaN(_req.query.borrowingId)) {
+      borrowingId = BigInt(_req.query.borrowingId as string);
+    }
+    const item = await getAllItemService({
+      borrowingId,
+    });
     res.send(normalize("Item found successfully", "OK", DataType.array, item));
   } catch (error) {
     res
