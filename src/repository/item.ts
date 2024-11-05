@@ -59,7 +59,11 @@ export const getItem = async (itemId: bigint) => {
   return item;
 };
 
-export const getAllItem = async () => {
-  const allItem = await prisma.item.findMany();
+export const getAllItem = async (props: { borrowingId: bigint | null }) => {
+  const filter = {} as any;
+  if (props.borrowingId != null) {
+    filter.borrowingId = props.borrowingId;
+  }
+  const allItem = await prisma.item.findMany({ where: filter });
   return allItem;
 };

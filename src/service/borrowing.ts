@@ -1,13 +1,8 @@
 import {
   checkOrganizationName,
-  createOrganization,
   getOrganization,
 } from "../repository/organization";
-import {
-  checkBorrowerName,
-  createBorrower,
-  getBorrower,
-} from "../repository/borrower";
+import { checkBorrowerName, getBorrower } from "../repository/borrower";
 import {
   createBorrowing,
   deleteBorrowing,

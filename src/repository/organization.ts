@@ -31,6 +31,7 @@ export const checkOrganizationName = async (organization: {
   return newOrganization;
 };
 
+
 export const updateOrganization = async (
   organizationId: bigint,
   organization: OrganizationUpdateParams,
