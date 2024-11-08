@@ -102,6 +102,16 @@ export const getAllBorrower = async (props: {
 
   const allBorrower = await prisma.borrower.findMany({
     where: filter,
+    include: {
+      borrowerOrganizationRel: {
+        select: {
+          organizationName: true,
+          address: true,
+          organizationStatus: true,
+          note: true,
+        },
+      },
+    },
   });
   return allBorrower;
 };
