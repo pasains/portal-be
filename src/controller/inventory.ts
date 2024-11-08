@@ -179,6 +179,7 @@ inventoryRouter.get(
 inventoryRouter.get("/", async (_req: Request, res: Response) => {
   try {
     let inventoryTypeId = null;
+    let inventoryGroupId = undefined;
     // If the value of query is string and except number show all without filter
     if (
       // Query paramater = _req.query.inventoryTypeId (string)
@@ -189,8 +190,18 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
       // Change query string to Bigint
       inventoryTypeId = BigInt(_req.query.inventoryTypeId as string);
     }
+    if (
+      // Query paramater = _req.query.inventoryTypeId (string)
+      _req.query.inventoryGroupId &&
+      // Function to checks if the given value is NaN (Not-a-Number)
+      !Number.isNaN(+_req.query.inventoryGroupId)
+    ) {
+      // Change query string to Bigint
+      inventoryTypeId = BigInt(_req.query.inventoryGroupId as string);
+    }
     const inventory = await getAllInventoryService({
       inventoryTypeId,
+      inventoryGroupId,
     });
     res.send(
       normalize(

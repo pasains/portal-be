@@ -49,8 +49,9 @@ export interface InventoryDetailResponse {
   isBorrowable: boolean;
   inventoryTypeId: bigint;
   inventoryTypeName: string;
-  image: string;
-  quantity: number;
+  url: string;
+  currentQuantity: number;
+  totalQuantity: number;
   condition: string;
   createdAt: Date;
   updatedAt: Date;
@@ -92,9 +93,10 @@ export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
     //quantity: data.inventoryStockIdRel.map(
     //  (quantities: any) => quantities.quantity,
     //),
-    image: data.image,
+    url: data.url,
     condition: data.condition,
-    quantity: data.quantity,
+    currentQuantity: data.currentQuantity,
+    totalQuantity: data.totalQuantity,
     createdAt: data.createdAt,
     updatedAt: data.updatedAt,
     createdBy: data.createdBy,

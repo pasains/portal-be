@@ -161,13 +161,13 @@ borrowingRouter.get(
 
 borrowingRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const borrowing = await getAllBorrowingService();
+    const borrowings = await getAllBorrowingService();
     res.send(
       normalize(
         "Borrowing found successfully",
         "OK",
         DataType.array,
-        borrowing,
+        borrowings,
       ),
     );
   } catch (error) {
