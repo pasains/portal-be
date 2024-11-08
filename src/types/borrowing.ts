@@ -34,3 +34,18 @@ export interface BorrowingUpdateParams {
   specialInstruction: string;
   updatedBy: bigint;
 }
+
+export interface BorrowingParams {
+  id: bigint;
+  borrowerId: bigint;
+  organizationId: bigint;
+  borrowerName: string;
+  identityCard: string;
+  identityNumber: string;
+  phoneNumber: string;
+  organizationName: string;
+  address: string;
+  dueDate: Date;
+  status: Status;
+  specialInstruction: string;
+}

@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import {
   BorrowingCreateParams,
+  BorrowingParams,
   BorrowingUpdateParams,
 } from "../types/borrowing";
 
@@ -85,11 +86,38 @@ export const deleteBorrowing = async (borrowingId: bigint) => {
 export const getBorrowing = async (borrowingId: bigint) => {
   const borrowing = await prisma.borrowing.findUnique({
     where: { id: borrowingId },
+    include: {
+      borrowerIdRel: {
+        select: {
+          borrowerName: true,
+          identityCard: true,
+          identityNumber: true,
+          organizationId: true,
+        },
+      },
+    },
   });
   return borrowing;
 };
 
 export const getAllBorrowing = async () => {
-  const allBorrowing = await prisma.borrowing.findMany();
+  const allBorrowing = await prisma.borrowing.findMany({
+    include: {
+      borrowerIdRel: {
+        select: {
+          borrowerName: true,
+          identityNumber: true,
+          identityCard: true,
+          phoneNumber: true,
+          borrowerOrganizationRel: {
+            select: {
+              organizationName: true,
+              address: true,
+            },
+          },
+        },
+      },
+    },
+  });
   return allBorrowing;
 };
