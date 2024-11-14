@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../configuration/db";
 import {
   OrganizationCreateParams,
   OrganizationUpdateParams,
 } from "../types/organization";
-
-const prisma = new PrismaClient();
 
 export const createOrganization = async (
   organization: OrganizationCreateParams,
@@ -30,7 +28,6 @@ export const checkOrganizationName = async (organization: {
   });
   return newOrganization;
 };
-
 
 export const updateOrganization = async (
   organizationId: bigint,
@@ -69,12 +66,14 @@ export const deleteOrganization = async (organizationId: bigint) => {
 
 export const getOrganization = async (organizationId: bigint) => {
   const organization = await prisma.organization.findUnique({
-    where: { id: organizationId },
+    where: { id: organizationId, deleted: false },
   });
   return organization;
 };
 
 export const getAllOrganization = async () => {
-  const allOrganization = await prisma.organization.findMany();
+  const allOrganization = await prisma.organization.findMany({
+    where: { deleted: false },
+  });
   return allOrganization;
 };

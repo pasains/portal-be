@@ -93,11 +93,11 @@ export const patchInventoryService = async (
 
 export const deleteInventoryService = async (inventoryId: bigint) => {
   const deletedInventory = await deleteInventory(inventoryId);
+  console.log(`DELETE_INVENTORY`);
   return deletedInventory;
 };
 
 export const getInventoryService = async (inventoryId: bigint) => {
-  console.log(`PORTAL_BE_INVENTORY_ID`, inventoryId);
   const inventory = await getInventory(inventoryId);
   console.log(`PORTAL_BE_INVENTORY`, inventory);
   return inventory;

@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { UserCreateParams, UserUpdateParams } from "../types/user";
-
-const prisma = new PrismaClient();
+import prisma from "../configuration/db";
 
 export default prisma;
 
@@ -49,14 +47,14 @@ export const patchUser = async (
 
 export const deleteUser = async (userId: bigint) => {
   const deletedUser = await prisma.user.delete({
-    where: { id: userId },
+    where: { id: userId, deleted: false },
   });
   return deletedUser;
 };
 
 export const getUser = async (userId: bigint) => {
   const user = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: userId, deleted: false },
   });
   return user;
 };

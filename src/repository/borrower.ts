@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { connect } from "http2";
+import prisma from "../configuration/db";
 import { BorrowerCreateParams, BorrowerUpdateParams } from "../types/borrower";
-
-const prisma = new PrismaClient();
 
 //Query prisma create Borrower
 export const createBorrower = async (borrower: BorrowerCreateParams) => {
@@ -47,10 +46,21 @@ export const updateBorrower = async (
   const updatedBorrower = await prisma.borrower.update({
     where: { id: borrowerId },
     data: {
+      id: borrower.id,
       borrowerName: borrower?.borrowerName,
       identityCard: borrower?.identityCard,
       identityNumber: borrower?.identityNumber,
       phoneNumber: borrower?.phoneNumber,
+      borrowerOrganizationRel: {
+        update: {
+          data: {
+            organizationName: borrower.organizationName,
+            address: borrower.address,
+            organizationStatus: borrower.organizationStatus,
+            note: borrower.note,
+          },
+        },
+      },
     },
   });
   return updatedBorrower;
@@ -81,7 +91,10 @@ export const deleteBorrower = async (borrowerId: bigint) => {
 //Query for get borrower by Id
 export const getBorrower = async (borrowerId: bigint) => {
   const borrower = await prisma.borrower.findUnique({
-    where: { id: borrowerId },
+    where: { id: borrowerId, deleted: false },
+    include: {
+      borrowerOrganizationRel: true,
+    },
   });
   return borrower;
 };
@@ -101,7 +114,7 @@ export const getAllBorrower = async (props: {
   //}
 
   const allBorrower = await prisma.borrower.findMany({
-    where: filter,
+    where: { ...filter, deleted: false },
     include: {
       borrowerOrganizationRel: {
         select: {

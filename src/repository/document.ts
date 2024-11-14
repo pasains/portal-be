@@ -1,6 +1,5 @@
-import { Document, PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Document } from "@prisma/client";
+import prisma from "../configuration/db";
 
 export const createDocument = async (document: Document) => {
   const newDocument = await prisma.document.create({
@@ -29,12 +28,14 @@ export const deleteDocument = async (documentId: bigint) => {
 
 export const getDocument = async (documentId: bigint) => {
   const document = await prisma.document.findUnique({
-    where: { id: documentId },
+    where: { id: documentId, deleted: false },
   });
   return document;
 };
 
 export const getAllDocument = async () => {
-  const allDocument = await prisma.document.findMany();
+  const allDocument = await prisma.document.findMany({
+    where: { deleted: false },
+  });
   return allDocument;
 };

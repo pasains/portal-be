@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../configuration/db";
 import { BorrowingHistoryCreateParams } from "../types/borrowingHistory";
-
-const prisma = new PrismaClient();
 
 export const createBorrowingHistory = async (
   borrowingHistory: BorrowingHistoryCreateParams,
@@ -24,12 +22,14 @@ export const createBorrowingHistory = async (
 
 export const getBorrowingHistory = async (borrowingHistoryId: bigint) => {
   const borrowingHistory = await prisma.borrowingHistory.findUnique({
-    where: { revId: borrowingHistoryId },
+    where: { revId: borrowingHistoryId, deleted: false },
   });
   return borrowingHistory;
 };
 
 export const getAllBorrowingHistory = async () => {
-  const getAllBorrowingHistory = await prisma.borrowingHistory.findMany();
+  const getAllBorrowingHistory = await prisma.borrowingHistory.findMany({
+    where: { deleted: false },
+  });
   return getAllBorrowingHistory;
 };

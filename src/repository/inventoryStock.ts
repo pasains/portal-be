@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../configuration/db";
 import {
   InventoryStockCreateParams,
   InventoryStockUpdateParams,
 } from "../types/inventoryStock";
-
-const prisma = new PrismaClient();
 
 export const createInventoryStock = async (
   inventoryStock: InventoryStockCreateParams,
@@ -43,12 +41,14 @@ export const deleteInventoryStock = async (inventoryStockId: bigint) => {
 
 export const getInventoryStock = async (inventoryStockId: bigint) => {
   const inventoryStock = await prisma.inventoryStock.findUnique({
-    where: { id: inventoryStockId },
+    where: { id: inventoryStockId, deleted: false },
   });
   return inventoryStock;
 };
 
 export const getAllInventoryStock = async () => {
-  const allInventoryStock = await prisma.inventoryStock.findMany();
+  const allInventoryStock = await prisma.inventoryStock.findMany({
+    where: { deleted: false },
+  });
   return allInventoryStock;
 };

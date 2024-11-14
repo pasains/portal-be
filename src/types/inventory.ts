@@ -25,7 +25,7 @@ export interface InventoryUpdateParams {
   inventoryTypeId: bigint;
   inventoryTypeName: string;
   descriptionInventoryType: string;
-  currentQuantity: number;
+  currentQuantity: number | undefined;
   totalQuantity: number;
   updatedAt: Date;
   updatedBy: bigint;
@@ -46,6 +46,7 @@ export interface InventoryDetailResponse {
   inventoryName: string;
   refId: string;
   description: string;
+  note: string;
   isBorrowable: boolean;
   inventoryTypeId: bigint;
   inventoryTypeName: string;
@@ -86,13 +87,7 @@ export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
     isBorrowable: data.isBorrowable,
     inventoryTypeId: data.inventoryTypeIdRel.id,
     inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
-    //image: data.inventoryHistoryIdRel.map((images: any) => images.image),
-    //condition: data.inventoryHistoryIdRel.map(
-    //  (conditions: any) => conditions.condition,
-    //),
-    //quantity: data.inventoryStockIdRel.map(
-    //  (quantities: any) => quantities.quantity,
-    //),
+    note: data.note,
     url: data.url,
     condition: data.condition,
     currentQuantity: data.currentQuantity,

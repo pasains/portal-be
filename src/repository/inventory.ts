@@ -1,12 +1,10 @@
 // handling all db related for inventory use case
 
-import { PrismaClient } from "@prisma/client";
+import prisma from "../configuration/db";
 import {
   InventoryCreateParams,
   InventoryUpdateParams,
 } from "../types/inventory";
-
-const prisma = new PrismaClient();
 
 export const createInventory = async (inventory: InventoryCreateParams) => {
   const newInventory = await prisma.$transaction(async (prisma) => {
@@ -58,7 +56,23 @@ export const updateInventory = async (
 ) => {
   const updatedInventory = await prisma.inventory.update({
     where: { id: inventoryId },
-    data: inventory,
+    data: {
+      id: inventory.id,
+      inventoryName: inventory.inventoryName,
+      description: inventory.description,
+      refId: inventory.refId,
+      condition: inventory.condition,
+      note: inventory.note,
+      isBorrowable: inventory.isBorrowable,
+      inventoryTypeIdRel: {
+        update: {
+          data: {
+            inventoryTypeName: inventory.inventoryTypeName,
+            description: inventory.descriptionInventoryType,
+          },
+        },
+      },
+    },
   });
   return updatedInventory;
 };
@@ -79,12 +93,13 @@ export const deleteInventory = async (inventoryId: bigint) => {
   const deletedInventory = await prisma.inventory.delete({
     where: { id: inventoryId },
   });
+  console.log(`DELETE_INVENTORY_`, deletedInventory);
   return deletedInventory;
 };
 
 export const getInventory = async (inventoryId: bigint) => {
   const inventory = await prisma.inventory.findUnique({
-    where: { id: inventoryId },
+    where: { id: inventoryId, deleted: false },
     include: {
       inventoryTypeIdRel: true,
       inventoryStockIdRel: {
@@ -110,7 +125,7 @@ export const getAllInventory = async (props: {
     filter.inventoryGroupId = props.inventoryGroupId;
   }
   const allInventory = await prisma.inventory.findMany({
-    where: filter,
+    where: { ...filter, deleted: false },
     include: {
       inventoryTypeIdRel: {
         include: {

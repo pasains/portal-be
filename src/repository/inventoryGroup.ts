@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../configuration/db";
 import {
   InventoryGroupCreateParams,
   InventoryGroupUpdateParams,
 } from "../types/inventoryGroup";
-
-const prisma = new PrismaClient();
 
 export const createInventoryGroup = async (
   inventoryGroup: InventoryGroupCreateParams,
@@ -35,13 +33,15 @@ export const deleteInventoryGroup = async (inventoryGroupId: bigint) => {
 
 export const getInventoryGroup = async (inventoryGroupId: bigint | bigint) => {
   const inventoryGroup = await prisma.inventoryGroup.findUnique({
-    where: { id: inventoryGroupId },
+    where: { id: inventoryGroupId, deleted: false },
   });
   return inventoryGroup;
 };
 
 export const getAllInventoryGroup = async () => {
-  const allInventoryGroup = await prisma.inventoryGroup.findMany();
+  const allInventoryGroup = await prisma.inventoryGroup.findMany({
+    where: { deleted: false },
+  });
   return allInventoryGroup;
 };
 
