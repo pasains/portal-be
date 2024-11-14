@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { ItemCreateParams, ItemUpdateParams } from "../types/item";
-
-const prisma = new PrismaClient();
+import prisma from "../configuration/db";
 
 export const createItem = async (item: ItemCreateParams) => {
   const newItem = await prisma.item.create({
@@ -54,7 +52,7 @@ export const deleteItem = async (itemId: bigint) => {
 
 export const getItem = async (itemId: bigint) => {
   const item = await prisma.item.findUnique({
-    where: { id: itemId },
+    where: { id: itemId, deleted:false },
   });
   return item;
 };
@@ -64,6 +62,8 @@ export const getAllItem = async (props: { borrowingId: bigint | null }) => {
   if (props.borrowingId != null) {
     filter.borrowingId = props.borrowingId;
   }
-  const allItem = await prisma.item.findMany({ where: filter });
+  const allItem = await prisma.item.findMany({
+    where: { ...filter, deleted: false },
+  });
   return allItem;
 };

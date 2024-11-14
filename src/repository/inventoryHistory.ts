@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../configuration/db";
 import { InventoryHistoryCreateParams } from "../types/inventoryHistory";
-
-const prisma = new PrismaClient();
 
 export const createInventoryHistory = async (
   inventoryHistory: InventoryHistoryCreateParams,
@@ -23,12 +21,14 @@ export const createInventoryHistory = async (
 
 export const getInventoryHistory = async (inventoryhistoryId: bigint) => {
   const inventoryHistory = await prisma.inventoryHistory.findUnique({
-    where: { revId: inventoryhistoryId },
+    where: { revId: inventoryhistoryId, deleted: false },
   });
   return inventoryHistory;
 };
 
 export const getAllInventoryHistory = async () => {
-  const allInventoryHistory = await prisma.inventoryHistory.findMany({});
+  const allInventoryHistory = await prisma.inventoryHistory.findMany({
+    where: { deleted: false },
+  });
   return allInventoryHistory;
 };

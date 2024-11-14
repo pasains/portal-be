@@ -16,7 +16,7 @@ import { DataType } from "../types/dataType";
 export const organizationRouter = Router();
 
 organizationRouter.post(
-  "/",
+  "/create",
   body("organizationName").isString().trim(),
   body("address").isString().trim(),
   body("organizationStatus").isString().trim(),

@@ -12,11 +12,12 @@ import {
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
+import { toBorrowerDetailResponse } from "../types/borrower";
 
 export const borrowerRouter = Router();
 
 borrowerRouter.post(
-  "/",
+  "/create",
   body("borrowerName").isString().trim(),
   body("organizationName").isString().trim(),
   body("address").isString().trim(),
@@ -48,16 +49,16 @@ borrowerRouter.post(
 );
 
 borrowerRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("borrowerName").isString().trim(),
+  body("identityNumber").isString().trim(),
+  body("identityCard").isString().trim(),
+  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
   body("organizationName").isString().trim(),
   body("address").isString().trim(),
   body("organizationStatus").isString().trim(),
   body("note").isString().trim(),
-  body("identityNumber").isString().trim(),
-  body("identityCard").isString().trim(),
-  body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -144,7 +145,7 @@ borrowerRouter.get(
             "Borrower found successfully",
             "OK",
             DataType.object,
-            borrower,
+            toBorrowerDetailResponse(borrower),
           ),
         );
       } else {

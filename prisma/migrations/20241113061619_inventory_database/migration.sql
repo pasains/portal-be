@@ -38,6 +38,7 @@ CREATE TABLE "UserHistory" (
     "createdBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
     "oldData" JSONB NOT NULL,
     "newData" JSONB NOT NULL,
 
@@ -72,6 +73,7 @@ CREATE TABLE "Document" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Document_pkey" PRIMARY KEY ("id")
 );
@@ -81,6 +83,7 @@ CREATE TABLE "InventoryType" (
     "id" BIGSERIAL NOT NULL,
     "inventoryTypeName" VARCHAR(50) NOT NULL,
     "description" TEXT,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "InventoryType_pkey" PRIMARY KEY ("id")
 );
@@ -94,6 +97,7 @@ CREATE TABLE "InventoryGroup" (
     "createdBy" BIGINT,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "InventoryGroup_pkey" PRIMARY KEY ("id")
 );
@@ -108,6 +112,7 @@ CREATE TABLE "InventoryStock" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "InventoryStock_pkey" PRIMARY KEY ("id")
 );
@@ -123,6 +128,7 @@ CREATE TABLE "InventoryStockHistory" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "InventoryStockHistory_pkey" PRIMARY KEY ("revId")
 );
@@ -142,6 +148,7 @@ CREATE TABLE "InventoryHistory" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "InventoryHistory_pkey" PRIMARY KEY ("revId")
 );
@@ -159,6 +166,7 @@ CREATE TABLE "Item" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Item_pkey" PRIMARY KEY ("id")
 );
@@ -174,6 +182,7 @@ CREATE TABLE "Borrowing" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Borrowing_pkey" PRIMARY KEY ("id")
 );
@@ -190,6 +199,7 @@ CREATE TABLE "BorrowingHistory" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "BorrowingHistory_pkey" PRIMARY KEY ("revId")
 );

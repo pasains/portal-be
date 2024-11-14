@@ -63,6 +63,7 @@ model UserHistory {
   createdBy               BigInt?
   updatedAt               DateTime @default(now())
   updatedBy               BigInt?
+  deleted                 Boolean  @default(false)
   oldData                 Json
   newData                 Json
   userHistoryCreatedByRel User?    @relation("userHistoryCreatedByRel", fields: [createdBy], references: [id])
@@ -102,6 +103,7 @@ model Document {
   createdAt            DateTime  @default(now())
   updatedBy            BigInt?
   updatedAt            DateTime  @default(now())
+  deleted              Boolean   @default(false)
   documentIdRel        Inventory @relation("documentIdRel", fields: [inventoryId], references: [id])
   documentCreatedByRel User?     @relation("documentCreatedByRel", fields: [createdBy], references: [id])
   documentUpdatedByRel User?     @relation("documentUpdatedByRel", fields: [updatedBy], references: [id])
@@ -111,6 +113,7 @@ model InventoryType {
   id                 BigInt           @id @default(autoincrement())
   inventoryTypeName  String           @db.VarChar(50)
   description        String?
+  deleted            Boolean          @default(false)
   inventoryTypeIdRel Inventory[]      @relation("inventoryTypeIdRel")
   group              InventoryGroup[] @relation("inventoryGroupMember")
 }
@@ -123,6 +126,7 @@ model InventoryGroup {
   createdBy                  BigInt?
   updatedBy                  BigInt?
   updatedAt                  DateTime        @default(now())
+  deleted                    Boolean         @default(false)
   inventoryGroupCreatedByRel User?           @relation("inventoryGroupCreatedByRel", fields: [createdBy], references: [id])
   inventoryGroupUpdatedByRel User?           @relation("inventoryGroupUpdatedByRel", fields: [updatedBy], references: [id])
   type                       InventoryType[] @relation("inventoryGroupMember")
@@ -137,6 +141,7 @@ model InventoryStock {
   createdAt                  DateTime                @default(now())
   updatedBy                  BigInt?
   updatedAt                  DateTime                @default(now())
+  deleted                    Boolean                 @default(false)
   inventoryStockCreatedByRel User?                   @relation("inventoryStockCreatedByRel", fields: [createdBy], references: [id])
   inventoryStockIdRel        Inventory               @relation("inventoryStockIdRel", fields: [inventoryId], references: [id])
   inventoryStockUpdatedByRel User?                   @relation("inventoryStockUpdatedByRel", fields: [updatedBy], references: [id])
@@ -153,6 +158,7 @@ model InventoryStockHistory {
   createdAt                         DateTime        @default(now())
   updatedBy                         BigInt?
   updatedAt                         DateTime        @default(now())
+  deleted                           Boolean         @default(false)
   inventoryIdRel                    Inventory       @relation("inventoryIdRel", fields: [inventoryId], references: [id])
   inventoryStockHistoryCreatedId    User?           @relation("inventoryStockHistoryCreatedId", fields: [createdBy], references: [id])
   inventoryStockHistoryUpdatedByRel User?           @relation("inventoryStockHistoryUpdatedByRel", fields: [updatedBy], references: [id])
@@ -173,6 +179,7 @@ model InventoryHistory {
   createdAt                    DateTime  @default(now())
   updatedBy                    BigInt?
   updatedAt                    DateTime  @default(now())
+  deleted                      Boolean   @default(false)
   inventoryHistoryIdRel        Inventory @relation("inventoryHistoryIdRel", fields: [id], references: [id])
   inventoryHistoryCreatedByRel User?     @relation("inventoryHistoryCreatedByRel", fields: [createdBy], references: [id])
   inventoryHistoryUpdatedByRel User?     @relation("inventoryHistoryUpdatedByRel", fields: [updatedBy], references: [id])
@@ -190,6 +197,7 @@ model Item {
   createdAt          DateTime   @default(now())
   updatedBy          BigInt?
   updatedAt          DateTime   @default(now())
+  deleted            Boolean    @default(false)
   itemBorrowingIdRel Borrowing? @relation("itemBorrowingIdRel", fields: [borrowingId], references: [id])
   itemCreatedByRel   User?      @relation("itemCreatedByRel", fields: [createdBy], references: [id])
   itemInventoryIdRel Inventory  @relation("itemInventoryIdRel", fields: [inventoryId], references: [id])
@@ -206,6 +214,7 @@ model Borrowing {
   createdAt             DateTime           @default(now())
   updatedBy             BigInt?
   updatedAt             DateTime           @default(now())
+  deleted               Boolean            @default(false)
   borrowerIdRel         Borrower?          @relation("borrowerIdRel", fields: [borrowerId], references: [id])
   borrowingCreatedByRel User?              @relation("borrowingCreatedByRel", fields: [createdBy], references: [id])
   borrowingUpdatedByRel User?              @relation("borrowingUpdatedByRel", fields: [updatedBy], references: [id])
@@ -224,6 +233,7 @@ model BorrowingHistory {
   createdAt                    DateTime  @default(now())
   updatedBy                    BigInt?
   updatedAt                    DateTime  @default(now())
+  deleted                      Boolean   @default(false)
   borrowerHistoryIdRel         Borrower? @relation("borrowerHistoryIdRel", fields: [borrowerId], references: [id])
   borrowingHistoryIdRel        Borrowing @relation("borrowingHistoryIdRel", fields: [id], references: [id])
   borrowingHistoryCreatedByRel User?     @relation("borrowingHistoryCreatedByRel", fields: [createdBy], references: [id])

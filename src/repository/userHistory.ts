@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../configuration/db";
 import { UserHistoryCreateParams } from "../types/userHistory";
-
-const prisma = new PrismaClient();
 
 export const createUserHistory = async (
   userHistory: UserHistoryCreateParams,
@@ -18,12 +16,14 @@ export const createUserHistory = async (
 
 export const getUserHistory = async (userHistoryId: bigint) => {
   const userHistory = await prisma.userHistory.findUnique({
-    where: { id: userHistoryId },
+    where: { id: userHistoryId, deleted: false },
   });
   return userHistory;
 };
 
 export const getAllUserHistory = async () => {
-  const allUserHistory = await prisma.userHistory.findMany();
+  const allUserHistory = await prisma.userHistory.findMany({
+    where: { deleted: false },
+  });
   return allUserHistory;
 };

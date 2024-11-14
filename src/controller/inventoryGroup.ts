@@ -41,7 +41,7 @@ inventoryGroupRouter.post(
 );
 
 inventoryGroupRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("inventoryGroupName").isString().trim(),
   body("description").isString().trim(),

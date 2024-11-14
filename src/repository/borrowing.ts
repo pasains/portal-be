@@ -1,11 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../configuration/db";
 import {
   BorrowingCreateParams,
-  BorrowingParams,
   BorrowingUpdateParams,
 } from "../types/borrowing";
-
-const prisma = new PrismaClient();
 
 export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
   const newBorrowing = await prisma.$transaction(async (prisma) => {
@@ -85,7 +82,7 @@ export const deleteBorrowing = async (borrowingId: bigint) => {
 
 export const getBorrowing = async (borrowingId: bigint) => {
   const borrowing = await prisma.borrowing.findUnique({
-    where: { id: borrowingId },
+    where: { id: borrowingId, deleted: false },
     include: {
       borrowerIdRel: {
         select: {
@@ -102,6 +99,7 @@ export const getBorrowing = async (borrowingId: bigint) => {
 
 export const getAllBorrowing = async () => {
   const allBorrowing = await prisma.borrowing.findMany({
+    where: { deleted: false },
     include: {
       borrowerIdRel: {
         select: {
