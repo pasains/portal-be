@@ -1,3 +1,4 @@
+import { StatusItem } from "@prisma/client";
 import {
   createItem,
   deleteItem,
@@ -5,8 +6,13 @@ import {
   getItem,
   patchItem,
   updateItem,
+  updateStatusBorrowing,
 } from "../repository/item";
-import { ItemCreateParams, ItemUpdateParams } from "../types/item";
+import {
+  ItemCreateParams,
+  ItemUpdateAllParams,
+  ItemUpdateParams,
+} from "../types/item";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 export const createItemService = async (item: ItemCreateParams) => {
@@ -20,6 +26,40 @@ export const updateItemService = async (
 ) => {
   const updatedItem = await updateItem(itemId, item);
   return updatedItem;
+};
+
+export const updateAllItemService = async (
+  borrowingId: bigint,
+  items: ItemUpdateAllParams,
+) => {
+  const updatedItems: {
+    id: bigint;
+    status: StatusItem;
+    postCondition: string;
+  }[] = [];
+
+  for (const currentItem of items.items) {
+    if (!currentItem.id) {
+      throw new Error("Each item must have an ID for update.");
+    }
+
+    // Call the repository to update the item
+    await updateItem(currentItem.id, {
+      status: currentItem.status,
+      postCondition: currentItem.postCondition,
+    });
+
+    // Collect the updated fields
+    updatedItems.push({
+      id: currentItem.id,
+      status: currentItem.status,
+      postCondition: currentItem.postCondition,
+    });
+  }
+  // Update borrowing status
+  await updateStatusBorrowing(borrowingId);
+
+  return updatedItems;
 };
 
 export const patchItemService = async (
@@ -61,5 +101,6 @@ export const getAllItemService = async (props: {
   borrowingId: bigint | null;
 }) => {
   const allItem = await getAllItem({ borrowingId: props.borrowingId });
+  console.log(`ITEM`, allItem);
   return allItem;
 };

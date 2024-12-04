@@ -6,23 +6,25 @@ import {
   getAllItemService,
   getItemService,
   patchItemService,
+  updateAllItemService,
   updateItemService,
 } from "../service/item";
 
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
+import { toItemDetailResponse, toItemResponses } from "../types/item";
 
 export const itemRouter = Router();
+const StatusInput = ["IN", "OUT"];
+const StatusInputBorrowing = ["DONE", "PENDING"];
 
 itemRouter.post(
-  "/",
+  "/create",
   body("borrowingId").optional().isNumeric(),
-  body("receivingId").optional().isNumeric(),
   body("inventoryId").optional().isNumeric(),
   body("quantity").isNumeric(),
-  body("preCondition").isString().trim(),
-  body("postCondition").isString().trim(),
+  body("status").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -41,14 +43,40 @@ itemRouter.post(
 );
 
 itemRouter.put(
-  "/:id",
+  "/updateall/:borrowingId",
+  body("items").isArray(),
+  body("items.*.id").isNumeric(),
+  body("items.*.status").isString().trim(),
+  body("items.*.postCondition").isString().trim(),
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const borrowingId = BigInt(req.params.borrowingId);
+    try {
+      const item = await updateAllItemService(borrowingId, req.body);
+      res.send(
+        normalize("Item updated successfully", "OK", DataType.object, item),
+      );
+    } catch (error) {
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+    }
+  },
+);
+
+itemRouter.put(
+  "/update/:id",
   param("id").isNumeric().trim(),
-  body("borrowingId").optional().isNumeric(),
-  body("receivingId").optional().isNumeric(),
-  body("inventoryId").optional().isNumeric(),
   body("quantity").isNumeric(),
+  body("status").isString().isIn(StatusInput),
   body("preCondition").isString().trim(),
+  body("inventoryName").isString().trim(),
+  body("refId").isString().trim(),
   body("postCondition").isString().trim(),
+  body("inventoryTypeName").isString().trim(),
+  body("statusBorrowing").isString().isIn(StatusInputBorrowing),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -122,7 +150,12 @@ itemRouter.get(
       const item = await getItemService(id);
       if (item) {
         res.send(
-          normalize("Item found successfully", "OK", DataType.object, item),
+          normalize(
+            "Item found successfully",
+            "OK",
+            DataType.object,
+            toItemDetailResponse(item),
+          ),
         );
       } else {
         res
@@ -145,7 +178,14 @@ itemRouter.get("/", async (_req: Request, res: Response) => {
     const item = await getAllItemService({
       borrowingId,
     });
-    res.send(normalize("Item found successfully", "OK", DataType.array, item));
+    res.send(
+      normalize(
+        "Item found successfully",
+        "OK",
+        DataType.array,
+        toItemResponses(item),
+      ),
+    );
   } catch (error) {
     res
       .status(400)

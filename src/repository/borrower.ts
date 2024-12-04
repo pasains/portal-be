@@ -1,4 +1,3 @@
-import { connect } from "http2";
 import prisma from "../configuration/db";
 import { BorrowerCreateParams, BorrowerUpdateParams } from "../types/borrower";
 

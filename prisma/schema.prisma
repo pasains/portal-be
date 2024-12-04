@@ -190,7 +190,7 @@ model Item {
   borrowingId        BigInt?
   inventoryId        BigInt     @unique
   quantity           BigInt
-  status             StatusItem
+  status             StatusItem @default(OUT)
   preCondition       String?
   postCondition      String?
   createdBy          BigInt?
@@ -208,7 +208,7 @@ model Borrowing {
   id                    BigInt             @id @default(autoincrement())
   borrowerId            BigInt
   dueDate               DateTime           @db.Date
-  status                Status
+  status                Status             @default(PENDING)
   specialInstruction    String
   createdBy             BigInt?
   createdAt             DateTime           @default(now())

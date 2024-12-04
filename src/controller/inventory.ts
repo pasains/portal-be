@@ -29,6 +29,7 @@ inventoryRouter.post(
   body("isBorrowable").isBoolean(),
   body("url").isURL(),
   body("currentQuantity").isNumeric(),
+  body("status").isString().trim(),
   body("inventoryTypeName").isString().trim(),
   body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
