@@ -1,3 +1,5 @@
+import { StatusItem } from "@prisma/client";
+
 export interface InventoryCreateParams {
   id: bigint;
   inventoryName: string;
@@ -12,6 +14,8 @@ export interface InventoryCreateParams {
   descriptionInventoryType: string;
   currentQuantity: number;
   totalQuantity: number;
+  status: StatusItem;
+  preCondition: string;
 }
 
 export interface InventoryUpdateParams {

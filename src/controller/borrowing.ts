@@ -12,6 +12,7 @@ import {
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
+import { toBorrowingDetailResponse } from "../types/borrowing";
 
 export const borrowingRouter = Router();
 
@@ -27,7 +28,13 @@ borrowingRouter.post(
   body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
   body("dueDate").isDate().withMessage("valid date YYYY-MM-DD").toDate(),
   body("specialInstruction").isString().trim(),
+  body("borrowingStatus").isString().trim(),
+  body("items").isArray().withMessage("Items must be non-empty array"),
+  body("items.*.inventoryId").isNumeric(),
+  body("items.*.status").isString(),
+  body("items.*.quantity").isNumeric(),
   async (req: Request, res: Response) => {
+    console.log(`REQ_BODY`, req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -144,7 +151,7 @@ borrowingRouter.get(
             "Borrowing found successfully",
             "OK",
             DataType.object,
-            borrowing,
+            toBorrowingDetailResponse(borrowing),
           ),
         );
       } else {

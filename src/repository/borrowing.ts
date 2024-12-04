@@ -34,7 +34,14 @@ export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
             },
           },
         },
-        status: borrowing.status,
+        itemBorrowingIdRel: {
+          create: borrowing.items.map((item) => ({
+            quantity: item.quantity,
+            status: item.status,
+            itemInventoryIdRel: { connect: { id: item.inventoryId } },
+          })),
+        },
+        status: borrowing.borrowingStatus,
         dueDate: borrowing.dueDate,
         specialInstruction: borrowing.specialInstruction,
       },
@@ -85,11 +92,8 @@ export const getBorrowing = async (borrowingId: bigint) => {
     where: { id: borrowingId, deleted: false },
     include: {
       borrowerIdRel: {
-        select: {
-          borrowerName: true,
-          identityCard: true,
-          identityNumber: true,
-          organizationId: true,
+        include: {
+          borrowerOrganizationRel: true,
         },
       },
     },

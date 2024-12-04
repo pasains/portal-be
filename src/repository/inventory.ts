@@ -10,6 +10,7 @@ export const createInventory = async (inventory: InventoryCreateParams) => {
   const newInventory = await prisma.$transaction(async (prisma) => {
     const createdInventory = await prisma.inventory.create({
       data: {
+        id: inventory.id,
         inventoryName: inventory.inventoryName,
         refId: inventory.refId,
         description: inventory.description,
