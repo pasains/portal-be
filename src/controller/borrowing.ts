@@ -173,7 +173,7 @@ borrowingRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
-    const { borrowing, totalPage, currentPage } = await getAllBorrowingService({
+    const { borrowing, currentPage, totalPage } = await getAllBorrowingService({
       page,
       limit,
     });

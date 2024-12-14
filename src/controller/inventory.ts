@@ -206,11 +206,11 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
     }
     const {
       inventory,
-      inventoryBorrowing,
-      totalPage,
-      currentPage,
-      currentPageBorrowing,
-      totalPageBorrowing,
+      currentPageInventory,
+      totalPageInventory,
+      borrowableInventory,
+      currentPageBorrowableInventory,
+      totalPageBorrowableInventory,
     } = await getAllInventoryService({
       inventoryTypeId,
       inventoryGroupId,
@@ -220,11 +220,11 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
     res.send(
       normalize("Inventory found successfully.", "OK", DataType.array, {
         inventory: toInventoryResponses(inventory),
-        inventoryBorrowing: toInventoryResponses(inventory),
-        currentPage,
-        totalPage,
-        currentPageBorrowing,
-        totalPageBorrowing,
+        borrowableInventory: toInventoryResponses(inventory),
+        currentPageInventory,
+        totalPageInventory,
+        currentPageBorrowableInventory,
+        totalPageBorrowableInventory,
       }),
     );
   } catch (error) {

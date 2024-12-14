@@ -153,7 +153,7 @@ export const getAllInventory = async (props: {
     skip: (page - 1) * limit,
     take: limit,
   });
-  const allInventoryBorrowing = await prisma.inventory.findMany({
+  const borrowableInventory = await prisma.inventory.findMany({
     where: {
       deleted: false,
       isBorrowable: { equals: true },
@@ -165,7 +165,7 @@ export const getAllInventory = async (props: {
     skip: (page - 1) * limit,
     take: limit,
   });
-  const totalInventoryBorrowing = await prisma.inventory.count({
+  const totalBorrowableInventory = await prisma.inventory.count({
     where: {
       deleted: false,
       isBorrowable: { equals: true },
@@ -177,10 +177,10 @@ export const getAllInventory = async (props: {
   });
   return {
     inventory: allInventory,
-    currentPage: page,
-    totalPage: Math.ceil(totalInventory / limit),
-    inventoryBorrowing: allInventoryBorrowing,
-    currentPageBorrowing: page,
-    totalPageBorrowing: Math.ceil(totalInventoryBorrowing / limit),
+    currentPageInventory: page,
+    totalPageInventory: Math.ceil(totalInventory / limit),
+    borrowableInventory: borrowableInventory,
+    currentPageBorrowableInventory: page,
+    totalPageBorrowableInventory: Math.ceil(totalBorrowableInventory / limit),
   };
 };
