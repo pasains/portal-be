@@ -36,6 +36,7 @@ export const updateAllItemService = async (
     id: bigint;
     status: StatusItem;
     postCondition: string;
+    quantity: number;
   }[] = [];
 
   for (const currentItem of items.items) {
@@ -47,6 +48,7 @@ export const updateAllItemService = async (
     await updateItem(currentItem.id, {
       status: currentItem.status,
       postCondition: currentItem.postCondition,
+      quantity: currentItem.quantity,
     });
 
     // Collect the updated fields
@@ -54,6 +56,7 @@ export const updateAllItemService = async (
       id: currentItem.id,
       status: currentItem.status,
       postCondition: currentItem.postCondition,
+      quantity: currentItem.quantity,
     });
   }
   // Update borrowing status
@@ -99,8 +102,13 @@ export const getItemService = async (itemId: bigint) => {
 
 export const getAllItemService = async (props: {
   borrowingId: bigint | null;
+  page?: number;
+  limit?: number;
 }) => {
-  const allItem = await getAllItem({ borrowingId: props.borrowingId });
-  console.log(`ITEM`, allItem);
+  const allItem = await getAllItem({
+    borrowingId: props.borrowingId,
+    page: props.page,
+    limit: props.limit,
+  });
   return allItem;
 };

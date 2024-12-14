@@ -5,6 +5,7 @@ import {
 } from "../types/borrowing";
 
 export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
+  console.log(`Organization Id`, borrowing?.organizationId == undefined);
   const newBorrowing = await prisma.$transaction(async (prisma) => {
     const createdBorrowing = await prisma.borrowing.create({
       data: {
@@ -35,13 +36,32 @@ export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
           },
         },
         itemBorrowingIdRel: {
-          create: borrowing.items.map((item) => ({
-            quantity: item.quantity,
-            status: item.status,
-            itemInventoryIdRel: { connect: { id: item.inventoryId } },
-          })),
+          create: await Promise.all(
+            borrowing.items.map(async (item) => {
+              // find inventory stock record by inventory id
+              const inventoryStock = await prisma.inventoryStock.findFirst({
+                where: { inventoryId: item.inventoryId },
+              });
+              if (!inventoryStock) {
+                throw new Error(
+                  `Inventory stock not found for inventory Id: ${item.inventoryId}`,
+                );
+              }
+              await prisma.inventoryStock.update({
+                where: {
+                  id: inventoryStock?.id,
+                },
+                data: { currentQuantity: { decrement: item.quantity } },
+              });
+              return {
+                quantity: item.quantity,
+                itemInventoryIdRel: {
+                  connect: { id: item.inventoryId },
+                },
+              };
+            }),
+          ),
         },
-        status: borrowing.borrowingStatus,
         dueDate: borrowing.dueDate,
         specialInstruction: borrowing.specialInstruction,
       },
@@ -101,7 +121,11 @@ export const getBorrowing = async (borrowingId: bigint) => {
   return borrowing;
 };
 
-export const getAllBorrowing = async () => {
+export const getAllBorrowing = async (props: {
+  page?: number;
+  limit?: number;
+}) => {
+  const { page = 1, limit = 10 } = props;
   const allBorrowing = await prisma.borrowing.findMany({
     where: { deleted: false },
     include: {
@@ -120,6 +144,15 @@ export const getAllBorrowing = async () => {
         },
       },
     },
+    skip: (page - 1) * limit,
+    take: limit,
   });
-  return allBorrowing;
+  const totalBorrowing = await prisma.borrowing.count({
+    where: { deleted: false },
+  });
+  return {
+    borrowing: allBorrowing,
+    currentPage: page,
+    totalPage: Math.ceil(totalBorrowing / limit),
+  };
 };

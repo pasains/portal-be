@@ -16,7 +16,7 @@ export interface BorrowingCreateParams {
   organizationStatus: string;
   note: string;
   items: {
-    quantity: bigint;
+    quantity: number;
     status: StatusItem;
     inventoryId: bigint;
   }[];

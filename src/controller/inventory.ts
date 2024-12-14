@@ -29,11 +29,11 @@ inventoryRouter.post(
   body("isBorrowable").isBoolean(),
   body("url").isURL(),
   body("currentQuantity").isNumeric(),
-  body("status").isString().trim(),
   body("inventoryTypeName").isString().trim(),
   body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
+    console.log(`REQ_BODY_INVENTORY`, req.body);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -181,6 +181,10 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
   try {
     let inventoryTypeId = null;
     let inventoryGroupId = undefined;
+    const page = _req.query.page ? parseInt(_req.query.page as string, 10) : 1;
+    const limit = _req.query.limit
+      ? parseInt(_req.query.limit as string, 10)
+      : 10;
     // If the value of query is string and except number show all without filter
     if (
       // Query paramater = _req.query.inventoryTypeId (string)
@@ -200,17 +204,28 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
       // Change query string to Bigint
       inventoryTypeId = BigInt(_req.query.inventoryGroupId as string);
     }
-    const inventory = await getAllInventoryService({
+    const {
+      inventory,
+      inventoryBorrowing,
+      totalPage,
+      currentPage,
+      currentPageBorrowing,
+      totalPageBorrowing,
+    } = await getAllInventoryService({
       inventoryTypeId,
       inventoryGroupId,
+      page,
+      limit,
     });
     res.send(
-      normalize(
-        "Inventory found successfully.",
-        "OK",
-        DataType.array,
-        toInventoryResponses(inventory),
-      ),
+      normalize("Inventory found successfully.", "OK", DataType.array, {
+        inventory: toInventoryResponses(inventory),
+        inventoryBorrowing: toInventoryResponses(inventory),
+        currentPage,
+        totalPage,
+        currentPageBorrowing,
+        totalPageBorrowing,
+      }),
     );
   } catch (error) {
     const message = (error as any)?.message || "Internal server error";

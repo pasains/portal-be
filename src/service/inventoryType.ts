@@ -55,7 +55,13 @@ export const getInventoryTypeService = async (inventoryTypeId: bigint) => {
   return inventoryType;
 };
 
-export const getAllInventoryTypeService = async () => {
-  const allInventoryType = await getAllInventoryType();
+export const getAllInventoryTypeService = async (props: {
+  page?: number;
+  limit?: number;
+}) => {
+  const allInventoryType = await getAllInventoryType({
+    page: props.page,
+    limit: props.limit,
+  });
   return allInventoryType;
 };
