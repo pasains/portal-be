@@ -4,7 +4,7 @@ export interface ItemCreateParams {
   id: bigint;
   borrowingId: bigint;
   inventoryId: bigint;
-  quantity: bigint;
+  quantity: number;
   status: StatusItem;
   preCondition: string;
   postCondition: string;
@@ -26,7 +26,7 @@ export interface ItemUpdateParams {
   inventoryId: bigint;
   status: StatusItem;
   statusBorrowing: Status;
-  quantity: bigint;
+  quantity: number;
   preCondition: string;
   postCondition: string;
 }
@@ -36,6 +36,7 @@ export interface ItemUpdateAllParams {
     id: bigint;
     status: StatusItem;
     postCondition: string;
+    quantity: number;
   }[];
 }
 
@@ -45,7 +46,7 @@ export interface ItemResponse {
   borrowingId: bigint;
   inventoryName: string;
   status: StatusItem;
-  quantity: bigint;
+  quantity: number;
   preCondition: string;
   postCondition: string;
 }
@@ -59,7 +60,7 @@ export interface ItemDetailResponse {
   inventoryTypeId: bigint;
   inventoryTypeName: string;
   status: StatusItem;
-  quantity: bigint;
+  quantity: number;
   preCondition: string;
   postCondition: string;
   statusBorrowing: Status;
@@ -72,13 +73,13 @@ export interface ItemDetailResponse {
 export function toItemResponse(data: any): ItemResponse {
   return {
     id: data.id,
-    borrowingId: data.itemBorrowingIdRel.id,
-    inventoryId: data.itemInventoryIdRel.id,
+    borrowingId: data.itemBorrowingIdRel?.id,
+    inventoryId: data.itemInventoryIdRel?.id,
     inventoryName: data.itemInventoryIdRel.inventoryName,
     status: data.status,
     quantity: data.quantity,
-    preCondition: data.preCondition,
-    postCondition: data.postCondition,
+    preCondition: data.itemInventoryIdRel.condition || null,
+    postCondition: data.postCondition || null,
   };
 }
 

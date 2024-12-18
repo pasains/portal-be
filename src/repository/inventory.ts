@@ -117,7 +117,10 @@ export const getInventory = async (inventoryId: bigint) => {
 export const getAllInventory = async (props: {
   inventoryTypeId: bigint | null;
   inventoryGroupId: bigint | undefined;
+  page?: number;
+  limit?: number;
 }) => {
+  const { page = 1, limit = 10 } = props;
   const filter = {} as any;
   if (props.inventoryTypeId != null) {
     filter.inventoryTypeId = props.inventoryTypeId;
@@ -126,7 +129,10 @@ export const getAllInventory = async (props: {
     filter.inventoryGroupId = props.inventoryGroupId;
   }
   const allInventory = await prisma.inventory.findMany({
-    where: { ...filter, deleted: false },
+    where: {
+      ...filter,
+      deleted: false,
+    },
     include: {
       inventoryTypeIdRel: {
         include: {
@@ -144,6 +150,37 @@ export const getAllInventory = async (props: {
       inventoryStockIdRel: { select: { currentQuantity: true } },
       documentIdRel: { select: { url: true } },
     },
+    skip: (page - 1) * limit,
+    take: limit,
   });
-  return allInventory;
+  const borrowableInventory = await prisma.inventory.findMany({
+    where: {
+      deleted: false,
+      isBorrowable: { equals: true },
+      itemInventoryIdRel: { none: { status: "OUT" } },
+    },
+    include: {
+      inventoryTypeIdRel: true,
+    },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
+  const totalBorrowableInventory = await prisma.inventory.count({
+    where: {
+      deleted: false,
+      isBorrowable: { equals: true },
+      itemInventoryIdRel: { none: { status: "OUT" } },
+    },
+  });
+  const totalInventory = await prisma.inventory.count({
+    where: { ...filter, deleted: false },
+  });
+  return {
+    inventory: allInventory,
+    currentPageInventory: page,
+    totalPageInventory: Math.ceil(totalInventory / limit),
+    borrowableInventory: borrowableInventory,
+    currentPageBorrowableInventory: page,
+    totalPageBorrowableInventory: Math.ceil(totalBorrowableInventory / limit),
+  };
 };

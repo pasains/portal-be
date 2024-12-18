@@ -106,10 +106,15 @@ export const getInventoryService = async (inventoryId: bigint) => {
 export const getAllInventoryService = async (props: {
   inventoryTypeId: bigint | null;
   inventoryGroupId: bigint | undefined;
+  page?: number;
+  limit?: number;
 }) => {
   const allInventory = await getAllInventory({
     inventoryTypeId: props.inventoryTypeId,
     inventoryGroupId: props.inventoryGroupId,
+    page: props.page,
+    limit: props.limit,
   });
   return allInventory;
 };
+

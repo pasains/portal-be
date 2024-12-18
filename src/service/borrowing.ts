@@ -38,6 +38,10 @@ export const createBorrowingService = async (
     organization = await getOrganization(borrowing.organizationId);
   }
   try {
+    console.log(
+      `Organization Id Service`,
+      borrowing?.organizationId == undefined,
+    );
     const newBorrowing = await createBorrowing({
       ...borrowing,
     });
@@ -100,7 +104,13 @@ export const getBorrowingService = async (borrowingId: bigint) => {
   return borrowing;
 };
 
-export const getAllBorrowingService = async () => {
-  const allBorrowing = await getAllBorrowing();
+export const getAllBorrowingService = async (props: {
+  page?: number;
+  limit?: number;
+}) => {
+  const allBorrowing = await getAllBorrowing({
+    page: props.page,
+    limit: props.limit,
+  });
   return allBorrowing;
 };

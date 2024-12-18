@@ -63,9 +63,25 @@ export const getInventoryType = async (inventoryTypeId: bigint | bigint) => {
   return inventoryType;
 };
 
-export const getAllInventoryType = async () => {
-  const allInventoryType = await prisma.inventoryType.findMany();
-  return allInventoryType;
+export const getAllInventoryType = async (props: {
+  page?: number;
+  limit?: number;
+}) => {
+  const { page = 1, limit = 10 } = props;
+  const allInventoryType = await prisma.inventoryType.findMany({
+    where: { deleted: false },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
+  const totalInventoryType = await prisma.inventoryType.count({
+    where: { deleted: false },
+  });
+  console.log(`Total Inventory Type`, totalInventoryType);
+  return {
+    invetoryType: allInventoryType,
+    currentPage: page,
+    totalPage: Math.ceil(totalInventoryType / limit),
+  };
 };
 
 export const checkInventoryTypeExists = async (

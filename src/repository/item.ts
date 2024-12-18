@@ -21,39 +21,58 @@ export const updateItem = async (
     where: { id: itemId, deleted: false },
     include: { itemInventoryIdRel: true },
   });
-  const updatedItem = await prisma.item.update({
-    where: { id: itemId, deleted: false },
-    data: {
-      id: item.id,
-      quantity: item?.quantity,
-      status: item?.status,
-      preCondition: item?.preCondition,
-      itemInventoryIdRel: {
-        update: {
-          data: {
-            inventoryName: item?.inventoryName,
-            refId: item?.refId,
-            condition: item?.postCondition?.trim()
-              ? item.postCondition
-              : existingItem?.itemInventoryIdRel?.condition,
-            inventoryTypeIdRel: {
-              update: {
-                data: {
-                  inventoryTypeName: item?.inventoryTypeName,
+  if (!existingItem) {
+    throw new Error(`Item with id ${itemId} not found.`);
+  }
+  const inventoryId = await prisma.inventoryStock.findFirst({
+    where: { inventoryId: existingItem.itemInventoryIdRel?.id },
+  });
+
+  if (!inventoryId) {
+    throw new Error(`Inventory not associated with the item id: ${itemId}`);
+  }
+
+  const updatedItem = await prisma.$transaction(async (prisma) => {
+    const newItem = await prisma.item.update({
+      where: { id: itemId, deleted: false },
+      data: {
+        id: item.id,
+        status: item?.status,
+        preCondition: item?.preCondition,
+        itemInventoryIdRel: {
+          update: {
+            data: {
+              condition: item?.postCondition?.trim()
+                ? item.postCondition
+                : existingItem?.itemInventoryIdRel?.condition,
+              inventoryStockIdRel: {
+                update: {
+                  where: { id: inventoryId.id },
+                  data: {
+                    currentQuantity:
+                      item.status === "IN"
+                        ? {
+                            increment: item.quantity,
+                          }
+                        : item.status === "OUT"
+                          ? { decrement: item.quantity }
+                          : undefined,
+                  },
                 },
               },
             },
           },
         },
-      },
-      itemBorrowingIdRel: {
-        update: {
-          data: {
-            status: item?.statusBorrowing,
+        itemBorrowingIdRel: {
+          update: {
+            data: {
+              status: item?.statusBorrowing,
+            },
           },
         },
       },
-    },
+    });
+    return newItem;
   });
   return updatedItem;
 };
@@ -114,7 +133,12 @@ export const getItem = async (itemId: bigint) => {
   return item;
 };
 
-export const getAllItem = async (props: { borrowingId: bigint | null }) => {
+export const getAllItem = async (props: {
+  borrowingId: bigint | null;
+  page?: number;
+  limit?: number;
+}) => {
+  const { page = 1, limit = 10 } = props;
   const filter = {} as any;
   if (props.borrowingId != null) {
     filter.borrowingId = props.borrowingId;
@@ -129,6 +153,15 @@ export const getAllItem = async (props: { borrowingId: bigint | null }) => {
       },
       itemBorrowingIdRel: true,
     },
+    skip: (page - 1) * limit,
+    take: limit,
   });
-  return allItem;
+  const totalItem = await prisma.item.count({
+    where: { ...filter, deleted: false },
+  });
+  return {
+    items: allItem,
+    currentPage: page,
+    totalPage: Math.ceil(totalItem / limit),
+  };
 };

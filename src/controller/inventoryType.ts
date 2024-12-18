@@ -124,14 +124,18 @@ inventoryTypeRouter.get(
 
 inventoryTypeRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventoryType = await getAllInventoryTypeService();
+    const page = _req.query.page ? parseInt(_req.query.page as string, 10) : 1;
+    const limit = _req.query.limit
+      ? parseInt(_req.query.limit as string, 10)
+      : 10;
+    const { invetoryType, currentPage, totalPage } =
+      await getAllInventoryTypeService({ page, limit });
     res.send(
-      normalize(
-        "Inventory Type found successfully",
-        "OK",
-        DataType.array,
-        inventoryType,
-      ),
+      normalize("Inventory Type found successfully", "OK", DataType.array, {
+        inventoryType: invetoryType,
+        currentPage,
+        totalPage,
+      }),
     );
   } catch (error) {
     res

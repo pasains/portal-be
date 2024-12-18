@@ -155,14 +155,18 @@ organizationRouter.get(
 
 organizationRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const organization = await getAllOrganizationService();
+    const page = _req.query.page ? parseInt(_req.query.page as string, 10) : 1;
+    const limit = _req.query.limit
+      ? parseInt(_req.query.limit as string, 10)
+      : 10;
+    const { organization, currentPage, totalPage } =
+      await getAllOrganizationService({ page, limit });
     res.send(
-      normalize(
-        "Organization found successfully",
-        "OK",
-        DataType.array,
-        organization,
-      ),
+      normalize("Organization found successfully", "OK", DataType.array, {
+        organization: organization,
+        currentPage,
+        totalPage,
+      }),
     );
   } catch (error) {
     res

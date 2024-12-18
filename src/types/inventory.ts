@@ -102,7 +102,3 @@ export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
     updatedBy: data.updatedBy,
   };
 }
-
-export function toInventoryDetailResponses(data: any): InventoryDetailResponse {
-  return toInventoryDetailResponses(data);
-}
