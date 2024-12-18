@@ -1,6 +1,20 @@
+import { Response, Request, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
 
-export const authorizationMiddleware = (req: any, res: any, next: any) => {
+//Middleware to check authorization
+//Autorization adalah proses pemberian izin yang telah teridentifikasi melakukan sesuatu
+export const authorizationMiddleware = (
+  req: Request | any,
+  res: Response,
+  next: NextFunction,
+) => {
+  //Skip authorization for this route
+  const publicRoute = ["/api/authentication", "api/healthz"];
+
+  if (publicRoute.includes(req.path)) {
+    return next;
+  }
+
   const token = req.headers.authorization;
   if (!token) {
     return res.status(401).json({
@@ -8,7 +22,8 @@ export const authorizationMiddleware = (req: any, res: any, next: any) => {
     });
   }
   try {
-    const decoded = verify(token, "secret");
+    const secret = process.env.JWT_SECRET || "secret";
+    const decoded = verify(token, secret);
     req.user = decoded;
     next();
   } catch (error) {

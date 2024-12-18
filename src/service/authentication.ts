@@ -1,6 +1,8 @@
 import { login } from "../repository/authentication";
 import { sign } from "jsonwebtoken";
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 // return user with jwt token
 export const loginService = async (email: string, password: string) => {
   const user = await login(email, password);
@@ -10,7 +12,7 @@ export const loginService = async (email: string, password: string) => {
       email: user.email,
       role: user.role,
     },
-    "secret", // iki kudu diganti nang .env ben secure, diganti sing angel
+    JWT_SECRET as string,
     {
       expiresIn: "24h",
     },

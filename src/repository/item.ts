@@ -35,7 +35,7 @@ export const updateItem = async (
             refId: item?.refId,
             condition: item?.postCondition?.trim()
               ? item.postCondition
-              : existingItem?.itemInventoryIdRel.condition,
+              : existingItem?.itemInventoryIdRel?.condition,
             inventoryTypeIdRel: {
               update: {
                 data: {
