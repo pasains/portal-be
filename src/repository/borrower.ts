@@ -102,15 +102,14 @@ export const getBorrower = async (borrowerId: bigint) => {
 export const getAllBorrower = async (props: {
   //Query paramaters for get organization by Id
   orgId: bigint | null;
-  //identityCard: string | null;
+  page?: number;
+  limit?: number;
 }) => {
-  const filter = {} as any;
+  const { page = 1, limit = 10 } = props;
+  const filter = { deleted: false } as any;
   if (props.orgId != null) {
     filter.organizationId = props.orgId;
   }
-  //if (props.identityCard != null) {
-  //  filter.identityCard = props.identityCard;
-  //}
 
   const allBorrower = await prisma.borrower.findMany({
     where: { ...filter, deleted: false },
@@ -124,6 +123,15 @@ export const getAllBorrower = async (props: {
         },
       },
     },
+    skip: (page - 1) * limit,
+    take: limit,
   });
-  return allBorrower;
+  const totalBorrower = await prisma.borrower.count({
+    where: { ...filter, deleted: false },
+  });
+  return {
+    borrower: allBorrower,
+    currentPage: page,
+    totalPage: Math.ceil(totalBorrower / limit),
+  };
 };

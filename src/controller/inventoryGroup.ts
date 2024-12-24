@@ -15,7 +15,7 @@ import { DataType } from "../types/dataType";
 export const inventoryGroupRouter = Router();
 
 inventoryGroupRouter.post(
-  "/",
+  "/create",
   body("inventoryGroupName").isString().trim(),
   body("description").isString().trim(),
   async (req: Request, res: Response) => {
@@ -69,7 +69,7 @@ inventoryGroupRouter.put(
 );
 
 inventoryGroupRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -127,14 +127,18 @@ inventoryGroupRouter.get(
 
 inventoryGroupRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventoryGroup = await getAllInventoryGroupService();
+    const page = _req.query.page ? parseInt(_req.query.page as string, 10) : 1;
+    const limit = _req.query.limit
+      ? parseInt(_req.query.limit as string, 10)
+      : 10;
+    const { inventoryGroup, currentPage, totalPage } =
+      await getAllInventoryGroupService({ page, limit });
     res.send(
-      normalize(
-        "Inventory Group found successfully",
-        "OK",
-        DataType.array,
-        inventoryGroup,
-      ),
+      normalize("Inventory Group found successfully", "OK", DataType.array, {
+        inventoryGroup: inventoryGroup,
+        currentPage,
+        totalPage,
+      }),
     );
   } catch (error) {
     res

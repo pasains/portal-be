@@ -163,7 +163,10 @@ borrowerRouter.get(
 borrowerRouter.get("/", async (_req: Request, res: Response) => {
   try {
     let orgId = null;
-    //let identityCard = null;
+    const page = _req.query.page ? parseInt(_req.query.page as string, 10) : 1;
+    const limit = _req.query.limit
+      ? parseInt(_req.query.limit as string, 10)
+      : 10;
     if (_req.query.orgId && Number.isNaN(+_req.query.orgId)) {
       res
         .status(400)
@@ -180,13 +183,17 @@ borrowerRouter.get("/", async (_req: Request, res: Response) => {
     if (_req.query.orgId && !Number.isNaN(+_req.query.orgId)) {
       orgId = BigInt(_req.query.orgId as string);
     }
-    //if (_req.query.identityCard) {
-    //  identityCard = _req.query.identityCard as string;
-    //}
-    console.log(`Organization`, orgId);
-    const borrower = await getAllBorrowerService({ orgId });
+    const { borrower, currentPage, totalPage } = await getAllBorrowerService({
+      orgId,
+      page,
+      limit,
+    });
     res.send(
-      normalize("Borrower found successfully", "OK", DataType.array, borrower),
+      normalize("Borrower found successfully", "OK", DataType.array, {
+        borrower: borrower,
+        currentPage,
+        totalPage,
+      }),
     );
   } catch (error) {
     console.log(`Error`, error);

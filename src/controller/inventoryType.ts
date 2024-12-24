@@ -81,9 +81,19 @@ inventoryTypeRouter.delete(
     const id = BigInt(req.params.id);
     try {
       await deleteInventoryTypeService(id);
-      res.status(200).json({ message: "Inventory Type deleted successfully" });
+      res
+        .status(200)
+        .json(
+          normalize(
+            "Inventory deleted successfully",
+            "OK",
+            DataType.null,
+            null,
+          ),
+        );
     } catch (error) {
-      return res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -124,14 +134,18 @@ inventoryTypeRouter.get(
 
 inventoryTypeRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const inventoryType = await getAllInventoryTypeService();
+    const page = _req.query.page ? parseInt(_req.query.page as string, 10) : 1;
+    const limit = _req.query.limit
+      ? parseInt(_req.query.limit as string, 10)
+      : 10;
+    const { invetoryType, currentPage, totalPage } =
+      await getAllInventoryTypeService({ page, limit });
     res.send(
-      normalize(
-        "Inventory Type found successfully",
-        "OK",
-        DataType.array,
-        inventoryType,
-      ),
+      normalize("Inventory Type found successfully", "OK", DataType.array, {
+        inventoryType: invetoryType,
+        currentPage,
+        totalPage,
+      }),
     );
   } catch (error) {
     res

@@ -38,6 +38,10 @@ export const createBorrowingService = async (
     organization = await getOrganization(borrowing.organizationId);
   }
   try {
+    console.log(
+      `Organization Id Service`,
+      borrowing?.organizationId == undefined,
+    );
     const newBorrowing = await createBorrowing({
       ...borrowing,
     });
@@ -97,10 +101,27 @@ export const deleteBorrowingService = async (borrowingId: bigint) => {
 
 export const getBorrowingService = async (borrowingId: bigint) => {
   const borrowing = await getBorrowing(borrowingId);
-  return borrowing;
+  const formatInvoiceNumber = (id: bigint): string => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const uniqueId = String(id).padStart(6, "0"); // Pad with leading zeros
+    return `INV-${year}${month}${day}-${uniqueId}`;
+  };
+  const invoiceNumber = formatInvoiceNumber(borrowingId);
+  console.log(`INV NUMBER`, invoiceNumber);
+
+  return { ...borrowing, invoiceNumber };
 };
 
-export const getAllBorrowingService = async () => {
-  const allBorrowing = await getAllBorrowing();
+export const getAllBorrowingService = async (props: {
+  page?: number;
+  limit?: number;
+}) => {
+  const allBorrowing = await getAllBorrowing({
+    page: props.page,
+    limit: props.limit,
+  });
   return allBorrowing;
 };

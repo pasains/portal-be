@@ -12,7 +12,9 @@ import {
 } from "../types/organization";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
-export const createOrganizationService = async (organization: OrganizationCreateParams) => {
+export const createOrganizationService = async (
+  organization: OrganizationCreateParams,
+) => {
   const newOrganization = await createOrganization(organization);
   return newOrganization;
 };
@@ -21,7 +23,10 @@ export const updateOrganizationService = async (
   organizationId: bigint,
   organization: OrganizationUpdateParams,
 ) => {
-  const updatedOrganization = await updateOrganization(organizationId, organization);
+  const updatedOrganization = await updateOrganization(
+    organizationId,
+    organization,
+  );
   return updatedOrganization;
 };
 
@@ -39,7 +44,12 @@ export const patchOrganizationService = async (
     throw new Error("Invalid field");
   }
   try {
-    const patchedOrganization = await patchOrganization(organizationId, op, field, value);
+    const patchedOrganization = await patchOrganization(
+      organizationId,
+      op,
+      field,
+      value,
+    );
     return patchedOrganization;
   } catch (error) {
     if (error instanceof PrismaClientValidationError) {
@@ -56,11 +66,17 @@ export const deleteOrganizationService = async (organizationId: bigint) => {
 };
 
 export const getOrganizationService = async (organizationId: bigint) => {
-  const organization = await getOrganization(organizationId)
+  const organization = await getOrganization(organizationId);
   return organization;
 };
 
-export const getAllOrganizationService = async () => {
-  const allOrganization = await getAllOrganization();
+export const getAllOrganizationService = async (props: {
+  page?: number;
+  limit?: number;
+}) => {
+  const allOrganization = await getAllOrganization({
+    page: props.page,
+    limit: props.limit,
+  });
   return allOrganization;
 };

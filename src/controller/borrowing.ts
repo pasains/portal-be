@@ -28,13 +28,14 @@ borrowingRouter.post(
   body("phoneNumber").isMobilePhone("id-ID", { strictMode: true }),
   body("dueDate").isDate().withMessage("valid date YYYY-MM-DD").toDate(),
   body("specialInstruction").isString().trim(),
-  body("borrowingStatus").isString().trim(),
   body("items").isArray().withMessage("Items must be non-empty array"),
   body("items.*.inventoryId").isNumeric(),
-  body("items.*.status").isString(),
   body("items.*.quantity").isNumeric(),
   async (req: Request, res: Response) => {
     console.log(`REQ_BODY`, req.body);
+    if (req.body?.organizationId == undefined) {
+      req.body.organizationId = 0;
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -168,14 +169,20 @@ borrowingRouter.get(
 
 borrowingRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const borrowings = await getAllBorrowingService();
+    const page = _req.query.page ? parseInt(_req.query.page as string, 10) : 1;
+    const limit = _req.query.limit
+      ? parseInt(_req.query.limit as string, 10)
+      : 10;
+    const { borrowing, currentPage, totalPage } = await getAllBorrowingService({
+      page,
+      limit,
+    });
     res.send(
-      normalize(
-        "Borrowing found successfully",
-        "OK",
-        DataType.array,
-        borrowings,
-      ),
+      normalize("Borrowing found successfully", "OK", DataType.array, {
+        borrowing: borrowing,
+        currentPage,
+        totalPage,
+      }),
     );
   } catch (error) {
     res

@@ -1,3 +1,4 @@
+import { cursorTo } from "readline";
 import prisma from "../configuration/db";
 import {
   OrganizationCreateParams,
@@ -71,9 +72,22 @@ export const getOrganization = async (organizationId: bigint) => {
   return organization;
 };
 
-export const getAllOrganization = async () => {
+export const getAllOrganization = async (props: {
+  page?: number;
+  limit?: number;
+}) => {
+  const { page = 1, limit = 10 } = props;
   const allOrganization = await prisma.organization.findMany({
     where: { deleted: false },
+    skip: (page - 1) * limit,
+    take: limit,
   });
-  return allOrganization;
+  const totalOrganization = await prisma.organization.count({
+    where: { deleted: false },
+  });
+  return {
+    organization: allOrganization,
+    currentPage: page,
+    totalPage: Math.ceil(totalOrganization / limit),
+  };
 };

@@ -172,19 +172,25 @@ itemRouter.get(
 itemRouter.get("/", async (_req: Request, res: Response) => {
   try {
     let borrowingId = null;
+    const page = _req.query.page ? parseInt(_req.query.page as string, 10) : 1;
+    const limit = _req.query.limit
+      ? parseInt(_req.query.limit as string, 10)
+      : 10;
     if (_req.query.borrowingId && !Number.isNaN(_req.query.borrowingId)) {
       borrowingId = BigInt(_req.query.borrowingId as string);
     }
-    const item = await getAllItemService({
+    const { items, currentPage, totalPage } = await getAllItemService({
       borrowingId,
+      page,
+      limit,
     });
+
     res.send(
-      normalize(
-        "Item found successfully",
-        "OK",
-        DataType.array,
-        toItemResponses(item),
-      ),
+      normalize("Item found successfully", "OK", DataType.array, {
+        item: toItemResponses(items),
+        currentPage,
+        totalPage,
+      }),
     );
   } catch (error) {
     res

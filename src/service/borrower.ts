@@ -60,11 +60,13 @@ export const getBorrowerService = async (borrowerId: bigint) => {
 
 export const getAllBorrowerService = async (props: {
   orgId: bigint | null;
-  //identityCard: string | null;
+  page?: number;
+  limit?: number;
 }) => {
   const allBorrower = await getAllBorrower({
     orgId: props.orgId,
-    //identityCard: props.identityCard,
+    page: props.page,
+    limit: props.limit,
   });
   return allBorrower;
 };

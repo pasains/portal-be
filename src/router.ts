@@ -30,22 +30,28 @@ app.use(
   }),
 );
 
+//Public Routes
 app.use("/api/authentication", authenticationRouter);
-app.use("/api/inventory", authorizationMiddleware, inventoryRouter);
-app.use("/api/inventoryhistory", authorizationMiddleware, inventoryHistoryRouter);
-app.use("/api/inventorytype", authorizationMiddleware, inventoryTypeRouter);
-app.use("/api/inventorygroup", authorizationMiddleware, inventoryGroupRouter);
-app.use("/api/inventorystock", authorizationMiddleware, inventoryStockRouter);
-app.use("/api/inventorystockhistory", authorizationMiddleware, inventoryStockHistoryRouter);
-app.use("/api/user", authorizationMiddleware, userRouter);
-app.use("/api/userhistory", authorizationMiddleware, userHistoryRouter);
-app.use("/api/document", authorizationMiddleware, documentRouter);
-app.use("/api/item", authorizationMiddleware, itemRouter);
-app.use("/api/borrowing", authorizationMiddleware, borrowingRouter);
-app.use("/api/borrowinghistory", authorizationMiddleware, borrowingHistoryRouter);
-app.use("/api/borrower", authorizationMiddleware, borrowerRouter);
-app.use("/api/organization", authorizationMiddleware, organizationRouter);
-app.use("/api/message", authorizationMiddleware, messageRouter);
 app.get("/api/healthz", (_req, res) => {
   res.send("OK");
 });
+
+//Apply the middleware globally
+app.use(authorizationMiddleware);
+
+//Protected Routes
+app.use("/api/inventory", inventoryRouter);
+app.use("/api/inventoryhistory", inventoryHistoryRouter);
+app.use("/api/inventorytype", inventoryTypeRouter);
+app.use("/api/inventorygroup", inventoryGroupRouter);
+app.use("/api/inventorystock", inventoryStockRouter);
+app.use("/api/inventorystockhistory", inventoryStockHistoryRouter);
+app.use("/api/user", userRouter);
+app.use("/api/userhistory", userHistoryRouter);
+app.use("/api/document", documentRouter);
+app.use("/api/item", itemRouter);
+app.use("/api/borrowing", borrowingRouter);
+app.use("/api/borrowinghistory", borrowingHistoryRouter);
+app.use("/api/borrower", borrowerRouter);
+app.use("/api/organization", organizationRouter);
+app.use("/api/message", messageRouter);

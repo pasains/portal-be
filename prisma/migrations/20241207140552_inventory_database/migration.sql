@@ -157,7 +157,7 @@ CREATE TABLE "InventoryHistory" (
 CREATE TABLE "Item" (
     "id" BIGSERIAL NOT NULL,
     "borrowingId" BIGINT,
-    "inventoryId" BIGINT NOT NULL,
+    "inventoryId" BIGINT,
     "quantity" BIGINT NOT NULL,
     "status" "StatusItem" NOT NULL DEFAULT 'OUT',
     "preCondition" TEXT,
@@ -259,9 +259,6 @@ CREATE TABLE "_inventoryGroupMember" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Item_inventoryId_key" ON "Item"("inventoryId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "_inventoryGroupMember_AB_unique" ON "_inventoryGroupMember"("A", "B");
 
 -- CreateIndex
@@ -343,7 +340,7 @@ ALTER TABLE "Item" ADD CONSTRAINT "Item_borrowingId_fkey" FOREIGN KEY ("borrowin
 ALTER TABLE "Item" ADD CONSTRAINT "Item_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Item" ADD CONSTRAINT "Item_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Item" ADD CONSTRAINT "Item_inventoryId_fkey" FOREIGN KEY ("inventoryId") REFERENCES "Inventory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Item" ADD CONSTRAINT "Item_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

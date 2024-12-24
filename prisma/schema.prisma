@@ -90,7 +90,7 @@ model Inventory {
   inventoryUpdatedByRel User?                   @relation("inventoryUpdatedByRel", fields: [updatedBy], references: [id])
   inventoryHistoryIdRel InventoryHistory[]      @relation("inventoryHistoryIdRel")
   inventoryStockIdRel   InventoryStock[]        @relation("inventoryStockIdRel")
-  itemInventoryIdRel    Item?                   @relation("itemInventoryIdRel")
+  itemInventoryIdRel    Item[]                  @relation("itemInventoryIdRel")
   inventoryIdRel        InventoryStockHistory[] @relation("inventoryIdRel")
   documentIdRel         Document[]              @relation("documentIdRel")
 }
@@ -188,7 +188,7 @@ model InventoryHistory {
 model Item {
   id                 BigInt     @id @default(autoincrement())
   borrowingId        BigInt?
-  inventoryId        BigInt     @unique
+  inventoryId        BigInt?
   quantity           BigInt
   status             StatusItem @default(OUT)
   preCondition       String?
@@ -200,7 +200,7 @@ model Item {
   deleted            Boolean    @default(false)
   itemBorrowingIdRel Borrowing? @relation("itemBorrowingIdRel", fields: [borrowingId], references: [id])
   itemCreatedByRel   User?      @relation("itemCreatedByRel", fields: [createdBy], references: [id])
-  itemInventoryIdRel Inventory  @relation("itemInventoryIdRel", fields: [inventoryId], references: [id])
+  itemInventoryIdRel Inventory? @relation("itemInventoryIdRel", fields: [inventoryId], references: [id])
   itemUpdatedByRel   User?      @relation("itemUpdatedByRel", fields: [updatedBy], references: [id])
 }
 

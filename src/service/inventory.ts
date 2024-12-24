@@ -99,17 +99,21 @@ export const deleteInventoryService = async (inventoryId: bigint) => {
 
 export const getInventoryService = async (inventoryId: bigint) => {
   const inventory = await getInventory(inventoryId);
-  console.log(`PORTAL_BE_INVENTORY`, inventory);
   return inventory;
 };
 
 export const getAllInventoryService = async (props: {
   inventoryTypeId: bigint | null;
   inventoryGroupId: bigint | undefined;
+  page?: number;
+  limit?: number;
 }) => {
   const allInventory = await getAllInventory({
     inventoryTypeId: props.inventoryTypeId,
     inventoryGroupId: props.inventoryGroupId,
+    page: props.page,
+    limit: props.limit,
   });
+  console.log(`ALL`, allInventory);
   return allInventory;
 };
