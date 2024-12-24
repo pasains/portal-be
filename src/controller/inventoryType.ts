@@ -81,9 +81,19 @@ inventoryTypeRouter.delete(
     const id = BigInt(req.params.id);
     try {
       await deleteInventoryTypeService(id);
-      res.status(200).json({ message: "Inventory Type deleted successfully" });
+      res
+        .status(200)
+        .json(
+          normalize(
+            "Inventory deleted successfully",
+            "OK",
+            DataType.null,
+            null,
+          ),
+        );
     } catch (error) {
-      return res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );

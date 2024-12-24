@@ -60,6 +60,7 @@ export interface BorrowingParams {
 }
 export interface BorrowingDetailResponse {
   id: bigint;
+  invoiceNumber: string;
   dueDate: undefined;
   status: Status;
   specialInstruction: string;
@@ -96,6 +97,7 @@ export function toBorrowingDetailResponse(data: any): BorrowingDetailResponse {
     organizationStatus:
       data.borrowerIdRel.borrowerOrganizationRel.organizationStatus,
     note: data.borrowerIdRel.borrowerOrganizationRel.note,
+    invoiceNumber: data.invoiceNumber,
     createdAt: data.createdAt,
     createdBy: data.createdBy,
     updatedAt: data.updatedAt,

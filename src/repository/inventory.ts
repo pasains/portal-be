@@ -55,28 +55,48 @@ export const updateInventory = async (
   inventoryId: bigint,
   inventory: InventoryUpdateParams,
 ) => {
-  const updatedInventory = await prisma.inventory.update({
-    where: { id: inventoryId },
-    data: {
-      id: inventory.id,
-      inventoryName: inventory.inventoryName,
-      description: inventory.description,
-      refId: inventory.refId,
-      condition: inventory.condition,
-      note: inventory.note,
-      isBorrowable: inventory.isBorrowable,
-      inventoryTypeIdRel: {
-        update: {
-          data: {
-            inventoryTypeName: inventory.inventoryTypeName,
-            description: inventory.descriptionInventoryType,
+  const newUpdatedInventory = await prisma.$transaction(async (prisma) => {
+    const updatedInventory = await prisma.inventory.update({
+      where: { id: inventoryId },
+      data: {
+        id: inventory.id,
+        inventoryName: inventory.inventoryName,
+        description: inventory.description,
+        refId: inventory.refId,
+        condition: inventory.condition,
+        note: inventory.note,
+        isBorrowable: inventory.isBorrowable,
+        inventoryTypeIdRel: {
+          update: {
+            data: {
+              inventoryTypeName: inventory.inventoryTypeName,
+              description: inventory.descriptionInventoryType,
+            },
+          },
+        },
+        documentIdRel: {
+          updateMany: {
+            where: { inventoryId: inventory.id },
+            data: { url: inventory.url },
+          },
+        },
+        inventoryStockIdRel: {
+          updateMany: {
+            where: { inventoryId: inventory.id },
+            data: { currentQuantity: inventory.currentQuantity },
           },
         },
       },
-    },
+      include: {
+        inventoryStockIdRel: { select: { currentQuantity: true } },
+        documentIdRel: { select: { url: true } },
+      },
+    });
+    return updatedInventory;
   });
-  return updatedInventory;
+  return newUpdatedInventory;
 };
+
 export const patchInventory = async (
   inventoryId: bigint,
   op: string,
@@ -147,12 +167,13 @@ export const getAllInventory = async (props: {
           },
         },
       },
-      inventoryStockIdRel: { select: { currentQuantity: true } },
-      documentIdRel: { select: { url: true } },
+      inventoryStockIdRel: true,
+      documentIdRel: true,
     },
     skip: (page - 1) * limit,
     take: limit,
   });
+
   const borrowableInventory = await prisma.inventory.findMany({
     where: {
       deleted: false,
@@ -161,6 +182,7 @@ export const getAllInventory = async (props: {
     },
     include: {
       inventoryTypeIdRel: true,
+      inventoryStockIdRel: true,
     },
     skip: (page - 1) * limit,
     take: limit,

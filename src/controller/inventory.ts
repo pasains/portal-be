@@ -33,7 +33,6 @@ inventoryRouter.post(
   body("descriptionInventoryType").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
-    console.log(`REQ_BODY_INVENTORY`, req.body);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -64,19 +63,20 @@ inventoryRouter.put(
   body("condition").isString().trim(),
   body("note").isString().trim(),
   body("isBorrowable").isBoolean(),
-  body("url").isURL().isArray(),
-  body("currentQuantity").isNumeric(),
-  body("totalQuantity").isNumeric(),
   body("inventoryTypeName").isString().trim(),
   body("descriptionInventoryType").isString().trim(),
+  body("url").isURL(),
+  body("currentQuantity").isNumeric(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
+    console.log(`REQ_BODY_UPDATE_INVENTORY`, req.body);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     const id = BigInt(req.params.id);
     try {
       const inventory = await updateInventoryService(id, req.body);
+      console.log(`UPDT INVT`, inventory);
       res.send(
         normalize(
           "Inventory updated successfully",
@@ -158,7 +158,7 @@ inventoryRouter.get(
       if (inventory) {
         res.send(
           normalize(
-            "Inventory found successfully",
+            "Inventory Detail found successfully",
             "OK",
             DataType.object,
             toInventoryDetailResponse(inventory),
@@ -219,7 +219,7 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
     });
     res.send(
       normalize("Inventory found successfully.", "OK", DataType.array, {
-        inventory: toInventoryResponses(inventory),
+        inventory: inventory,
         borrowableInventory: toInventoryResponses(inventory),
         currentPageInventory,
         totalPageInventory,

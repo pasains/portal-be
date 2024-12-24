@@ -18,23 +18,6 @@ export interface InventoryCreateParams {
   preCondition: string;
 }
 
-export interface InventoryUpdateParams {
-  id: bigint;
-  inventoryName: string;
-  refId: string;
-  description: string;
-  condition: string;
-  note: string;
-  isBorrowable: boolean;
-  inventoryTypeId: bigint;
-  inventoryTypeName: string;
-  descriptionInventoryType: string;
-  currentQuantity: number | undefined;
-  totalQuantity: number;
-  updatedAt: Date;
-  updatedBy: bigint;
-}
-
 export interface InventoryResponse {
   id: bigint;
   inventoryName: string;
@@ -43,6 +26,7 @@ export interface InventoryResponse {
   isBorrowable: boolean;
   inventoryTypeId: bigint;
   inventoryTypeName: string;
+  currentQuantity: number;
 }
 
 export interface InventoryDetailResponse {
@@ -55,8 +39,8 @@ export interface InventoryDetailResponse {
   inventoryTypeId: bigint;
   inventoryTypeName: string;
   url: string;
-  currentQuantity: number;
-  totalQuantity: number;
+  currentQuantity: bigint;
+  totalQuantity: bigint;
   condition: string;
   createdAt: Date;
   updatedAt: Date;
@@ -72,6 +56,7 @@ export function toInventoryResponse(data: any): InventoryResponse {
     description: data.description,
     isBorrowable: data.isBorrowable,
     inventoryTypeId: data.inventoryTypeIdRel.id,
+    currentQuantity: data.inventoryStockIdRel?.currentQuantity,
     inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
   };
 }
@@ -92,13 +77,32 @@ export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
     inventoryTypeId: data.inventoryTypeIdRel.id,
     inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
     note: data.note,
-    url: data.url,
     condition: data.condition,
-    currentQuantity: data.currentQuantity,
-    totalQuantity: data.totalQuantity,
+    currentQuantity: data.inventoryStockIdRel?.[0]?.currentQuantity,
+    totalQuantity: data.inventoryStockIdRel?.[0]?.currentQuantity,
+    url: data.documentIdRel?.[0]?.url || null,
     createdAt: data.createdAt,
     updatedAt: data.updatedAt,
     createdBy: data.createdBy,
     updatedBy: data.updatedBy,
   };
+}
+
+export interface InventoryUpdateParams {
+  id: bigint;
+  inventoryName: string;
+  refId: string;
+  description: string;
+  condition: string;
+  note: string;
+  isBorrowable: boolean;
+  inventoryTypeId: bigint;
+  inventoryTypeName: string;
+  descriptionInventoryType: string;
+  currentQuantity: number;
+  url: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: bigint;
 }

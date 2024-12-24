@@ -156,3 +156,4 @@ export const getAllBorrowing = async (props: {
     totalPage: Math.ceil(totalBorrowing / limit),
   };
 };
+

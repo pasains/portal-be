@@ -1,3 +1,4 @@
+import { throws } from "assert";
 import {
   createInventoryGroup,
   deleteInventoryGroup,
@@ -21,7 +22,10 @@ export const updateInventoryGroupService = async (
   inventoryGroupId: bigint,
   inventoryGroup: InventoryGroupUpdateParams,
 ) => {
-  const updatedInventoryGroup = await updateInventoryGroup(inventoryGroupId, inventoryGroup);
+  const updatedInventoryGroup = await updateInventoryGroup(
+    inventoryGroupId,
+    inventoryGroup,
+  );
   return updatedInventoryGroup;
 };
 
@@ -30,12 +34,20 @@ export const deleteInventoryGroupService = async (inventoryGroupId: bigint) => {
   return deletedInventoryGroup;
 };
 
-export const getInventoryGroupService = async (inventoryGroupId: bigint | bigint) => {
+export const getInventoryGroupService = async (
+  inventoryGroupId: bigint | bigint,
+) => {
   const user = await getInventoryGroup(inventoryGroupId);
   return user;
 };
 
-export const getAllInventoryGroupService = async () => {
-  const allInventoryGroup = await getAllInventoryGroup();
+export const getAllInventoryGroupService = async (props: {
+  page?: number;
+  limit?: number;
+}) => {
+  const allInventoryGroup = await getAllInventoryGroup({
+    page: props.page,
+    limit: props.limit,
+  });
   return allInventoryGroup;
 };
