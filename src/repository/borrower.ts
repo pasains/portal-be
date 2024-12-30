@@ -123,6 +123,7 @@ export const getAllBorrower = async (props: {
         },
       },
     },
+    orderBy: { borrowerName: "asc" },
     skip: (page - 1) * limit,
     take: limit,
   });

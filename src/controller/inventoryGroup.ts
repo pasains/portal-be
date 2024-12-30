@@ -79,9 +79,19 @@ inventoryGroupRouter.delete(
     const id = BigInt(req.params.id);
     try {
       await deleteInventoryGroupService(id);
-      res.status(200).json({ message: "Inventory Group deleted successfully" });
+      res
+        .status(200)
+        .json(
+          normalize(
+            "Inventory Group deleted successfully.",
+            "OK",
+            DataType.null,
+            null,
+          ),
+        );
     } catch (error) {
-      return res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );

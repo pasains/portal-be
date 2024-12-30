@@ -3,6 +3,7 @@ import {
   createInventory,
   deleteInventory,
   getAllInventory,
+  getBorrowingByInventory,
   getInventory,
   patchInventory,
   updateInventory,
@@ -116,4 +117,16 @@ export const getAllInventoryService = async (props: {
   });
   console.log(`ALL`, allInventory);
   return allInventory;
+};
+export const getBorrowingByInventoryService = async (props: {
+  inventoryId: bigint;
+  page?: number;
+  limit?: number;
+}) => {
+  const borrowing = await getBorrowingByInventory({
+    inventoryId: props.inventoryId,
+    page: props.page,
+    limit: props.limit,
+  });
+  return borrowing;
 };

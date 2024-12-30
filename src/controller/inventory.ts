@@ -4,6 +4,7 @@ import {
   createInventoryService,
   deleteInventoryService,
   getAllInventoryService,
+  getBorrowingByInventoryService,
   getInventoryService,
   patchInventoryService,
   updateInventoryService,
@@ -13,6 +14,7 @@ import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 import {
+  toInventoryBorrowingResponses,
   toInventoryDetailResponse,
   toInventoryResponses,
 } from "../types/inventory";
@@ -219,8 +221,8 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
     });
     res.send(
       normalize("Inventory found successfully.", "OK", DataType.array, {
-        inventory: inventory,
-        borrowableInventory: toInventoryResponses(inventory),
+        inventory: toInventoryResponses(inventory),
+        borrowableInventory: toInventoryResponses(borrowableInventory),
         currentPageInventory,
         totalPageInventory,
         currentPageBorrowableInventory,
@@ -232,3 +234,52 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
     res.status(400).json(normalize(message, "ERROR", DataType.null, null));
   }
 });
+
+inventoryRouter.get(
+  "/history/:id",
+  param("id").isNumeric().trim(),
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const inventoryId = BigInt(req.params.id);
+    try {
+      const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+      const limit = req.query.limit
+        ? parseInt(req.query.limit as string, 10)
+        : 10;
+      const { currentPage, totalPages, totalItems, data } =
+        await getBorrowingByInventoryService({ inventoryId, page, limit });
+      if (data) {
+        res.send(
+          normalize(
+            "Borrowing history by inventory found successfully",
+            "OK",
+            DataType.object,
+            {
+              currentPage,
+              totalPages,
+              totalItems,
+              data: toInventoryBorrowingResponses(data),
+            },
+          ),
+        );
+      } else {
+        res
+          .status(400)
+          .json(
+            normalize(
+              "Borrowing history by inventory not found",
+              "ERROR",
+              DataType.null,
+              null,
+            ),
+          );
+      }
+    } catch (error) {
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
+    }
+  },
+);

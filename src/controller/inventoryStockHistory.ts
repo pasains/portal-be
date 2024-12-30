@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { Router } from "express";
 import {
-  createInventoryStockHistoryService,
   getInventoryStockHistoryService,
   getAllInventoryStockHistoryService,
 } from "../service/inventoryStockHistory";
@@ -11,36 +10,6 @@ import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
 
 export const inventoryStockHistoryRouter = Router();
-
-inventoryStockHistoryRouter.post(
-  "/",
-  body("id").isNumeric(),
-  body("inventoryId").isNumeric(),
-  body("currentQuantity").isNumeric(),
-  body("totalQuantity").isNumeric(),
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    try {
-      const inventoryStockHistory = await createInventoryStockHistoryService(
-        req.body,
-      );
-      res.send(
-        normalize(
-          "Stock Ledger created successfully",
-          "OK",
-          DataType.object,
-          inventoryStockHistory,
-        ),
-      );
-    } catch (error) {
-      const message = (error as any)?.message || "Internal server error";
-      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
-    }
-  },
-);
 
 inventoryStockHistoryRouter.get(
   "/:revId",

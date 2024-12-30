@@ -6,13 +6,12 @@ export interface InventoryHistoryCreateParams {
   description: string;
   condition: string;
   note: string;
-  url: string;
   isBorrowable: boolean;
   inventoryTypeId: bigint;
-  inventoryTypeName: string;
-  descriptionInventoryType: string;
-  currentQuantity: number;
-  totalQuantity: number;
+  createdAt: Date;
+  createdBy: bigint;
+  updatedAt: Date;
+  updatedBy: bigint;
 }
 
 export interface InventoryHistoryResponse {

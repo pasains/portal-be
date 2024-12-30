@@ -19,7 +19,6 @@ export const updateBorrowerService = async (
   borrower: BorrowerUpdateParams,
 ) => {
   const updatedBorrower = await updateBorrower(borrowerId, borrower);
-  console.log(`BORROWER_SERVICE`, updatedBorrower);
   return updatedBorrower;
 };
 

@@ -44,7 +44,8 @@ export interface BorrowingUpdateParams {
   updatedBy: bigint;
 }
 
-export interface BorrowingParams {
+//BORROWING PARAMS//
+export interface BorrowingResponse {
   id: bigint;
   borrowerId: bigint;
   organizationId: bigint;
@@ -58,6 +59,33 @@ export interface BorrowingParams {
   status: Status;
   specialInstruction: string;
 }
+
+export function toBorrowingResponse(data: any): BorrowingResponse {
+  return {
+    id: data.id,
+    borrowerId: data.borrowerId,
+    borrowerName: data.borrowerIdRel.borrowerName,
+    identityCard: data.borrowerIdRel.identityCard,
+    identityNumber: data.borrowerIdRel.identityNumber,
+    phoneNumber: data.borrowerIdRel.phoneNumber,
+    organizationId: data.borrowerIdRel.organizationId,
+    organizationName:
+      data.borrowerIdRel.borrowerOrganizationRel.organizationName,
+    address: data.borrowerIdRel.borrowerOrganizationRel.address,
+    dueDate: data.dueDate,
+    status: data.status,
+    specialInstruction: data.specialInstruction,
+  };
+}
+
+export function toBorrowingResponses(data: any[]): BorrowingResponse[] {
+  return data.map((item) => {
+    return toBorrowingResponse(item);
+  });
+}
+//BORROWING PARAMS//
+
+//BORROWING DETAIL PARAMS//
 export interface BorrowingDetailResponse {
   id: bigint;
   invoiceNumber: string;
@@ -104,3 +132,4 @@ export function toBorrowingDetailResponse(data: any): BorrowingDetailResponse {
     updatedBy: data.updatedBy,
   };
 }
+//BORROWING DETAIL PARAMS//

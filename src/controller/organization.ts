@@ -44,7 +44,7 @@ organizationRouter.post(
 );
 
 organizationRouter.put(
-  "/:id",
+  "/update/:id",
   param("id").isNumeric().trim(),
   body("organizationName").isString().trim(),
   body("address").isString().trim(),
@@ -102,7 +102,7 @@ organizationRouter.patch(
 );
 
 organizationRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -112,9 +112,19 @@ organizationRouter.delete(
     const id = BigInt(req.params.id);
     try {
       await deleteOrganizationService(id);
-      res.status(200).json({ message: "Organization deleted successfully" });
+      res
+        .status(200)
+        .json(
+          normalize(
+            "Organization deleted successfully.",
+            "OK",
+            DataType.null,
+            null,
+          ),
+        );
     } catch (error) {
-      return res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
