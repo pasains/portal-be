@@ -18,6 +18,26 @@ export interface InventoryCreateParams {
   preCondition: string;
 }
 
+export interface InventoryUpdateParams {
+  id: bigint;
+  inventoryName: string;
+  refId: string;
+  description: string;
+  condition: string;
+  note: string;
+  isBorrowable: boolean;
+  inventoryTypeId: bigint;
+  inventoryTypeName: string;
+  descriptionInventoryType: string;
+  currentQuantity: number;
+  url: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: bigint;
+}
+
+// INVENTORY RESPONSE//
 export interface InventoryResponse {
   id: bigint;
   inventoryName: string;
@@ -27,8 +47,31 @@ export interface InventoryResponse {
   inventoryTypeId: bigint;
   inventoryTypeName: string;
   currentQuantity: number;
+  totalQuantity: number;
 }
 
+export function toInventoryResponse(data: any): InventoryResponse {
+  return {
+    id: data.id,
+    inventoryName: data.inventoryName,
+    refId: data.refId,
+    description: data.description,
+    isBorrowable: data.isBorrowable,
+    inventoryTypeId: data.inventoryTypeIdRel.id,
+    currentQuantity: data.inventoryStockIdRel?.[0]?.currentQuantity,
+    totalQuantity: data.inventoryStockIdRel?.[0]?.totalQuantity,
+    inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
+  };
+}
+
+export function toInventoryResponses(data: any[]): InventoryResponse[] {
+  return data.map((item) => {
+    return toInventoryResponse(item);
+  });
+}
+// INVENTORY RESPONSE//
+
+// INVENTORY DETAIL RESPONSE//
 export interface InventoryDetailResponse {
   id: bigint;
   inventoryName: string;
@@ -46,25 +89,6 @@ export interface InventoryDetailResponse {
   updatedAt: Date;
   createdBy: bigint;
   updatedBy: bigint;
-}
-
-export function toInventoryResponse(data: any): InventoryResponse {
-  return {
-    id: data.id,
-    inventoryName: data.inventoryName,
-    refId: data.refId,
-    description: data.description,
-    isBorrowable: data.isBorrowable,
-    inventoryTypeId: data.inventoryTypeIdRel.id,
-    currentQuantity: data.inventoryStockIdRel?.currentQuantity,
-    inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
-  };
-}
-
-export function toInventoryResponses(data: any[]): InventoryResponse[] {
-  return data.map((item) => {
-    return toInventoryResponse(item);
-  });
 }
 
 export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
@@ -87,22 +111,37 @@ export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
     updatedBy: data.updatedBy,
   };
 }
+// INVENTORY DETAIL RESPONSE//
 
-export interface InventoryUpdateParams {
+// INVENTORY BY BORROWING RESPONSE//
+export interface InventoryBorrowingResponse {
   id: bigint;
-  inventoryName: string;
-  refId: string;
-  description: string;
-  condition: string;
-  note: string;
-  isBorrowable: boolean;
-  inventoryTypeId: bigint;
-  inventoryTypeName: string;
-  descriptionInventoryType: string;
-  currentQuantity: number;
-  url: string;
-  createdBy: string;
+  borrowerName: string;
+  address: string;
+  organizationName: string;
+  status: string;
   createdAt: Date;
-  updatedAt: Date;
-  updatedBy: bigint;
 }
+
+export function toInventoryBorrowingResponse(
+  data: any,
+): InventoryBorrowingResponse {
+  return {
+    id: data.id,
+    borrowerName: data.borrowerIdRel.borrowerName,
+    organizationName:
+      data.borrowerIdRel.borrowerOrganizationRel.organizationName,
+    address: data.borrowerIdRel.borrowerOrganizationRel.address,
+    status: data.status,
+    createdAt: data.createdAt,
+  };
+}
+
+export function toInventoryBorrowingResponses(
+  data: any[],
+): InventoryBorrowingResponse[] {
+  return data.map((item) => {
+    return toInventoryBorrowingResponse(item);
+  });
+}
+// INVENTORY BY BORROWING RESPONSE//

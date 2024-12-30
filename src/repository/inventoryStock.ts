@@ -21,15 +21,35 @@ export const updateInventoryStock = async (
   inventoryStockId: bigint,
   inventoryStock: InventoryStockUpdateParams,
 ) => {
-  const updatedInventoryStock = await prisma.inventoryStock.update({
-    where: { id: inventoryStockId },
-    data: {
-      inventoryId: inventoryStock?.inventoryId,
-      currentQuantity: inventoryStock?.currentQuantity,
-      totalQuantity: inventoryStock?.totalQuantity,
-    },
+  const newUpdatedInventoryStock = await prisma.$transaction(async (prisma) => {
+    const currentInventoryStock = await prisma.inventoryStock.findUnique({
+      where: { id: inventoryStockId },
+      include: { inventoryStockIdRel: true },
+    });
+    if (!currentInventoryStock) {
+      throw new Error("Inventory stock not found.");
+    }
+    const updatedInventoryStock = await prisma.inventoryStock.update({
+      where: { id: inventoryStockId },
+      data: {
+        inventoryId: inventoryStock?.inventoryId,
+        currentQuantity: inventoryStock?.currentQuantity,
+        totalQuantity: inventoryStock?.totalQuantity,
+      },
+    });
+    await prisma.inventoryStockHistory.create({
+      data: {
+        id: currentInventoryStock.id,
+        inventoryId: currentInventoryStock.inventoryId,
+        totalQuantity: currentInventoryStock.totalQuantity,
+        currentQuantity: currentInventoryStock.currentQuantity,
+        createdAt: currentInventoryStock.createdAt,
+        updatedAt: new Date(),
+      },
+    });
+    return updatedInventoryStock;
   });
-  return updatedInventoryStock;
+  return newUpdatedInventoryStock;
 };
 
 export const deleteInventoryStock = async (inventoryStockId: bigint) => {

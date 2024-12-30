@@ -79,6 +79,7 @@ export const getAllOrganization = async (props: {
   const { page = 1, limit = 10 } = props;
   const allOrganization = await prisma.organization.findMany({
     where: { deleted: false },
+    orderBy: { organizationName: "asc" },
     skip: (page - 1) * limit,
     take: limit,
   });

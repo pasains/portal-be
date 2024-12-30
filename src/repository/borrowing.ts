@@ -5,6 +5,14 @@ import {
 } from "../types/borrowing";
 
 export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
+  const formatInvoiceNumber = (id: bigint): string => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const uniqueId = String(id).padStart(6, "0"); // Pad with leading zeros
+    return `INV-${year}${month}${day}-${uniqueId}`;
+  };
   console.log(`Organization Id`, borrowing?.organizationId == undefined);
   const newBorrowing = await prisma.$transaction(async (prisma) => {
     const createdBorrowing = await prisma.borrowing.create({
@@ -47,6 +55,12 @@ export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
                   `Inventory stock not found for inventory Id: ${item.inventoryId}`,
                 );
               }
+              // Validate the requested quantity
+              if (item.quantity > inventoryStock.currentQuantity) {
+                throw new Error(
+                  `Requested quantity (${item.quantity}) exceeds available stock (${inventoryStock.currentQuantity}) for inventory Id: ${item.inventoryId}`,
+                );
+              }
               await prisma.inventoryStock.update({
                 where: {
                   id: inventoryStock?.id,
@@ -66,8 +80,9 @@ export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
         specialInstruction: borrowing.specialInstruction,
       },
     });
+    const invoiceNumber = formatInvoiceNumber(createdBorrowing.id);
 
-    return createdBorrowing;
+    return { ...createdBorrowing, invoiceNumber };
   });
   return newBorrowing;
 };
@@ -76,16 +91,49 @@ export const updateBorrowing = async (
   borrowingId: bigint,
   borrowing: BorrowingUpdateParams,
 ) => {
-  const updatedBorrowing = await prisma.borrowing.update({
-    where: { id: borrowingId },
-    data: {
-      borrowerId: borrowing.borrowerId,
-      dueDate: borrowing.dueDate,
-      status: borrowing.status,
-      specialInstruction: borrowing.specialInstruction,
-    },
+  const newUpdatedborrowing = await prisma.$transaction(async (prisma) => {
+    const currentBorrowing = await prisma.borrowing.findUnique({
+      where: { id: borrowingId },
+      include: {
+        borrowerIdRel: {
+          include: {
+            borrowerOrganizationRel: true,
+          },
+        },
+        itemBorrowingIdRel: {
+          include: {
+            itemInventoryIdRel: true,
+          },
+        },
+      },
+    });
+    if (!currentBorrowing) {
+      throw new Error("Borrowing not found.");
+    }
+    const updatedBorrowing = await prisma.borrowing.update({
+      where: { id: borrowingId },
+      data: {
+        borrowerId: borrowing.borrowerId,
+        dueDate: borrowing.dueDate,
+        status: borrowing.status,
+        specialInstruction: borrowing.specialInstruction,
+      },
+    });
+
+    await prisma.borrowingHistory.create({
+      data: {
+        id: currentBorrowing.id,
+        dueDate: currentBorrowing.dueDate,
+        status: currentBorrowing.status,
+        specialInstruction: currentBorrowing.specialInstruction,
+        borrowerId: currentBorrowing.borrowerId,
+        createdAt: currentBorrowing.createdAt,
+        updatedAt: new Date(),
+      },
+    });
+    return updatedBorrowing;
   });
-  return updatedBorrowing;
+  return newUpdatedborrowing;
 };
 export const patchBorrowing = async (
   borrowingId: bigint,
@@ -144,6 +192,7 @@ export const getAllBorrowing = async (props: {
         },
       },
     },
+    orderBy: { createdAt: "asc" },
     skip: (page - 1) * limit,
     take: limit,
   });
@@ -156,4 +205,3 @@ export const getAllBorrowing = async (props: {
     totalPage: Math.ceil(totalBorrowing / limit),
   };
 };
-

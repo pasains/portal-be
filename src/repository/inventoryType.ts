@@ -70,6 +70,7 @@ export const getAllInventoryType = async (props: {
   const { page = 1, limit = 10 } = props;
   const allInventoryType = await prisma.inventoryType.findMany({
     where: { deleted: false },
+    orderBy: { inventoryTypeName: "asc" },
     skip: (page - 1) * limit,
     take: limit,
   });

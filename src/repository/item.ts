@@ -78,7 +78,12 @@ export const updateItem = async (
 };
 
 export const updateStatusBorrowing = async (borrowingId: bigint) => {
-  const checkData = await prisma.item.count({ where: { status: "OUT" } });
+  console.log(`updateStatusBorrowing called with borrowingId: ${borrowingId}`);
+
+  const checkData = await prisma.item.count({
+    where: { status: "OUT", borrowingId },
+  });
+  console.log(`Check Data`, checkData);
   if (checkData > 0) {
     await prisma.borrowing.update({
       where: { id: borrowingId },

@@ -1,4 +1,4 @@
-import { MessageCreateParams } from "@pasains/types/message";
+import { MessageCreateParams } from "../types/message";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
