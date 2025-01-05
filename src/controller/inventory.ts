@@ -18,6 +18,7 @@ import {
   toInventoryDetailResponse,
   toInventoryResponses,
 } from "../types/inventory";
+import { Stream } from "stream";
 
 export const inventoryRouter = Router();
 
@@ -187,6 +188,7 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
+    const search = _req.query.search ? String(_req.query.search) : undefined;
     // If the value of query is string and except number show all without filter
     if (
       // Query paramater = _req.query.inventoryTypeId (string)
@@ -218,6 +220,7 @@ inventoryRouter.get("/", async (_req: Request, res: Response) => {
       inventoryGroupId,
       page,
       limit,
+      search,
     });
     res.send(
       normalize("Inventory found successfully.", "OK", DataType.array, {

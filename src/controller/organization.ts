@@ -169,6 +169,7 @@ organizationRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
+    const search = _req.query.search ? String(_req.query.search) : undefined;
     const { organization, currentPage, totalPage } =
       await getAllOrganizationService({ page, limit });
     res.send(
@@ -176,6 +177,7 @@ organizationRouter.get("/", async (_req: Request, res: Response) => {
         organization: organization,
         currentPage,
         totalPage,
+        search,
       }),
     );
   } catch (error) {

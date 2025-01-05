@@ -104,11 +104,15 @@ export const getAllBorrower = async (props: {
   orgId: bigint | null;
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const { page = 1, limit = 10 } = props;
-  const filter = { deleted: false } as any;
+  const filter = {} as any;
   if (props.orgId != null) {
     filter.organizationId = props.orgId;
+  }
+  if (props.search) {
+    filter.borrowerName = { contains: props.search, mode: "insensitive" };
   }
 
   const allBorrower = await prisma.borrower.findMany({

@@ -138,6 +138,7 @@ inventoryTypeRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
+    const search = _req.query.search ? String(_req.query.search) : undefined;
     const { invetoryType, currentPage, totalPage } =
       await getAllInventoryTypeService({ page, limit });
     res.send(
@@ -145,6 +146,7 @@ inventoryTypeRouter.get("/", async (_req: Request, res: Response) => {
         inventoryType: invetoryType,
         currentPage,
         totalPage,
+        search,
       }),
     );
   } catch (error) {

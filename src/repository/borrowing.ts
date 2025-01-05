@@ -172,10 +172,15 @@ export const getBorrowing = async (borrowingId: bigint) => {
 export const getAllBorrowing = async (props: {
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const { page = 1, limit = 10 } = props;
+  const filter = {} as any;
+  if (props.search) {
+    filter.borrowerName = { contains: props.search, mode: "insensitive" };
+  }
   const allBorrowing = await prisma.borrowing.findMany({
-    where: { deleted: false },
+    where: { ...filter, deleted: false },
     include: {
       borrowerIdRel: {
         select: {
@@ -197,7 +202,7 @@ export const getAllBorrowing = async (props: {
     take: limit,
   });
   const totalBorrowing = await prisma.borrowing.count({
-    where: { deleted: false },
+    where: { ...filter, deleted: false },
   });
   return {
     borrowing: allBorrowing,
