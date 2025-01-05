@@ -164,6 +164,7 @@ export const getAllInventory = async (props: {
   inventoryGroupId: bigint | undefined;
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const { page = 1, limit = 10 } = props;
   const filter = {} as any;
@@ -172,6 +173,9 @@ export const getAllInventory = async (props: {
   }
   if (props.inventoryGroupId != undefined) {
     filter.inventoryGroupId = props.inventoryGroupId;
+  }
+  if (props.search) {
+    filter.inventoryName = { contains: props.search, mode: "insensitive" };
   }
   const allInventory = await prisma.inventory.findMany({
     where: {
@@ -202,6 +206,7 @@ export const getAllInventory = async (props: {
 
   const borrowableInventory = await prisma.inventory.findMany({
     where: {
+      ...filter,
       deleted: false,
       isBorrowable: true,
       itemInventoryIdRel: { none: { status: "OUT" } },

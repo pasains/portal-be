@@ -24,7 +24,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/user/5",
+							"raw": "localhost:8080/api/user/update/5",
 							"host": [
 								"localhost"
 							],
@@ -32,6 +32,7 @@
 							"path": [
 								"api",
 								"user",
+								"update",
 								"5"
 							]
 						}
@@ -44,7 +45,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/user/5",
+							"raw": "localhost:8080/api/user/delete/5",
 							"host": [
 								"localhost"
 							],
@@ -52,6 +53,7 @@
 							"path": [
 								"api",
 								"user",
+								"delete",
 								"5"
 							]
 						}
@@ -94,7 +96,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userName\": \"igun_test_1\",\n    \"firstName\": \"igun_1\",\n    \"lastName\": \"test_1\",\n    \"email\": \"igun+1@test.com\",\n    \"password\": \"test_1\",\n    \"phoneNumber\": \"+6281329033253\",\n    \"address\": \"Grabag\",\n    \"profile\": \"path\",\n    \"position\": \"senior\",\n    \"role\": \"ADMIN\",\n    \"isActive\": true\n}",
+							"raw": "{\n    \"userName\": \"weleh\",\n    \"firstName\": \"weleh_1\",\n    \"lastName\": \"test_1\",\n    \"email\": \"weleh+1@test.com\",\n    \"password\": \"test_1\",\n    \"phoneNumber\": \"+6281329033253\",\n    \"address\": \"Sleman\",\n    \"profile\": \"path\",\n    \"position\": \"senior\",\n    \"role\": \"ADMIN\",\n    \"isActive\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -102,14 +104,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/user",
+							"raw": "localhost:8080/api/user/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"user"
+								"user",
+								"create"
 							]
 						}
 					},
@@ -166,7 +169,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryTypeName\": \"test_1\",\n    \"description\": \"test_1\"\n}",
+							"raw": "{\n    \"inventoryTypeName\": \"test_3\",\n    \"description\": \"test_3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -174,14 +177,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/inventorytype",
+							"raw": "localhost:8080/api/inventorytype/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"inventorytype"
+								"inventorytype",
+								"create"
 							]
 						}
 					},
@@ -193,7 +197,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/inventorytype",
+							"raw": "localhost:8080/api/inventorytype?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -201,6 +205,16 @@
 							"path": [
 								"api",
 								"inventorytype"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
 							]
 						}
 					},
@@ -261,7 +275,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/inventorytype/1",
+							"raw": "localhost:8080/api/inventorytype/delete/1",
 							"host": [
 								"localhost"
 							],
@@ -269,6 +283,7 @@
 							"path": [
 								"api",
 								"inventorytype",
+								"delete",
 								"1"
 							]
 						}
@@ -284,10 +299,16 @@
 					"name": "Create Inventory",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1NDY2NzY1LCJleHAiOjE3MzU1NTMxNjV9.gwH0YnzT_QJ34j94Fg4aDJXe7TykeLRYoxHpJE7yxKU",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryName\": \"test_2\",\n    \"refId\": \"test_2\",\n    \"description\": \"test_2\",\n    \"isBorrowable\": true,\n    \"inventoryTypeId\": 1\n}",
+							"raw": "{\n    \"inventoryName\": \"test_weleh\",\n    \"refId\": \"test_weleh\",\n    \"description\": \"test_weleh\",\n    \"condition\": \"test_weleh\",\n    \"note\": \"test_weleh\",\n    \"isBorrowable\": true,\n    \"inventoryTypeId\": 2,\n    \"inventoryTypeName\": \"logistik Weleh\", \n    \"descriptionInventoryType\": \"alat-alat punya weleh\",\n    \"url\": \"https://www.material-tailwind.com/image/product-4.png\",\n    \"currentQuantity\": 1,\n    \"totalQuantity\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -295,14 +316,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/inventory",
+							"raw": "localhost:8080/api/inventory/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"inventory"
+								"inventory",
+								"create"
 							]
 						}
 					},
@@ -312,9 +334,15 @@
 					"name": "Get All Inventory",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1NDY2NzY1LCJleHAiOjE3MzU1NTMxNjV9.gwH0YnzT_QJ34j94Fg4aDJXe7TykeLRYoxHpJE7yxKU",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:8080/api/inventory",
+							"raw": "localhost:8080/api/inventory?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -322,6 +350,26 @@
 							"path": [
 								"api",
 								"inventory"
+							],
+							"query": [
+								{
+									"key": "inventoryTypeId",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "inventoryGroupId",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
 							]
 						}
 					},
@@ -331,9 +379,15 @@
 					"name": "Get Inventory By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1NTQ5NTk1LCJleHAiOjE3MzU2MzU5OTV9.otTB9BJRtd-j-vYpiClyxUp9z5br_Ik3bbmwhDOj6gs",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:8080/api/inventory/1",
+							"raw": "localhost:8080/api/inventory/6",
 							"host": [
 								"localhost"
 							],
@@ -341,7 +395,7 @@
 							"path": [
 								"api",
 								"inventory",
-								"1"
+								"6"
 							]
 						}
 					},
@@ -351,10 +405,16 @@
 					"name": "Update Inventory",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM0ODQzMTQ1LCJleHAiOjE3MzQ5Mjk1NDV9.qR0wgr-EbauetdQ1PHwzH2jks8n31y0sZBB41Tmuxnw",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryName\": \"test_1\",\n    \"refId\": \"test_1\",\n    \"description\": \"test_1_update\",\n    \"isBorrowable\": true,\n    \"inventoryTypeId\": 1\n}",
+							"raw": "{\n    \"id\": 5,\n    \"condition\": \"lecet dikit\",\n    \"description\": \"silver\",\n    \"inventoryName\": \"carabiner\",\n    \"inventoryTypeId\": 1,\n    \"inventoryTypeName\": \"logistik Weleh\",\n    \"descriptionInventoryType\": \"apa ya\",\n    \"isBorrowable\": true,\n    \"note\": \"jangan lupa rutin kasih pelumas ya bro\",\n    \"refId\": \"21/CV/123\",\n    \"currentQuantity\": [\n        6\n    ],\n    \"url\": [\n        \"https://www.material-tailwind.com/image/product-4.png\"\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -362,7 +422,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/inventory/1",
+							"raw": "localhost:8080/api/inventory/update/5",
 							"host": [
 								"localhost"
 							],
@@ -370,7 +430,8 @@
 							"path": [
 								"api",
 								"inventory",
-								"1"
+								"update",
+								"5"
 							]
 						}
 					},
@@ -411,7 +472,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/inventory/5",
+							"raw": "localhost:8080/api/inventory/delete/1",
 							"host": [
 								"localhost"
 							],
@@ -419,9 +480,18 @@
 							"path": [
 								"api",
 								"inventory",
-								"5"
+								"delete",
+								"1"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Inventory by Borrowing",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -437,7 +507,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"borrowingId\": 1,\n    \"receivingId\": 1,\n    \"inventoryId\": 1,\n    \"quantity\": \"test_1\",\n    \"preCondition\": \"test_1\",\n    \"postCondition\": \"test_1\"\n}",
+							"raw": "{\n    \"borrowingId\": 1,\n    \"inventoryId\": 1,\n    \"quantity\": \"test_1\",\n    \"status\": \"test_1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -445,14 +515,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/item",
+							"raw": "localhost:8080/api/item/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"item"
+								"item",
+								"create"
 							]
 						}
 					},
@@ -462,9 +533,15 @@
 					"name": "Get All Item",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1MjAyMjgyLCJleHAiOjE3MzUyODg2ODJ9.d6xkYtr68v_30J8iPAM-hiWD2eMZAuMna7MTNUFwqqg",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:8080/api/item",
+							"raw": "localhost:8080/api/item?borrowingId=1&page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -472,6 +549,20 @@
 							"path": [
 								"api",
 								"item"
+							],
+							"query": [
+								{
+									"key": "borrowingId",
+									"value": "1"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
 							]
 						}
 					},
@@ -501,10 +592,16 @@
 					"name": "Update Item",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1MzY5MjYwLCJleHAiOjE3MzU0NTU2NjB9.2u9i3VrG0-iNCUpFtZIKzvnwfZP5c5mkSoGbjGdBZFo",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"borrowingId\": 1,\n    \"receivingId\": 1,\n    \"inventoryId\": 1,\n    \"quantity\": \"test_1\",\n    \"preCondition\": \"test_1\",\n    \"postCondition\": \"test_1\"\n}",
+							"raw": "{\n    \"borrowingId\": 1,\n    \"inventoryId\": 1,\n    \"quantity\": \"test_1\",\n    \"status\": \"test_1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -512,7 +609,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/item/1",
+							"raw": "localhost:8080/api/item/update/2",
 							"host": [
 								"localhost"
 							],
@@ -520,7 +617,8 @@
 							"path": [
 								"api",
 								"item",
-								"1"
+								"update",
+								"2"
 							]
 						}
 					},
@@ -533,7 +631,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/inventoryName\",\n    \"value\": \"igun_test_1_patch_2\"\n}",
+							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/postCondition\",\n    \"value\": \"\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -541,7 +639,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/item/1",
+							"raw": "localhost:8080/api/item/2",
 							"host": [
 								"localhost"
 							],
@@ -549,7 +647,7 @@
 							"path": [
 								"api",
 								"item",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -574,6 +672,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update All Item",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"items\": [\n        {\n            \"id\": 1,\n            \"status\": \"IN\",\n            \"condition\": \"test\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/item/updateall/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"item",
+								"updateall",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -587,7 +715,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"borrowerId\": 2,\n    \"borrowingStatusId\": 2,\n    \"organizationId\": 1,\n    \"dueDate\": \"2024-08-10T12:34:56.789Z\",\n    \"specialInstruction\": \"test_1\"\n}",
+							"raw": "{\n    \"organizationName\": \"PASAINS\",\n    \"organizationId\":1,\n    \"borrowerId\": 1,\n    \"borrowingStatus\": \"PENDING\",\n    \"address\": \"FMIPA UGM\",\n    \"organizationStatus\": \"Good\",\n    \"note\": \"Good\",\n    \"borrowerName\": \"Susilawati\",\n    \"identityCard\": \"KTA\",\n    \"identityNumber\": \"16/XVIII/PASAINS/237\",\n    \"phoneNumber\": \"+6281225363229\",\n    \"dueDate\": \"2024-12-29\",\n    \"specialInstruction\": \"Tidak ada\",\n    \"items\": [{\n        \"inventoryId\": 1, \"quantity\": 1\n    },\n    {\"inventoryId\":2, \"quantity\": 1}]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -595,14 +723,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/borrowing",
+							"raw": "localhost:8080/api/borrowing/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"borrowing"
+								"borrowing",
+								"create"
 							]
 						}
 					},
@@ -612,9 +741,15 @@
 					"name": "Get All Borrowing",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1MDM1ODA0LCJleHAiOjE3MzUxMjIyMDR9.o_zvbB2oGe9Lg5p_ctzFD-teooT5ZWimawBwJCrOPVU",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:8080/api/borrowing",
+							"raw": "localhost:8080/api/borrowing?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -622,6 +757,16 @@
 							"path": [
 								"api",
 								"borrowing"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
 							]
 						}
 					},
@@ -631,9 +776,15 @@
 					"name": "Get Borrowing By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1NTQ5NTk1LCJleHAiOjE3MzU2MzU5OTV9.otTB9BJRtd-j-vYpiClyxUp9z5br_Ik3bbmwhDOj6gs",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:8080/api/borrowing/1",
+							"raw": "localhost:8080/api/borrowing/7",
 							"host": [
 								"localhost"
 							],
@@ -641,7 +792,7 @@
 							"path": [
 								"api",
 								"borrowing",
-								"1"
+								"7"
 							]
 						}
 					},
@@ -711,7 +862,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/borrowing/1",
+							"raw": "localhost:8080/api/borrowing/delete/5",
 							"host": [
 								"localhost"
 							],
@@ -719,7 +870,8 @@
 							"path": [
 								"api",
 								"borrowing",
-								"1"
+								"delete",
+								"5"
 							]
 						}
 					},
@@ -734,10 +886,16 @@
 					"name": "Create Borrower",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1MzY5MjYwLCJleHAiOjE3MzU0NTU2NjB9.2u9i3VrG0-iNCUpFtZIKzvnwfZP5c5mkSoGbjGdBZFo",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"borrowerName\": \"test_1\",\n    \"organizationName\": \"test_1\",\n    \"identityCard\": \"test_1\",\n    \"identityNumber\": \"test_1\",\n    \"phoneNumber\": \"test_1\"\n}",
+							"raw": "{\n    \"address\": \"FMIPA\",\n    \"borrowerName\": \"test_susi\",\n    \"identityCard\": \"test_susi      \",\n    \"identityNumber\": \"test_susi\",\n    \"note\": \"None\",\n    \"organizationId\": 1,\n    \"organizationName\": \"pasains\",\n    \"organizationStatus\": \"Good\",\n    \"phoneNumber\": \"+6212234445783\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -745,14 +903,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/borrower",
+							"raw": "localhost:8080/api/borrower/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"borrower"
+								"borrower",
+								"create"
 							]
 						}
 					},
@@ -762,9 +921,15 @@
 					"name": "Get All Borrower",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1MjAyMjgyLCJleHAiOjE3MzUyODg2ODJ9.d6xkYtr68v_30J8iPAM-hiWD2eMZAuMna7MTNUFwqqg",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:8080/api/borrower",
+							"raw": "localhost:8080/api/borrower?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -772,6 +937,21 @@
 							"path": [
 								"api",
 								"borrower"
+							],
+							"query": [
+								{
+									"key": "org",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
 							]
 						}
 					},
@@ -801,10 +981,16 @@
 					"name": "Update Borrower",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1MzY5MjYwLCJleHAiOjE3MzU0NTU2NjB9.2u9i3VrG0-iNCUpFtZIKzvnwfZP5c5mkSoGbjGdBZFo",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"borrowerName\": \"test_1_update\",\n    \"organizationName\": \"pasains\",\n    \"identityCard\": \"test\",\n    \"identityNumber\": \"test_1\",\n    \"phoneNumber\": \"test_1\"\n}",
+							"raw": "{\n    \"borrowerName\": \"test_1_update\",\n    \"organizationName\": \"test\",\n    \"identityCard\": \"test\",\n    \"identityNumber\": \"test\",\n    \"phoneNumber\": \"+623467198272\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -812,7 +998,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/borrower/2",
+							"raw": "localhost:8080/api/borrower/update/2",
 							"host": [
 								"localhost"
 							],
@@ -820,6 +1006,7 @@
 							"path": [
 								"api",
 								"borrower",
+								"update",
 								"2"
 							]
 						}
@@ -861,7 +1048,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/borrower/1",
+							"raw": "localhost:8080/api/borrower/delete/1",
 							"host": [
 								"localhost"
 							],
@@ -869,6 +1056,7 @@
 							"path": [
 								"api",
 								"borrower",
+								"delete",
 								"1"
 							]
 						}
@@ -895,14 +1083,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/organization",
+							"raw": "localhost:8080/api/organization/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"organization"
+								"organization",
+								"create"
 							]
 						}
 					},
@@ -914,7 +1103,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/organization",
+							"raw": "localhost:8080/api/organization?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -922,6 +1111,16 @@
 							"path": [
 								"api",
 								"organization"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
 							]
 						}
 					},
@@ -962,7 +1161,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/organization/1",
+							"raw": "localhost:8080/api/organization/update/1",
 							"host": [
 								"localhost"
 							],
@@ -970,6 +1169,7 @@
 							"path": [
 								"api",
 								"organization",
+								"update",
 								"1"
 							]
 						}
@@ -1009,9 +1209,15 @@
 					"name": "Delete Organization",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1MzY5MjYwLCJleHAiOjE3MzU0NTU2NjB9.2u9i3VrG0-iNCUpFtZIKzvnwfZP5c5mkSoGbjGdBZFo",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:8080/api/organization/1",
+							"raw": "localhost:8080/api/organization/delete/2",
 							"host": [
 								"localhost"
 							],
@@ -1019,7 +1225,8 @@
 							"path": [
 								"api",
 								"organization",
-								"1"
+								"delete",
+								"2"
 							]
 						}
 					},
@@ -1028,50 +1235,22 @@
 			]
 		},
 		{
-			"name": "Borrowing Status",
+			"name": "Borrowing History",
 			"item": [
 				{
-					"name": "Create Borrowing Status",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"item\": 1,\n    \"inventoryId\": 1,\n    \"status\": \"test_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/borrowingstatus",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"borrowingstatus"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Borrowing Status",
+					"name": "Get All Borrowing History",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/borrowingstatus",
+							"raw": "localhost:8080/api/borrowinghsitory",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"borrowingstatus"
+								"borrowinghsitory"
 							]
 						}
 					},
@@ -1081,95 +1260,23 @@
 					"name": "Get Borrowing Status By Id",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/borrowingstatus/2",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"borrowingstatus",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Borrowing Status",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"itemId\": 1,\n    \"inventoryId\": 1,\n    \"status\": \"test_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1NDY2NzY1LCJleHAiOjE3MzU1NTMxNjV9.gwH0YnzT_QJ34j94Fg4aDJXe7TykeLRYoxHpJE7yxKU",
+								"type": "text"
 							}
-						},
+						],
 						"url": {
-							"raw": "localhost:8080/api/borrowingstatus/2",
+							"raw": "localhost:8080/api/borrowinghistory/2",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"borrowingstatus",
+								"borrowinghistory",
 								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Patch Borrowing Status",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/status\",\n    \"value\": \"test_1_patch_2\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/borrowingstatus/2",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"borrowingstatus",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Borrowing Status",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/borrowingstatus/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"borrowingstatus",
-								"1"
 							]
 						}
 					},
@@ -1178,50 +1285,22 @@
 			]
 		},
 		{
-			"name": "Stock Ledger",
+			"name": "Inventory Stock History",
 			"item": [
 				{
-					"name": "Create Stock Ledger",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"inventoryName\": \"test_1\",\n    \"refId\": \"test_1\",\n    \"description\": \"test_2\",\n    \"isBorrowable\": true,\n    \"inventoryTypeId\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/stockledger",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"stockledger"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Stock Ledger",
+					"name": "Get All Inventory Stock",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/stockledger/1",
+							"raw": "localhost:8080/api/inventorystock/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"stockledger",
+								"inventorystock",
 								"1"
 							]
 						}
@@ -1229,97 +1308,19 @@
 					"response": []
 				},
 				{
-					"name": "Get Stock Ledger By Id",
+					"name": "Get Inventory Stock By Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/stockledger/1",
+							"raw": "localhost:8080/api/inventorystock/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"stockledger",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Stock Ledger",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"inventoryId\": 1,\n    \"quantity\": 1,\n    \"quantityAfterTransaction\": 1,\n    \"voucherType\": \"test_1_update\",\n    \"voucherName\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/stockledger/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"stockledger",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Patch Stock Ledger",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"op\": \"replace\",\n    \"path\": \"/inventoryName\",\n    \"value\": \"igun_test_1_patch_2\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/inventory/5",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"inventory",
-								"5"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Stock Ledger",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/stockledger/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"stockledger",
+								"inventorystock",
 								"1"
 							]
 						}
@@ -1335,7 +1336,13 @@
 					"name": "Create Inventory Group",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM0OTQ2MjYzLCJleHAiOjE3MzUwMzI2NjN9.XTq5jTeUFOttvUB9WX6J6tjuCU8je-spkCB7z7rsasU",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"inventoryGroupName\": \"test_1\",\n    \"description\": \"test_1\"\n}",
@@ -1346,14 +1353,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/inventorygroup",
+							"raw": "localhost:8080/api/inventorygroup/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"inventorygroup"
+								"inventorygroup",
+								"create"
 							]
 						}
 					},
@@ -1363,9 +1371,15 @@
 					"name": "Get All Inventory Group",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM0OTQ2MjYzLCJleHAiOjE3MzUwMzI2NjN9.XTq5jTeUFOttvUB9WX6J6tjuCU8je-spkCB7z7rsasU",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "localhost:8080/api/inventorygroup",
+							"raw": "localhost:8080/api/inventorygroup?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -1373,6 +1387,16 @@
 							"path": [
 								"api",
 								"inventorygroup"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
 							]
 						}
 					},
@@ -1402,7 +1426,13 @@
 					"name": "Update Inventory Group",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM0OTQ2MjYzLCJleHAiOjE3MzUwMzI2NjN9.XTq5jTeUFOttvUB9WX6J6tjuCU8je-spkCB7z7rsasU",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"inventoryGroupName\": \"test_1\",\n    \"description\": \"test_2_update\"\n}",
@@ -1413,7 +1443,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/inventorygroup/1",
+							"raw": "localhost:8080/api/inventorygroup/update/1",
 							"host": [
 								"localhost"
 							],
@@ -1421,6 +1451,7 @@
 							"path": [
 								"api",
 								"inventorygroup",
+								"update",
 								"1"
 							]
 						}
@@ -1433,7 +1464,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/inventorygroup/1",
+							"raw": "localhost:8080/api/inventorygroup/delete/1",
 							"host": [
 								"localhost"
 							],
@@ -1441,6 +1472,7 @@
 							"path": [
 								"api",
 								"inventorygroup",
+								"delete",
 								"1"
 							]
 						}
@@ -1459,7 +1491,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"inventoryId\": 1,\n    \"quantity\": 1\n}",
+							"raw": "{\n    \"inventoryId\": 1,\n    \"currentQuantity\": 1,\n    \"totalQuantity\":1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1565,38 +1597,16 @@
 			"name": "Inventory History",
 			"item": [
 				{
-					"name": "Create Inventory History",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"inventoryId\": 8,\n    \"condition\": \"test_1\",\n    \"image\": \"test_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/inventoryhistory",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"inventoryhistory"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get All Inventory History",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1NDY2NzY1LCJleHAiOjE3MzU1NTMxNjV9.gwH0YnzT_QJ34j94Fg4aDJXe7TykeLRYoxHpJE7yxKU",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "localhost:8080/api/inventoryhistory",
 							"host": [
@@ -1615,38 +1625,15 @@
 					"name": "Get Inventory History by Id",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/inventorystock/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"inventorystock",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Inventory History",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"inventoryId\": 1,\n    \"condition\": \"test_1\",\n    \"image\": \"test_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM1NDY2NzY1LCJleHAiOjE3MzU1NTMxNjV9.gwH0YnzT_QJ34j94Fg4aDJXe7TykeLRYoxHpJE7yxKU",
+								"type": "text"
 							}
-						},
+						],
 						"url": {
-							"raw": "localhost:8080/api/inventoryhistory/1",
+							"raw": "localhost:8080/api/inventoryhistory/14",
 							"host": [
 								"localhost"
 							],
@@ -1654,27 +1641,7 @@
 							"path": [
 								"api",
 								"inventoryhistory",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Inventory History",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/inventorystock/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"inventorystock",
-								"1"
+								"14"
 							]
 						}
 					},
@@ -1708,127 +1675,6 @@
 					"name": "Get User History by Id",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/userhistory/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"userhistory",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Receiving",
-			"item": [
-				{
-					"name": "Create Receiving",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"userId\": 8,\n    \"note\": \"test_1\",\n    \"status\": \"test_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/receiving",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"receiving"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Receiving",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/receiving",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"receiving"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Receiving by Id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/receiving/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"receiving",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Receiving",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"userId\": 8,\n    \"notes\": \"test_1\",\n    \"status\": \"test_1_update\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/receiving/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"receiving",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Receiving",
-					"request": {
-						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "localhost:8080/api/userhistory/1",
@@ -1969,118 +1815,122 @@
 			]
 		},
 		{
-			"name": "Receiving Status",
+			"name": "Message",
 			"item": [
 				{
-					"name": "Create Receiving Status",
+					"name": "Create Message",
 					"request": {
 						"method": "POST",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"receivingId\": 1,\n    \"status\": \"test_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "localhost:8080/api/receivingstatus",
+							"raw": "localhost:8080/api/message/create",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"receivingstatus"
+								"message",
+								"create"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get All Receiving Status",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/receivingstatus",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"receivingstatus"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Receiving Status by Id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/receivingstatus/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"receivingstatus",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Receiving Status",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"receivingId\": 1,\n    \"status\": \"test_1_update\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/receivingstatus/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"receivingstatus",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Receiving Status",
+					"name": "Delete Message",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/receivingstatus",
+							"raw": "localhost:8080/api/message/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"receivingstatus"
+								"message",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Message",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/message",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"message"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Message by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/message/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"message",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzdXNpQHByb2JvLmlkIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzM0MTcxNDg5LCJleHAiOjE3MzQyNTc4ODl9.dSoYY13OSCEG8Om8Y5bon4xQBEBZGKl6yaM37wWBjh8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"susi@probo.id\",\n    \"password\": \"Susi889977\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/authentication/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"authentication",
+								"login"
 							]
 						}
 					},

@@ -61,11 +61,13 @@ export const getAllBorrowerService = async (props: {
   orgId: bigint | null;
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const allBorrower = await getAllBorrower({
     orgId: props.orgId,
     page: props.page,
     limit: props.limit,
+    search: props.search,
   });
   return allBorrower;
 };

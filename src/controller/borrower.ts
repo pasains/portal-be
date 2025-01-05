@@ -180,6 +180,7 @@ borrowerRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
+    const search = _req.query.search ? String(_req.query.search) : undefined;
     if (_req.query.orgId && Number.isNaN(+_req.query.orgId)) {
       res
         .status(400)
@@ -200,6 +201,7 @@ borrowerRouter.get("/", async (_req: Request, res: Response) => {
       orgId,
       page,
       limit,
+      search,
     });
     res.send(
       normalize("Borrower found successfully", "OK", DataType.array, {
