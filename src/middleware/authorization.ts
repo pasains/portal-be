@@ -22,7 +22,7 @@ export const authorizationMiddleware = (
     });
   }
   try {
-    const secret = process.env.JWT_SECRET || "secret";
+    const secret = process.env.JWT_SECRET || "secret_secret_secret";
     const decoded = verify(token, secret);
     req.user = decoded;
     next();

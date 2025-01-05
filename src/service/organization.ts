@@ -73,10 +73,12 @@ export const getOrganizationService = async (organizationId: bigint) => {
 export const getAllOrganizationService = async (props: {
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const allOrganization = await getAllOrganization({
     page: props.page,
     limit: props.limit,
+    search: props.search,
   });
   return allOrganization;
 };

@@ -1,28 +1,14 @@
 import { getInventory } from "../repository/inventory";
 import {
-  createInventoryStock,
   deleteInventoryStock,
   getAllInventoryStock,
   getInventoryStock,
   updateInventoryStock,
 } from "../repository/inventoryStock";
 import {
-  InventoryStockCreateParams,
   InventoryStockUpdateParams,
 } from "../types/inventoryStock";
 
-export const createInventoryStockService = async (
-  inventoryStock: InventoryStockCreateParams,
-) => {
-  if (inventoryStock.inventoryId) {
-    const inventoryExists = await getInventory(inventoryStock.inventoryId)
-    if (!inventoryExists) {
-      throw new Error("Invalid Inventory Id")
-    }
-  }
-  const newInventoryStock = await createInventoryStock({...inventoryStock,});
-  return newInventoryStock;
-};
 
 export const updateInventoryStockService = async (
   inventoryStockId: bigint,

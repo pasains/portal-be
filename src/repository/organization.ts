@@ -75,15 +75,21 @@ export const getOrganization = async (organizationId: bigint) => {
 export const getAllOrganization = async (props: {
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const { page = 1, limit = 10 } = props;
+  const filter = {} as any;
+  if (props.search) {
+    filter.organizationName = { contains: props.search, mode: "insensitive" };
+  }
   const allOrganization = await prisma.organization.findMany({
-    where: { deleted: false },
+    where: { ...filter, deleted: false },
+    orderBy: { organizationName: "asc" },
     skip: (page - 1) * limit,
     take: limit,
   });
   const totalOrganization = await prisma.organization.count({
-    where: { deleted: false },
+    where: { ...filter, deleted: false },
   });
   return {
     organization: allOrganization,

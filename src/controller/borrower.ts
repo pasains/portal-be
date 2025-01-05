@@ -12,7 +12,10 @@ import {
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
-import { toBorrowerDetailResponse } from "../types/borrower";
+import {
+  toBorrowerDetailResponse,
+  toBorrowerResponses,
+} from "../types/borrower";
 
 export const borrowerRouter = Router();
 
@@ -111,7 +114,7 @@ borrowerRouter.patch(
 );
 
 borrowerRouter.delete(
-  "/:id",
+  "/delete/:id",
   param("id").isNumeric().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -121,9 +124,19 @@ borrowerRouter.delete(
     const id = BigInt(req.params.id);
     try {
       await deleteBorrowerService(id);
-      res.status(200).json({ message: "Borrower deleted successfully" });
+      res
+        .status(200)
+        .json(
+          normalize(
+            "Borrower deleted successfully.",
+            "OK",
+            DataType.null,
+            null,
+          ),
+        );
     } catch (error) {
-      return res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -167,6 +180,7 @@ borrowerRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
+    const search = _req.query.search ? String(_req.query.search) : undefined;
     if (_req.query.orgId && Number.isNaN(+_req.query.orgId)) {
       res
         .status(400)
@@ -187,10 +201,11 @@ borrowerRouter.get("/", async (_req: Request, res: Response) => {
       orgId,
       page,
       limit,
+      search,
     });
     res.send(
       normalize("Borrower found successfully", "OK", DataType.array, {
-        borrower: borrower,
+        borrower: toBorrowerResponses(borrower),
         currentPage,
         totalPage,
       }),

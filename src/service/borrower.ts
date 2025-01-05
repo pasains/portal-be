@@ -19,7 +19,6 @@ export const updateBorrowerService = async (
   borrower: BorrowerUpdateParams,
 ) => {
   const updatedBorrower = await updateBorrower(borrowerId, borrower);
-  console.log(`BORROWER_SERVICE`, updatedBorrower);
   return updatedBorrower;
 };
 
@@ -62,11 +61,13 @@ export const getAllBorrowerService = async (props: {
   orgId: bigint | null;
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const allBorrower = await getAllBorrower({
     orgId: props.orgId,
     page: props.page,
     limit: props.limit,
+    search: props.search,
   });
   return allBorrower;
 };

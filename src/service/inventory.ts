@@ -3,6 +3,7 @@ import {
   createInventory,
   deleteInventory,
   getAllInventory,
+  getBorrowingByInventory,
   getInventory,
   patchInventory,
   updateInventory,
@@ -99,7 +100,6 @@ export const deleteInventoryService = async (inventoryId: bigint) => {
 
 export const getInventoryService = async (inventoryId: bigint) => {
   const inventory = await getInventory(inventoryId);
-  console.log(`PORTAL_BE_INVENTORY`, inventory);
   return inventory;
 };
 
@@ -108,13 +108,27 @@ export const getAllInventoryService = async (props: {
   inventoryGroupId: bigint | undefined;
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const allInventory = await getAllInventory({
     inventoryTypeId: props.inventoryTypeId,
     inventoryGroupId: props.inventoryGroupId,
     page: props.page,
     limit: props.limit,
+    search: props.search,
   });
+  console.log(`ALL`, allInventory);
   return allInventory;
 };
-
+export const getBorrowingByInventoryService = async (props: {
+  inventoryId: bigint;
+  page?: number;
+  limit?: number;
+}) => {
+  const borrowing = await getBorrowingByInventory({
+    inventoryId: props.inventoryId,
+    page: props.page,
+    limit: props.limit,
+  });
+  return borrowing;
+};

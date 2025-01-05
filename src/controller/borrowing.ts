@@ -12,7 +12,10 @@ import {
 import { body, param, validationResult } from "express-validator";
 import { normalize } from "../utils/normalize";
 import { DataType } from "../types/dataType";
-import { toBorrowingDetailResponse } from "../types/borrowing";
+import {
+  toBorrowingDetailResponse,
+  toBorrowingResponses,
+} from "../types/borrowing";
 
 export const borrowingRouter = Router();
 
@@ -128,9 +131,19 @@ borrowingRouter.delete(
     const id = BigInt(req.params.id);
     try {
       await deleteBorrowingService(id);
-      res.status(200).json({ message: "Borrowing deleted successfully" });
+      res
+        .status(200)
+        .json(
+          normalize(
+            "Borrowing deleted successfully.",
+            "OK",
+            DataType.null,
+            null,
+          ),
+        );
     } catch (error) {
-      return res.status(400).json({ message: error });
+      const message = (error as any)?.message || "Internal server error";
+      res.status(400).json(normalize(message, "ERROR", DataType.null, null));
     }
   },
 );
@@ -173,15 +186,17 @@ borrowingRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
+    const search = _req.query.search ? String(_req.query.search) : undefined;
     const { borrowing, currentPage, totalPage } = await getAllBorrowingService({
       page,
       limit,
     });
     res.send(
       normalize("Borrowing found successfully", "OK", DataType.array, {
-        borrowing: borrowing,
+        borrowing: toBorrowingResponses(borrowing),
         currentPage,
         totalPage,
+        search,
       }),
     );
   } catch (error) {

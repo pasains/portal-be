@@ -19,7 +19,10 @@ export const updateInventoryGroup = async (
 ) => {
   const updatedInventoryGroup = await prisma.inventoryGroup.update({
     where: { id: inventoryGroupId },
-    data: inventoryGroup,
+    data: {
+      inventoryGroupName: inventoryGroup.inventoryGroupName,
+      description: inventoryGroup.description,
+    },
   });
   return updatedInventoryGroup;
 };
@@ -38,11 +41,29 @@ export const getInventoryGroup = async (inventoryGroupId: bigint | bigint) => {
   return inventoryGroup;
 };
 
-export const getAllInventoryGroup = async () => {
+export const getAllInventoryGroup = async (props: {
+  page?: number;
+  limit?: number;
+  search?: string;
+}) => {
+  const { page = 1, limit = 10 } = props;
+  const filter = {} as any;
+  if (props.search) {
+    filter.inventoryGroupName = { contains: props.search, mode: "insensitive" };
+  }
   const allInventoryGroup = await prisma.inventoryGroup.findMany({
-    where: { deleted: false },
+    where: { ...filter, deleted: false },
+    skip: (page - 1) * limit,
+    take: limit,
   });
-  return allInventoryGroup;
+  const totalInventoryGroup = await prisma.inventoryGroup.count({
+    where: { ...filter, deleted: false },
+  });
+  return {
+    inventoryGroup: allInventoryGroup,
+    currentPage: page,
+    totalPage: Math.ceil(totalInventoryGroup / limit),
+  };
 };
 
 export const connectInventoryGroupToInventoryType = async (

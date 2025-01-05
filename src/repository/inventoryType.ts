@@ -58,7 +58,7 @@ export const deleteInventoryType = async (inventoryTypeId: bigint) => {
 
 export const getInventoryType = async (inventoryTypeId: bigint | bigint) => {
   const inventoryType = await prisma.inventoryType.findUnique({
-    where: { id: inventoryTypeId },
+    where: { id: inventoryTypeId, deleted: false },
   });
   return inventoryType;
 };
@@ -66,17 +66,22 @@ export const getInventoryType = async (inventoryTypeId: bigint | bigint) => {
 export const getAllInventoryType = async (props: {
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const { page = 1, limit = 10 } = props;
+  const filter = {} as any;
+  if (props.search) {
+    filter.inventoryTypeName = { contains: props.search, mode: "insensitive" };
+  }
   const allInventoryType = await prisma.inventoryType.findMany({
-    where: { deleted: false },
+    where: { ...filter, deleted: false },
+    orderBy: { inventoryTypeName: "asc" },
     skip: (page - 1) * limit,
     take: limit,
   });
   const totalInventoryType = await prisma.inventoryType.count({
-    where: { deleted: false },
+    where: { ...filter, deleted: false },
   });
-  console.log(`Total Inventory Type`, totalInventoryType);
   return {
     invetoryType: allInventoryType,
     currentPage: page,

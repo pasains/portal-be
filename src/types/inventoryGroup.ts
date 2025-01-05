@@ -9,5 +9,6 @@ export interface InventoryGroupUpdateParams {
   id: bigint;
   inventoryGroupName: string;
   description: string;
+  updateAt: Date;
   updatedBy: bigint;
 }

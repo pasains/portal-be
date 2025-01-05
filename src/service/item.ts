@@ -61,6 +61,7 @@ export const updateAllItemService = async (
   }
   // Update borrowing status
   await updateStatusBorrowing(borrowingId);
+  console.log(`UPDATE STATUS BORROWING`, updatedItems);
 
   return updatedItems;
 };
