@@ -30,7 +30,7 @@ export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
               borrowerOrganizationRel: {
                 connectOrCreate: {
                   where: {
-                    id: borrowing.organizationId,
+                    id: borrowing?.organizationId,
                   },
                   create: {
                     organizationName: borrowing.organizationName,
@@ -177,7 +177,10 @@ export const getAllBorrowing = async (props: {
   const { page = 1, limit = 10 } = props;
   const filter = {} as any;
   if (props.search) {
-    filter.borrowerName = { contains: props.search, mode: "insensitive" };
+    filter.borrowerName = {
+      contains: props.search,
+      mode: "insensitive",
+    };
   }
   const allBorrowing = await prisma.borrowing.findMany({
     where: { ...filter, deleted: false },

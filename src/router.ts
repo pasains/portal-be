@@ -18,6 +18,7 @@ import { organizationRouter } from "./controller/organization";
 import { messageRouter } from "./controller/message";
 import { authenticationRouter } from "./controller/authentication";
 import { authorizationMiddleware } from "./middleware/authorization";
+import { postRouter } from "./controller/post";
 
 export const app = express();
 
@@ -55,3 +56,4 @@ app.use("/api/borrowinghistory", borrowingHistoryRouter);
 app.use("/api/borrower", borrowerRouter);
 app.use("/api/organization", organizationRouter);
 app.use("/api/message", messageRouter);
+app.use("/api/post", postRouter);

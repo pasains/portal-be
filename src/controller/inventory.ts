@@ -18,7 +18,6 @@ import {
   toInventoryDetailResponse,
   toInventoryResponses,
 } from "../types/inventory";
-import { Stream } from "stream";
 
 export const inventoryRouter = Router();
 
@@ -30,7 +29,7 @@ inventoryRouter.post(
   body("condition").isString().trim(),
   body("note").isString().trim(),
   body("isBorrowable").isBoolean(),
-  body("url").isURL(),
+  body("url").isString(),
   body("currentQuantity").isNumeric(),
   body("inventoryTypeName").isString().trim(),
   body("descriptionInventoryType").isString().trim(),
@@ -68,7 +67,7 @@ inventoryRouter.put(
   body("isBorrowable").isBoolean(),
   body("inventoryTypeName").isString().trim(),
   body("descriptionInventoryType").isString().trim(),
-  body("url").isURL(),
+  body("url").isString(),
   body("currentQuantity").isNumeric(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);

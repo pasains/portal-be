@@ -1,4 +1,9 @@
 import {
+  checkOrganizationName,
+  createOrganization,
+  getOrganization,
+} from "../repository/organization";
+import {
   createBorrower,
   deleteBorrower,
   getAllBorrower,
@@ -10,8 +15,38 @@ import { BorrowerCreateParams, BorrowerUpdateParams } from "../types/borrower";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 export const createBorrowerService = async (borrower: BorrowerCreateParams) => {
-  const newBorrower = await createBorrower(borrower);
-  return newBorrower;
+  let organization;
+  const exists = await checkOrganizationName({
+    organizationName: borrower.organizationName,
+  });
+  if (exists) {
+    organization = await getOrganization(borrower.organizationId);
+  } else {
+    organization = await createOrganization({
+      id: borrower.organizationId,
+      organizationName: borrower.organizationName,
+      address: borrower.address,
+      organizationStatus: borrower.organizationStatus,
+      note: borrower.note,
+    });
+  }
+  if (!organization || !organization.id) {
+    throw new Error("Failed to retrieve or create a valid organization.");
+  }
+  try {
+    const newBorrower = await createBorrower({
+      ...borrower,
+      organizationId: organization.id,
+    });
+    return newBorrower;
+  } catch (error) {
+    console.log(error);
+    if (error instanceof PrismaClientValidationError) {
+      const message = error.message.split("\n");
+      throw new Error(message[message.length - 1]);
+    }
+    throw new Error("Internal server error.");
+  }
 };
 
 export const updateBorrowerService = async (

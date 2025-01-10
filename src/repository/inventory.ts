@@ -214,6 +214,7 @@ export const getAllInventory = async (props: {
 
     include: {
       inventoryTypeIdRel: true,
+      inventoryStockIdRel: true,
     },
     skip: (page - 1) * limit,
     take: limit,

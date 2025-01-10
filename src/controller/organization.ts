@@ -171,7 +171,7 @@ organizationRouter.get("/", async (_req: Request, res: Response) => {
       : 10;
     const search = _req.query.search ? String(_req.query.search) : undefined;
     const { organization, currentPage, totalPage } =
-      await getAllOrganizationService({ page, limit });
+      await getAllOrganizationService({ page, limit, search });
     res.send(
       normalize("Organization found successfully", "OK", DataType.array, {
         organization: organization,
