@@ -190,6 +190,7 @@ borrowingRouter.get("/", async (_req: Request, res: Response) => {
     const { borrowing, currentPage, totalPage } = await getAllBorrowingService({
       page,
       limit,
+      search,
     });
     res.send(
       normalize("Borrowing found successfully", "OK", DataType.array, {

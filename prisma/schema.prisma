@@ -284,6 +284,42 @@ model Message {
   createdAt    DateTime @default(now())
 }
 
+model Post {
+  id                  BigInt   @id @default(autoincrement())
+  type                PostType
+  title               String   @db.VarChar(150)
+  headerPhoto         String   @db.VarChar(250)
+  place               String   @db.VarChar(50)
+  writer              String   @db.VarChar(50)
+  date                String   @db.VarChar(50)
+  generation          String   @db.VarChar(50)
+  firstParagraph      String   @db.Text
+  secondParagraph     String   @db.Text
+  thirdParagraph      String   @db.Text
+  fourthParagraph     String   @db.Text
+  firstImage          String?  @db.VarChar(250)
+  captionFirstImage   String?  @db.VarChar(150)
+  secondImage         String?  @db.VarChar(250)
+  captionSecondImage  String?  @db.VarChar(150)
+  thirdImage          String?  @db.VarChar(250)
+  captionThirdImage   String?  @db.VarChar(150)
+  photoCollage        String[] @db.Text
+  captionPhotoCollage String   @db.VarChar(200)
+  quote               String   @db.Text
+  nameQuote           String   @db.VarChar(50)
+  createdBy           BigInt?
+  createdAt           DateTime @default(now())
+  updatedBy           BigInt?
+  updatedAt           DateTime @default(now())
+  deleted             Boolean  @default(false)
+}
+
+enum PostType {
+  ARTICLE
+  REPORT
+  TRAINING
+}
+
 enum Role {
   USER
   ADMIN

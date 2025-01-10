@@ -39,7 +39,7 @@ export const deleteMessage = async (messageId: bigint) => {
 };
 
 export const getMessage = async (messageId: bigint) => {
-  const message = await prisma.borrower.findUnique({
+  const message = await prisma.message.findUnique({
     where: { id: messageId },
   });
   return message;

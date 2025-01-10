@@ -44,10 +44,12 @@ export const getInventoryGroupService = async (
 export const getAllInventoryGroupService = async (props: {
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const allInventoryGroup = await getAllInventoryGroup({
     page: props.page,
     limit: props.limit,
+    search: props.search,
   });
   return allInventoryGroup;
 };

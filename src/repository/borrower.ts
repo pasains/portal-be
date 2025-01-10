@@ -3,26 +3,29 @@ import { BorrowerCreateParams, BorrowerUpdateParams } from "../types/borrower";
 
 //Query prisma create Borrower
 export const createBorrower = async (borrower: BorrowerCreateParams) => {
-  const newBorrower = await prisma.borrower.create({
-    data: {
-      borrowerName: borrower.borrowerName,
-      identityCard: borrower.identityCard,
-      identityNumber: borrower.identityNumber,
-      phoneNumber: borrower.phoneNumber,
-      borrowerOrganizationRel: {
-        connectOrCreate: {
-          where: {
-            id: borrower.organizationId,
-          },
-          create: {
-            organizationName: borrower.organizationName,
-            address: borrower.address,
-            organizationStatus: borrower.organizationStatus,
-            note: borrower.note,
+  const newBorrower = await prisma.$transaction(async (prisma) => {
+    const createdBorrower = await prisma.borrower.create({
+      data: {
+        borrowerName: borrower.borrowerName,
+        identityCard: borrower.identityCard,
+        identityNumber: borrower.identityNumber,
+        phoneNumber: borrower.phoneNumber,
+        borrowerOrganizationRel: {
+          connectOrCreate: {
+            where: {
+              id: borrower.organizationId,
+            },
+            create: {
+              organizationName: borrower.organizationName,
+              address: borrower.address,
+              organizationStatus: borrower.organizationStatus,
+              note: borrower.note,
+            },
           },
         },
       },
-    },
+    });
+    return createdBorrower;
   });
   return newBorrower;
 };

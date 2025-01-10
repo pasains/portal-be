@@ -140,7 +140,7 @@ inventoryTypeRouter.get("/", async (_req: Request, res: Response) => {
       : 10;
     const search = _req.query.search ? String(_req.query.search) : undefined;
     const { invetoryType, currentPage, totalPage } =
-      await getAllInventoryTypeService({ page, limit });
+      await getAllInventoryTypeService({ page, limit, search });
     res.send(
       normalize("Inventory Type found successfully", "OK", DataType.array, {
         inventoryType: invetoryType,

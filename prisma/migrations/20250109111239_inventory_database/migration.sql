@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "PostType" AS ENUM ('ARTICLE', 'REPORT', 'TRAINING');
+
+-- CreateEnum
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
 -- CreateEnum
@@ -247,6 +250,39 @@ CREATE TABLE "Message" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Post" (
+    "id" BIGSERIAL NOT NULL,
+    "type" "PostType" NOT NULL,
+    "title" VARCHAR(150) NOT NULL,
+    "headerPhoto" VARCHAR(250) NOT NULL,
+    "place" VARCHAR(50) NOT NULL,
+    "writer" VARCHAR(50) NOT NULL,
+    "date" VARCHAR(50) NOT NULL,
+    "generation" VARCHAR(50) NOT NULL,
+    "firstParagraph" TEXT NOT NULL,
+    "secondParagraph" TEXT NOT NULL,
+    "thirdParagraph" TEXT NOT NULL,
+    "fourthParagraph" TEXT NOT NULL,
+    "firstImage" VARCHAR(250),
+    "captionFirstImage" VARCHAR(150),
+    "secondImage" VARCHAR(250),
+    "captionSecondImage" VARCHAR(150),
+    "thirdImage" VARCHAR(250),
+    "captionThirdImage" VARCHAR(150),
+    "photoCollage" TEXT[],
+    "captionPhotoCollage" VARCHAR(200) NOT NULL,
+    "quote" TEXT NOT NULL,
+    "nameQuote" VARCHAR(50) NOT NULL,
+    "createdBy" BIGINT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedBy" BIGINT,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable

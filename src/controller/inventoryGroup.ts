@@ -141,8 +141,9 @@ inventoryGroupRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
+    const search = _req.query.search ? String(_req.query.search) : undefined;
     const { inventoryGroup, currentPage, totalPage } =
-      await getAllInventoryGroupService({ page, limit });
+      await getAllInventoryGroupService({ page, limit, search });
     res.send(
       normalize("Inventory Group found successfully", "OK", DataType.array, {
         inventoryGroup: inventoryGroup,
