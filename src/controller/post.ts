@@ -56,7 +56,7 @@ postRouter.post(
 );
 
 postRouter.put(
-  "/:id",
+  "/update/:id",
   body("title").isString().trim(),
   body("type").isString().trim(),
   body("headerPhoto").isString().trim(),
@@ -159,7 +159,7 @@ postRouter.get("/", async (_req: Request, res: Response) => {
         post: post,
         currentPage,
         totalPage,
-        search,
+        search
       }),
     );
   } catch (error) {

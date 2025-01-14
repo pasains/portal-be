@@ -1,5 +1,6 @@
 // handling all db related for inventory use case
 
+import { equal } from "assert";
 import prisma from "../configuration/db";
 import {
   InventoryCreateParams,
@@ -209,7 +210,7 @@ export const getAllInventory = async (props: {
       ...filter,
       deleted: false,
       isBorrowable: true,
-      itemInventoryIdRel: { none: { status: "OUT" } },
+      inventoryStockIdRel: { none: { currentQuantity: { equals: 0 } } },
     },
 
     include: {
@@ -223,14 +224,14 @@ export const getAllInventory = async (props: {
     where: {
       deleted: false,
       isBorrowable: true,
-      itemInventoryIdRel: { none: { status: "OUT" } },
+      inventoryStockIdRel: { none: { currentQuantity: { equals: 0 } } },
     },
   });
   const totalInventory = await prisma.inventory.count({
     where: {
       ...filter,
       isBorrowable: true,
-      itemInventoryIdRel: { none: { status: "OUT" } },
+      inventoryStockIdRel: { none: { currentQuantity: { equals: 0 } } },
       deleted: false,
     },
   });

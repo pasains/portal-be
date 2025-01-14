@@ -142,11 +142,20 @@ export const getAllItem = async (props: {
   borrowingId: bigint | null;
   page?: number;
   limit?: number;
+  search?: string;
 }) => {
   const { page = 1, limit = 10 } = props;
   const filter = {} as any;
   if (props.borrowingId != null) {
     filter.borrowingId = props.borrowingId;
+  }
+  if (props.search) {
+    filter.itemInventoryIdRel = {
+      inventoryName: {
+        contains: props.search,
+        mode: "insensitive",
+      },
+    };
   }
   const allItem = await prisma.item.findMany({
     where: { ...filter, deleted: false },

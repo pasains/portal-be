@@ -88,14 +88,14 @@ export const getAllPost = async (props: {
     filter.title = { contains: props.search, mode: "insensitive" };
   }
   const allPost = await prisma.post.findMany({
-    where: { ...filter, delete: false },
+    where: { ...filter, deleted: false },
     orderBy: { date: "asc" },
     skip: (page - 1) * limit,
     take: limit,
   });
 
   const totalPost = await prisma.post.count({
-    where: { deleted: false },
+    where: { deleted: false, ...filter },
   });
 
   return {
