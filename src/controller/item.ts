@@ -176,6 +176,7 @@ itemRouter.get("/", async (_req: Request, res: Response) => {
     const limit = _req.query.limit
       ? parseInt(_req.query.limit as string, 10)
       : 10;
+    const search = _req.query.search ? String(_req.query.search) : undefined;
     if (_req.query.borrowingId && !Number.isNaN(_req.query.borrowingId)) {
       borrowingId = BigInt(_req.query.borrowingId as string);
     }
@@ -183,6 +184,7 @@ itemRouter.get("/", async (_req: Request, res: Response) => {
       borrowingId,
       page,
       limit,
+      search
     });
 
     res.send(
