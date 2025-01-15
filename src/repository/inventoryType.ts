@@ -7,25 +7,10 @@ import {
 export const createInventoryType = async (
   inventoryType: InventoryTypeCreateParams,
 ) => {
-  const group = inventoryType?.groupId
-    ? { connect: { id: inventoryType?.groupId } }
-    : undefined;
   const newInventoryType = await prisma.inventoryType.create({
     data: {
       inventoryTypeName: inventoryType?.inventoryTypeName,
       description: inventoryType?.description,
-      group,
-    },
-  });
-  return newInventoryType;
-};
-
-export const checkInventoryTypeName = async (inventoryType: {
-  inventoryTypeName: string;
-}) => {
-  const newInventoryType = await prisma.inventoryType.findFirst({
-    where: {
-      inventoryTypeName: inventoryType.inventoryTypeName,
     },
   });
   return newInventoryType;
@@ -35,15 +20,11 @@ export const updateInventoryType = async (
   inventoryTypeId: bigint,
   inventoryType: InventoryTypeUpdateParams,
 ) => {
-  const group = inventoryType?.groupId
-    ? { connect: { id: inventoryType?.groupId } }
-    : undefined;
   const updatedInventoryType = await prisma.inventoryType.update({
     where: { id: inventoryTypeId },
     data: {
       inventoryTypeName: inventoryType?.inventoryTypeName,
       description: inventoryType?.description,
-      group,
     },
   });
   return updatedInventoryType;
@@ -89,6 +70,17 @@ export const getAllInventoryType = async (props: {
   };
 };
 
+export const checkInventoryTypeName = async (inventoryType: {
+  inventoryTypeName: string;
+}) => {
+  const newInventoryType = await prisma.inventoryType.findFirst({
+    where: {
+      inventoryTypeName: inventoryType.inventoryTypeName,
+    },
+  });
+  return newInventoryType;
+};
+
 export const checkInventoryTypeExists = async (
   inventoryTypeId: bigint,
 ): Promise<boolean> => {
@@ -99,17 +91,4 @@ export const checkInventoryTypeExists = async (
     },
   });
   return count > 0;
-};
-
-export const connectInventoryTypeToGroup = async (
-  inventoryTypeId: bigint,
-  inventoryGroupId: bigint,
-) => {
-  const updatedInventoryType = await prisma.inventoryType.update({
-    where: { id: inventoryTypeId, deleted: false },
-    data: {
-      group: { connect: { id: inventoryGroupId } },
-    },
-  });
-  return updatedInventoryType;
 };

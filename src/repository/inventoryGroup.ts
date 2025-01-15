@@ -8,7 +8,10 @@ export const createInventoryGroup = async (
   inventoryGroup: InventoryGroupCreateParams,
 ) => {
   const newInventoryGroup = await prisma.inventoryGroup.create({
-    data: inventoryGroup,
+    data: {
+      inventoryGroupName: inventoryGroup.inventoryGroupName,
+      description: inventoryGroup.description,
+    },
   });
   return newInventoryGroup;
 };
@@ -20,8 +23,8 @@ export const updateInventoryGroup = async (
   const updatedInventoryGroup = await prisma.inventoryGroup.update({
     where: { id: inventoryGroupId },
     data: {
-      inventoryGroupName: inventoryGroup.inventoryGroupName,
-      description: inventoryGroup.description,
+      inventoryGroupName: inventoryGroup?.inventoryGroupName,
+      description: inventoryGroup?.description,
     },
   });
   return updatedInventoryGroup;
@@ -66,15 +69,25 @@ export const getAllInventoryGroup = async (props: {
   };
 };
 
-export const connectInventoryGroupToInventoryType = async (
-  inventoryGroupId: bigint,
-  inventoryTypeId: bigint,
-) => {
-  const updatedInventoryGroup = await prisma.inventoryGroup.update({
-    where: { id: inventoryGroupId },
-    data: {
-      type: { connect: { id: inventoryTypeId } },
+export const checkInventoryGroupName = async (inventoryGroup: {
+  inventoryGroupName: string;
+}) => {
+  const newInventoryGroup = await prisma.inventoryGroup.findFirst({
+    where: {
+      inventoryGroupName: inventoryGroup.inventoryGroupName,
     },
   });
-  return updatedInventoryGroup;
+  return newInventoryGroup;
+};
+
+export const checkInventoryGroupExists = async (
+  inventoryGroupId: bigint,
+): Promise<boolean> => {
+  const count = await prisma.inventoryGroup.count({
+    where: {
+      id: inventoryGroupId,
+      deleted: false,
+    },
+  });
+  return count > 0;
 };
