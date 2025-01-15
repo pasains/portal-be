@@ -33,6 +33,8 @@ model User {
   inventoryUpdatedByRel             Inventory[]             @relation("inventoryUpdatedByRel")
   inventoryGroupCreatedByRel        InventoryGroup[]        @relation("inventoryGroupCreatedByRel")
   inventoryGroupUpdatedByRel        InventoryGroup[]        @relation("inventoryGroupUpdatedByRel")
+  inventoryTypeCreatedByRel         InventoryType[]         @relation("inventoryTypeCreatedByRel")
+  inventoryTypeUpdatedByRel         InventoryType[]         @relation("inventoryTypeUpdatedByRel")
   inventoryHistoryCreatedByRel      InventoryHistory[]      @relation("inventoryHistoryCreatedByRel")
   inventoryHistoryUpdatedByRel      InventoryHistory[]      @relation("inventoryHistoryUpdatedByRel")
   inventoryStockCreatedByRel        InventoryStock[]        @relation("inventoryStockCreatedByRel")
@@ -80,6 +82,7 @@ model Inventory {
   note                  String                  @db.Text
   isBorrowable          Boolean                 @default(true)
   inventoryTypeId       BigInt
+  inventoryGroupId      BigInt
   createdAt             DateTime                @default(now())
   createdBy             BigInt?
   updatedAt             DateTime                @default(now())
@@ -87,6 +90,7 @@ model Inventory {
   deleted               Boolean                 @default(false)
   inventoryCreatedByRel User?                   @relation("inventoryCreatedByRel", fields: [createdBy], references: [id])
   inventoryTypeIdRel    InventoryType           @relation("inventoryTypeIdRel", fields: [inventoryTypeId], references: [id])
+  inventoryGroupIdRel   InventoryGroup          @relation("inventoryGroupIdRel", fields: [inventoryGroupId], references: [id])
   inventoryUpdatedByRel User?                   @relation("inventoryUpdatedByRel", fields: [updatedBy], references: [id])
   inventoryHistoryIdRel InventoryHistory[]      @relation("inventoryHistoryIdRel")
   inventoryStockIdRel   InventoryStock[]        @relation("inventoryStockIdRel")
@@ -110,26 +114,31 @@ model Document {
 }
 
 model InventoryType {
-  id                 BigInt           @id @default(autoincrement())
-  inventoryTypeName  String           @db.VarChar(50)
-  description        String?
-  deleted            Boolean          @default(false)
-  inventoryTypeIdRel Inventory[]      @relation("inventoryTypeIdRel")
-  group              InventoryGroup[] @relation("inventoryGroupMember")
+  id                        BigInt      @id @default(autoincrement())
+  inventoryTypeName         String      @db.VarChar(50)
+  description               String?
+  deleted                   Boolean     @default(false)
+  createdAt                 DateTime    @default(now())
+  createdBy                 BigInt?
+  updatedBy                 BigInt?
+  updatedAt                 DateTime    @default(now())
+  inventoryTypeIdRel        Inventory[] @relation("inventoryTypeIdRel")
+  inventoryTypeCreatedByRel User?       @relation("inventoryTypeCreatedByRel", fields: [createdBy], references: [id])
+  inventoryTypeUpdatedByRel User?       @relation("inventoryTypeUpdatedByRel", fields: [updatedBy], references: [id])
 }
 
 model InventoryGroup {
-  id                         BigInt          @id @default(autoincrement())
-  inventoryGroupName         String          @db.VarChar(50)
+  id                         BigInt      @id @default(autoincrement())
+  inventoryGroupName         String      @db.VarChar(50)
   description                String?
-  createdAt                  DateTime        @default(now())
+  createdAt                  DateTime    @default(now())
   createdBy                  BigInt?
   updatedBy                  BigInt?
-  updatedAt                  DateTime        @default(now())
-  deleted                    Boolean         @default(false)
-  inventoryGroupCreatedByRel User?           @relation("inventoryGroupCreatedByRel", fields: [createdBy], references: [id])
-  inventoryGroupUpdatedByRel User?           @relation("inventoryGroupUpdatedByRel", fields: [updatedBy], references: [id])
-  type                       InventoryType[] @relation("inventoryGroupMember")
+  updatedAt                  DateTime    @default(now())
+  deleted                    Boolean     @default(false)
+  inventoryGroupCreatedByRel User?       @relation("inventoryGroupCreatedByRel", fields: [createdBy], references: [id])
+  inventoryGroupUpdatedByRel User?       @relation("inventoryGroupUpdatedByRel", fields: [updatedBy], references: [id])
+  inventoryGroupIdRel        Inventory[] @relation("inventoryGroupIdRel")
 }
 
 model InventoryStock {
@@ -175,6 +184,7 @@ model InventoryHistory {
   note                         String    @db.Text
   isBorrowable                 Boolean   @default(true)
   inventoryTypeId              BigInt
+  inventoryGroupId             BigInt
   createdBy                    BigInt?
   createdAt                    DateTime  @default(now())
   updatedBy                    BigInt?

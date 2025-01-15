@@ -18,15 +18,24 @@ import {
   createInventoryType,
   getInventoryType,
 } from "../repository/inventoryType";
+import {
+  checkInventoryGroupName,
+  createInventoryGroup,
+  getInventoryGroup,
+} from "../repository/inventoryGroup";
 
 export const createInventoryService = async (
   inventory: InventoryCreateParams,
 ) => {
   let inventoryType;
-  const exists = await checkInventoryTypeName({
+  let inventoryGroup;
+  const existsInventoryType = await checkInventoryTypeName({
     inventoryTypeName: inventory.inventoryTypeName,
   });
-  if (exists) {
+  const existsInventoryGroup = await checkInventoryGroupName({
+    inventoryGroupName: inventory.inventoryGroupName,
+  });
+  if (existsInventoryType) {
     inventoryType = await getInventoryType(inventory.inventoryTypeId);
   } else {
     inventoryType = await createInventoryType({
@@ -35,13 +44,26 @@ export const createInventoryService = async (
       description: inventory.descriptionInventoryType,
     });
   }
+  if (existsInventoryGroup) {
+    inventoryGroup = await getInventoryGroup(inventory.inventoryGroupId);
+  } else {
+    inventoryGroup = await createInventoryGroup({
+      id: inventory.inventoryGroupId,
+      inventoryGroupName: inventory.inventoryGroupName,
+      description: inventory.descriptionInventoryGroup,
+    });
+  }
   if (!inventoryType || !inventoryType.id) {
     throw new Error("Failed to retrieve or create a valid inventory type");
+  }
+  if (!inventoryGroup || !inventoryGroup.id) {
+    throw new Error("Failed to retrieve or create a valid inventory group");
   }
   try {
     const newInventory = await createInventory({
       ...inventory,
       inventoryTypeId: inventoryType.id,
+      inventoryGroupId: inventoryGroup.id,
     });
     return newInventory;
   } catch (error) {

@@ -58,6 +58,7 @@ CREATE TABLE "Inventory" (
     "note" TEXT NOT NULL,
     "isBorrowable" BOOLEAN NOT NULL DEFAULT true,
     "inventoryTypeId" BIGINT NOT NULL,
+    "inventoryGroupId" BIGINT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" BIGINT,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -87,6 +88,10 @@ CREATE TABLE "InventoryType" (
     "inventoryTypeName" VARCHAR(50) NOT NULL,
     "description" TEXT,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" BIGINT,
+    "updatedBy" BIGINT,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "InventoryType_pkey" PRIMARY KEY ("id")
 );
@@ -147,6 +152,7 @@ CREATE TABLE "InventoryHistory" (
     "note" TEXT NOT NULL,
     "isBorrowable" BOOLEAN NOT NULL DEFAULT true,
     "inventoryTypeId" BIGINT NOT NULL,
+    "inventoryGroupId" BIGINT NOT NULL,
     "createdBy" BIGINT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedBy" BIGINT,
@@ -285,20 +291,8 @@ CREATE TABLE "Post" (
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "_inventoryGroupMember" (
-    "A" BIGINT NOT NULL,
-    "B" BIGINT NOT NULL
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_inventoryGroupMember_AB_unique" ON "_inventoryGroupMember"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_inventoryGroupMember_B_index" ON "_inventoryGroupMember"("B");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -322,6 +316,9 @@ ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_createdBy_fkey" FOREIGN KEY ("
 ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_inventoryTypeId_fkey" FOREIGN KEY ("inventoryTypeId") REFERENCES "InventoryType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_inventoryGroupId_fkey" FOREIGN KEY ("inventoryGroupId") REFERENCES "InventoryGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -332,6 +329,12 @@ ALTER TABLE "Document" ADD CONSTRAINT "Document_createdBy_fkey" FOREIGN KEY ("cr
 
 -- AddForeignKey
 ALTER TABLE "Document" ADD CONSTRAINT "Document_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "InventoryType" ADD CONSTRAINT "InventoryType_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "InventoryType" ADD CONSTRAINT "InventoryType_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "InventoryGroup" ADD CONSTRAINT "InventoryGroup_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -416,9 +419,3 @@ ALTER TABLE "Organization" ADD CONSTRAINT "Organization_createdBy_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "Organization" ADD CONSTRAINT "Organization_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_inventoryGroupMember" ADD CONSTRAINT "_inventoryGroupMember_A_fkey" FOREIGN KEY ("A") REFERENCES "InventoryGroup"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_inventoryGroupMember" ADD CONSTRAINT "_inventoryGroupMember_B_fkey" FOREIGN KEY ("B") REFERENCES "InventoryType"("id") ON DELETE CASCADE ON UPDATE CASCADE;

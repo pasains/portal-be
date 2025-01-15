@@ -1,6 +1,5 @@
 // handling all db related for inventory use case
 
-import { equal } from "assert";
 import prisma from "../configuration/db";
 import {
   InventoryCreateParams,
@@ -26,6 +25,17 @@ export const createInventory = async (inventory: InventoryCreateParams) => {
             create: {
               inventoryTypeName: inventory.inventoryTypeName,
               description: inventory.descriptionInventoryType,
+            },
+          },
+        },
+        inventoryGroupIdRel: {
+          connectOrCreate: {
+            where: {
+              id: inventory.inventoryGroupId,
+            },
+            create: {
+              inventoryGroupName: inventory.inventoryGroupName,
+              description: inventory.descriptionInventoryGroup,
             },
           },
         },
@@ -86,6 +96,14 @@ export const updateInventory = async (
             },
           },
         },
+        inventoryGroupIdRel: {
+          update: {
+            data: {
+              inventoryGroupName: inventory.inventoryGroupName,
+              description: inventory.descriptionInventoryGroup,
+            },
+          },
+        },
         documentIdRel: {
           updateMany: {
             where: { inventoryId: inventory.id },
@@ -114,6 +132,7 @@ export const updateInventory = async (
         note: currentInventory.note,
         isBorrowable: currentInventory.isBorrowable,
         inventoryTypeId: currentInventory.inventoryTypeId,
+        inventoryGroupId: currentInventory.inventoryGroupId,
         createdAt: currentInventory.createdAt,
         updatedAt: new Date(),
       },
@@ -149,6 +168,7 @@ export const getInventory = async (inventoryId: bigint) => {
     where: { id: inventoryId, deleted: false },
     include: {
       inventoryTypeIdRel: true,
+      inventoryGroupIdRel: true,
       inventoryStockIdRel: {
         select: { currentQuantity: true, totalQuantity: true },
       },
@@ -184,19 +204,8 @@ export const getAllInventory = async (props: {
       deleted: false,
     },
     include: {
-      inventoryTypeIdRel: {
-        include: {
-          group: {
-            include: {
-              type: {
-                include: {
-                  group: {},
-                },
-              },
-            },
-          },
-        },
-      },
+      inventoryTypeIdRel: true,
+      inventoryGroupIdRel: true,
       inventoryStockIdRel: true,
       documentIdRel: true,
     },
@@ -215,6 +224,7 @@ export const getAllInventory = async (props: {
 
     include: {
       inventoryTypeIdRel: true,
+      inventoryGroupIdRel: true,
       inventoryStockIdRel: true,
     },
     skip: (page - 1) * limit,

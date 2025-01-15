@@ -12,6 +12,9 @@ export interface InventoryCreateParams {
   inventoryTypeId: bigint;
   inventoryTypeName: string;
   descriptionInventoryType: string;
+  inventoryGroupId: bigint;
+  inventoryGroupName: string;
+  descriptionInventoryGroup: string;
   currentQuantity: number;
   totalQuantity: number;
   status: StatusItem;
@@ -29,6 +32,9 @@ export interface InventoryUpdateParams {
   inventoryTypeId: bigint;
   inventoryTypeName: string;
   descriptionInventoryType: string;
+  inventoryGroupId: bigint;
+  inventoryGroupName: string;
+  descriptionInventoryGroup: string;
   currentQuantity: number;
   url: string;
   createdBy: string;
@@ -46,6 +52,8 @@ export interface InventoryResponse {
   isBorrowable: boolean;
   inventoryTypeId: bigint;
   inventoryTypeName: string;
+  inventoryGroupId: bigint;
+  inventoryGroupName: string;
   currentQuantity: number;
   totalQuantity: number;
 }
@@ -61,6 +69,8 @@ export function toInventoryResponse(data: any): InventoryResponse {
     currentQuantity: data.inventoryStockIdRel?.[0]?.currentQuantity,
     totalQuantity: data.inventoryStockIdRel?.[0]?.totalQuantity,
     inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
+    inventoryGroupId: data.inventoryGroupIdRel.id,
+    inventoryGroupName: data.inventoryGroupIdRel.inventoryGroupName,
   };
 }
 
@@ -81,6 +91,8 @@ export interface InventoryDetailResponse {
   isBorrowable: boolean;
   inventoryTypeId: bigint;
   inventoryTypeName: string;
+  inventoryGroupId: bigint;
+  inventoryGroupName: string;
   url: string;
   currentQuantity: bigint;
   totalQuantity: bigint;
@@ -100,6 +112,8 @@ export function toInventoryDetailResponse(data: any): InventoryDetailResponse {
     isBorrowable: data.isBorrowable,
     inventoryTypeId: data.inventoryTypeIdRel.id,
     inventoryTypeName: data.inventoryTypeIdRel.inventoryTypeName,
+    inventoryGroupId: data.inventoryGroupIdRel.inventoryGroupId,
+    inventoryGroupName: data.inventoryGroupIdRel.inventoryGroupName,
     note: data.note,
     condition: data.condition,
     currentQuantity: data.inventoryStockIdRel?.[0]?.currentQuantity,

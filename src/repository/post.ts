@@ -1,4 +1,4 @@
-import { PostCreateParams, PostUpdateParams } from "@pasains/types/post";
+import { PostCreateParams, PostUpdateParams } from "../types/post";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();

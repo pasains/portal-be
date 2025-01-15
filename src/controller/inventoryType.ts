@@ -18,7 +18,6 @@ inventoryTypeRouter.post(
   "/create",
   body("inventoryTypeName").isString().trim(),
   body("description").isString().trim(),
-  body("groupId").optional().isNumeric(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -46,7 +45,6 @@ inventoryTypeRouter.put(
   param("id").isNumeric().trim(),
   body("inventoryTypeName").isString().trim(),
   body("description").isString().trim(),
-  body("groupId").optional().isNumeric(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -2,7 +2,6 @@ export interface InventoryTypeCreateParams {
   id: bigint;
   inventoryTypeName: string;
   description: string;
-  groupId?: bigint;
 }
 
 export interface InventoryTypeUpdateParams {
@@ -11,5 +10,4 @@ export interface InventoryTypeUpdateParams {
   description: string;
   updatedAt: Date;
   updatedBy: number;
-  groupId: bigint;
 }

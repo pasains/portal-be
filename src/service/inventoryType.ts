@@ -14,16 +14,7 @@ import {
 export const createInventoryTypeService = async (
   inventoryType: InventoryTypeCreateParams,
 ) => {
-  // check if InventoryGroup exists
-  if (inventoryType.groupId) {
-    const groupExists = await getInventoryGroup(inventoryType.groupId);
-    if (!groupExists) {
-      throw new Error("Invalid Inventory Group");
-    }
-  }
-  const newInventoryType = await createInventoryType({
-    ...inventoryType,
-  });
+  const newInventoryType = await createInventoryType(inventoryType);
   return newInventoryType;
 };
 
@@ -31,13 +22,6 @@ export const updateInventoryTypeService = async (
   inventoryTypeId: bigint,
   inventoryType: InventoryTypeUpdateParams,
 ) => {
-  // check if InventoryGroup exists
-  if (inventoryType.groupId) {
-    const groupExists = await getInventoryGroup(inventoryType.groupId);
-    if (!groupExists) {
-      throw new Error("Invalid Inventory Group");
-    }
-  }
   const updatedInventoryType = await updateInventoryType(
     inventoryTypeId,
     inventoryType,

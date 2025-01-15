@@ -33,6 +33,8 @@ inventoryRouter.post(
   body("currentQuantity").isNumeric(),
   body("inventoryTypeName").isString().trim(),
   body("descriptionInventoryType").isString().trim(),
+  body("inventoryGroupName").isString().trim(),
+  body("descriptionInventoryGroup").isString().trim(),
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -67,6 +69,8 @@ inventoryRouter.put(
   body("isBorrowable").isBoolean(),
   body("inventoryTypeName").isString().trim(),
   body("descriptionInventoryType").isString().trim(),
+  body("inventoryGroupName").isString().trim(),
+  body("descriptionInventoryGroup").isString().trim(),
   body("url").isString(),
   body("currentQuantity").isNumeric(),
   async (req: Request, res: Response) => {
