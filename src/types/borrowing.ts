@@ -14,6 +14,7 @@ export interface BorrowingCreateParams {
   organizationName: string;
   address: string;
   organizationStatus: string;
+  invoiceNumber?: string;
   note: string;
   items: {
     quantity: number;
@@ -52,6 +53,7 @@ export interface BorrowingResponse {
   borrowerName: string;
   identityCard: string;
   identityNumber: string;
+  invoiceNumber: string;
   phoneNumber: string;
   organizationName: string;
   address: string;
@@ -69,6 +71,7 @@ export function toBorrowingResponse(data: any): BorrowingResponse {
     identityNumber: data.borrowerIdRel.identityNumber,
     phoneNumber: data.borrowerIdRel.phoneNumber,
     organizationId: data.borrowerIdRel.organizationId,
+    invoiceNumber: data?.invoiceNumber,
     organizationName:
       data.borrowerIdRel.borrowerOrganizationRel.organizationName,
     address: data.borrowerIdRel.borrowerOrganizationRel.address,
@@ -125,7 +128,7 @@ export function toBorrowingDetailResponse(data: any): BorrowingDetailResponse {
     organizationStatus:
       data.borrowerIdRel.borrowerOrganizationRel.organizationStatus,
     note: data.borrowerIdRel.borrowerOrganizationRel.note,
-    invoiceNumber: data.invoiceNumber,
+    invoiceNumber: data?.invoiceNumber,
     createdAt: data.createdAt,
     createdBy: data.createdBy,
     updatedAt: data.updatedAt,

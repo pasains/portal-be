@@ -81,8 +81,13 @@ export const createBorrowing = async (borrowing: BorrowingCreateParams) => {
       },
     });
     const invoiceNumber = formatInvoiceNumber(createdBorrowing.id);
+    // Update the borrowing record with the generated invoice number
+    const updatedBorrowing = await prisma.borrowing.update({
+      where: { id: createdBorrowing.id },
+      data: { invoiceNumber },
+    });
 
-    return { ...createdBorrowing, invoiceNumber };
+    return updatedBorrowing;
   });
   return newBorrowing;
 };
