@@ -131,6 +131,7 @@ export const getItem = async (itemId: bigint) => {
       itemInventoryIdRel: {
         include: {
           inventoryTypeIdRel: { select: { inventoryTypeName: true } },
+          inventoryGroupIdRel: { select: { inventoryGroupName: true } },
         },
       },
     },
@@ -163,6 +164,7 @@ export const getAllItem = async (props: {
       itemInventoryIdRel: {
         include: {
           inventoryTypeIdRel: true,
+          inventoryGroupIdRel: true,
         },
       },
       itemBorrowingIdRel: true,

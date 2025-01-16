@@ -45,6 +45,7 @@ export interface ItemResponse {
   inventoryId: bigint;
   borrowingId: bigint;
   inventoryName: string;
+  description: string;
   status: StatusItem;
   quantity: number;
   preCondition: string;
@@ -58,7 +59,10 @@ export interface ItemDetailResponse {
   inventoryName: string;
   refId: string;
   inventoryTypeId: bigint;
+  description:string;
   inventoryTypeName: string;
+  inventoryGroupId: bigint;
+  inventoryGroupName: string;
   status: StatusItem;
   quantity: number;
   preCondition: string;
@@ -76,6 +80,7 @@ export function toItemResponse(data: any): ItemResponse {
     borrowingId: data.itemBorrowingIdRel?.id,
     inventoryId: data.itemInventoryIdRel?.id,
     inventoryName: data.itemInventoryIdRel.inventoryName,
+    description: data.itemInventoryIdRel.description,
     status: data.status,
     quantity: data.quantity,
     preCondition: data.itemInventoryIdRel.condition || null,
@@ -96,9 +101,14 @@ export function toItemDetailResponse(data: any): ItemDetailResponse {
     inventoryId: data.itemInventoryIdRel.id,
     inventoryName: data.itemInventoryIdRel.inventoryName,
     refId: data.itemInventoryIdRel.refId,
+    description: data.itemInventoryIdRel.description,
     inventoryTypeId: data.itemInventoryIdRel.inventoryTypeIdRel.inventoryTypeId,
     inventoryTypeName:
       data.itemInventoryIdRel.inventoryTypeIdRel.inventoryTypeName,
+    inventoryGroupId:
+      data.itemInventoryIdRel.inventoryGroupIdRel.inventoryGroupId,
+    inventoryGroupName:
+      data.itemInventoryIdRel.inventoryGroupIdRel.inventoryGroupName,
     status: data.status,
     quantity: data.quantity,
     preCondition: data.itemInventoryIdRel.condition,

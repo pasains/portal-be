@@ -186,6 +186,7 @@ CREATE TABLE "Borrowing" (
     "borrowerId" BIGINT NOT NULL,
     "dueDate" DATE NOT NULL,
     "status" "Status" NOT NULL DEFAULT 'PENDING',
+    "invoiceNumber" TEXT,
     "specialInstruction" TEXT NOT NULL,
     "createdBy" BIGINT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

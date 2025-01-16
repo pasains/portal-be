@@ -1,4 +1,5 @@
 import express from "express";
+import PDFDocument from "pdfkit";
 
 import bodyParser from "body-parser";
 import { inventoryRouter } from "./controller/inventory";

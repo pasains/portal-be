@@ -219,6 +219,7 @@ model Borrowing {
   borrowerId            BigInt
   dueDate               DateTime           @db.Date
   status                Status             @default(PENDING)
+  invoiceNumber         String?
   specialInstruction    String
   createdBy             BigInt?
   createdAt             DateTime           @default(now())
