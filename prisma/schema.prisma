@@ -115,7 +115,7 @@ model Document {
 
 model InventoryType {
   id                        BigInt      @id @default(autoincrement())
-  inventoryTypeName         String      @db.VarChar(50)
+  inventoryTypeName         String      @unique @db.VarChar(50)
   description               String?
   deleted                   Boolean     @default(false)
   createdAt                 DateTime    @default(now())
@@ -129,7 +129,7 @@ model InventoryType {
 
 model InventoryGroup {
   id                         BigInt      @id @default(autoincrement())
-  inventoryGroupName         String      @db.VarChar(50)
+  inventoryGroupName         String      @unique @db.VarChar(50)
   description                String?
   createdAt                  DateTime    @default(now())
   createdBy                  BigInt?
